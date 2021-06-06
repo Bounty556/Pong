@@ -5,34 +5,39 @@
 
 namespace Soul
 {
-	unsigned char* m_Memory; // Our entire allocated memory byte array
-	void* m_StableMemoryStart; // The location of the start of our stable memory block
-	void* m_StableMemoryEnd; // The location of the end of our stable memory block
+	u8* allocatedMemory; // Our entire allocated memory byte array
+	void* allocMemoryStart; // The location of the start of our stable memory block
+	void* allocMemoryEnd; // The location of the end of our stable memory block
+	bool memoryInitialized = false;
 
-	void InitializeMemoryManager(u32 bytes)
+	bool InitializeMemoryManager(u32 bytes)
 	{
-		m_Memory = (unsigned char*)PlatformAllocateMemory(bytes);
-		m_StableMemoryStart = m_Memory;
-		m_StableMemoryEnd = m_Memory + bytes;
+		allocatedMemory = (u8*)PlatformAllocateMemory(bytes);
+		allocMemoryStart = allocatedMemory;
+		allocMemoryEnd = allocatedMemory + bytes;
 
-		// Create our 0th node at the 2MB mark
-		MemoryNode* memoryNode = (MemoryNode*)m_StableMemoryStart;
-		memoryNode->BlockSize = bytes; // - Megabytes(2);
+		// Create our 0th node at the start
+		MemoryNode* memoryNode = (MemoryNode*)allocMemoryStart;
+		memoryNode->BlockSize = bytes;
 		memoryNode->NextNode = nullptr;
+
+		memoryInitialized = true;
+
+		return allocatedMemory;
 	}
 
 	void ShutdownMemoryManager()
 	{
-		PlatformFreeMemory(m_Memory);
+		PlatformFreeMemory(allocatedMemory);
 	}
 
-	void* PartitionMemory(unsigned int bytes, unsigned int count)
+	void* PartitionMemory(u32 bytes, u32 count)
 	{
-		MemoryNode* currentNode = (MemoryNode*)m_StableMemoryStart;
+		MemoryNode* currentNode = (MemoryNode*)allocMemoryStart;
 		MemoryNode* smallestValidNode = nullptr;
 
 		// Need more bytes to store the header for the partition we're making
-		unsigned int actualBytes = (bytes * count) + sizeof(PartitionHeader); 
+		u32 actualBytes = (bytes * count) + sizeof(PartitionHeader); 
 
 		while (currentNode)
 		{
@@ -54,7 +59,7 @@ namespace Soul
 			// If we were to store memory here, can we keep our node?
 			if (smallestValidNode->BlockSize - sizeof(MemoryNode) >= actualBytes)
 			{
-				void* location = ((unsigned char*)smallestValidNode) + (smallestValidNode->BlockSize - actualBytes);
+				void* location = ((u8*)smallestValidNode) + (smallestValidNode->BlockSize - actualBytes);
 
 				// Initialize newly partitioned memory to 0
 				PlatformSetMemory(location, 0, actualBytes);
@@ -62,7 +67,7 @@ namespace Soul
 				PartitionHeader* header = (PartitionHeader*)location;
 				header->Bytes = actualBytes;
 				header->Count = count;
-				location = (unsigned char*)location + sizeof(PartitionHeader);
+				location = (u8*)location + sizeof(PartitionHeader);
 
 				smallestValidNode->BlockSize -= actualBytes;
 
@@ -72,10 +77,10 @@ namespace Soul
 			else if (smallestValidNode->BlockSize >= actualBytes)
 			{
 				// If we try to remove our 0th node everything will break...
-				Assert(smallestValidNode != m_StableMemoryStart);
+				Assert(smallestValidNode != allocMemoryStart);
 
 				void* location = smallestValidNode;
-				unsigned int blockSize = smallestValidNode->BlockSize;
+				u32 blockSize = smallestValidNode->BlockSize;
 
 				RemoveNode(smallestValidNode);
 				PlatformSetMemory(location, 0, smallestValidNode->BlockSize);
@@ -83,7 +88,7 @@ namespace Soul
 				PartitionHeader* header = (PartitionHeader*)location;
 				header->Bytes = blockSize;
 				header->Count = count;
-				location = (unsigned char*)location + sizeof(PartitionHeader);
+				location = (u8*)location + sizeof(PartitionHeader);
 
 				return location;
 			}
@@ -96,28 +101,28 @@ namespace Soul
 		return (void*)nullptr;
 	}
 
-	unsigned int GetByteSize(void* location)
+	u32 GetByteSize(void* location)
 	{
-		Assert(location >= m_StableMemoryStart);
-		Assert(location < m_StableMemoryEnd);
+		Assert(location >= allocMemoryStart);
+		Assert(location < allocMemoryEnd);
 
 		// Back newLocation up to where we put the header
-		PartitionHeader* header = (PartitionHeader*)((unsigned char*)location - sizeof(PartitionHeader));
+		PartitionHeader* header = (PartitionHeader*)((u8*)location - sizeof(PartitionHeader));
 		return header->Bytes - sizeof(PartitionHeader);
 	}
 
 	u32 GetTotalPartitionedMemory()
 	{
-		unsigned int freeBytes = GetTotalFreeMemory();
-		unsigned int partitionedBytes = (unsigned int)m_StableMemoryEnd - (unsigned int)m_StableMemoryStart - freeBytes;
+		u32 freeBytes = GetTotalFreeMemory();
+		u32 partitionedBytes = (u32)allocMemoryEnd - (u32)allocMemoryStart - freeBytes;
 
 		return partitionedBytes;
 	}
 
 	u32 GetTotalFreeMemory()
 	{
-		MemoryNode* currentNode = (MemoryNode*)m_StableMemoryStart;
-		unsigned int freeBytes = currentNode->BlockSize;
+		MemoryNode* currentNode = (MemoryNode*)allocMemoryStart;
+		u32 freeBytes = currentNode->BlockSize;
 
 		while (currentNode->NextNode)
 		{
@@ -136,7 +141,7 @@ namespace Soul
 
 	void RemoveNode(MemoryNode* removedNode)
 	{
-		MemoryNode* currentNode = (MemoryNode*)m_StableMemoryStart;
+		MemoryNode* currentNode = (MemoryNode*)allocMemoryStart;
 
 		while (currentNode->NextNode != nullptr)
 		{
@@ -150,15 +155,15 @@ namespace Soul
 	void AddNode(void* location)
 	{
 		// Back newLocation up to where we put the header
-		void* newLocation = (unsigned char*)location - sizeof(PartitionHeader);
-		unsigned int size = ((PartitionHeader*)newLocation)->Bytes;
+		void* newLocation = (u8*)location - sizeof(PartitionHeader);
+		u32 size = ((PartitionHeader*)newLocation)->Bytes;
 
 		// Create a new memory node at the given location
 		MemoryNode* newNode = (MemoryNode*)newLocation;
 		newNode->BlockSize = size;
 
-		MemoryNode* previousNode = (MemoryNode*)m_StableMemoryStart;
-		MemoryNode* currentNode = (MemoryNode*)m_StableMemoryStart;
+		MemoryNode* previousNode = (MemoryNode*)allocMemoryStart;
+		MemoryNode* currentNode = (MemoryNode*)allocMemoryStart;
 		while (currentNode->NextNode)
 		{
 			currentNode = currentNode->NextNode;
@@ -168,7 +173,7 @@ namespace Soul
 			{
 				bool didCombine = false;
 				// Check to see if newNode and currentNode can be combined
-				if ((unsigned char*)newNode + newNode->BlockSize == (unsigned char*)currentNode)
+				if ((u8*)newNode + newNode->BlockSize == (u8*)currentNode)
 				{
 					newNode->BlockSize += currentNode->BlockSize;
 					newNode->NextNode = currentNode->NextNode;
@@ -177,7 +182,7 @@ namespace Soul
 				}
 
 				// Check to see if previousNode and newNode can be combined
-				if ((unsigned char*)previousNode + previousNode->BlockSize == (unsigned char*)newNode)
+				if ((u8*)previousNode + previousNode->BlockSize == (u8*)newNode)
 				{
 					previousNode->BlockSize += newNode->BlockSize;
 					if (didCombine)
@@ -200,7 +205,7 @@ namespace Soul
 		}
 
 		// If we still haven't found this new node, it must be at the end
-		if ((unsigned char*)currentNode + currentNode->BlockSize == (unsigned char*)newNode)
+		if ((u8*)currentNode + currentNode->BlockSize == (u8*)newNode)
 		{
 			currentNode->BlockSize += newNode->BlockSize;
 		}
@@ -211,10 +216,10 @@ namespace Soul
 		}
 	}
 
-	unsigned int CountNodes()
+	u32 CountNodes()
 	{
-		MemoryNode* currentNode = (MemoryNode*)m_StableMemoryStart;
-		unsigned int nodeCount = 0;
+		MemoryNode* currentNode = (MemoryNode*)allocMemoryStart;
+		u32 nodeCount = 0;
 
 		while (currentNode)
 		{

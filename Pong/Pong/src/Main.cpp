@@ -2,11 +2,11 @@
 
 int main()
 {
-	Soul::InitializeEngine(1280, 720, "Pong!");
+	if (Soul::InitializeEngine(1280, 720, "Pong!"))
+	{
 
-
-
-	Soul::ShutdownEngine();
+		Soul::ShutdownEngine();
+	}
 
 	return 0;
 }

@@ -2,17 +2,23 @@
 
 #include "EntryPoint.h"
 
+#include <Core/Logger.h>
+#include <Memory/MemoryManager.h>
+
 namespace Soul
 {
-	Context InitializeEngine(i16 WindowWidth, i16 WindowHeight, const char* WindowName)
+	bool InitializeEngine(i16 WindowWidth, i16 WindowHeight, const char* WindowName)
 	{
 		LOG_DEBUG("Starting engine");
 
 		// Startup systems
-		InitializeMemoryManager(Megabytes(512));
+		if (!InitializeMemoryManager(Megabytes(512)))
+		{
+			LOG_FATAL("Failed to initialize memory.");
+			return false;
+		}
 
-		Context newContext;
-		return newContext;
+		return true;
 	}
 
 	// TODO: Add scene

@@ -65,7 +65,7 @@ namespace Soul
 	/*
 	Initializes our whole memory block.
 	*/
-	void InitializeMemoryManager(u32 bytes);
+	bool InitializeMemoryManager(u32 bytes);
 
 	/*
 	Cleans up all allocated memory.
