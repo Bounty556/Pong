@@ -1,0 +1,34 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31205.134
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Pong", "Pong\Pong.vcxproj", "{4785B80E-F168-4D23-B39F-7E4DC879ABE3}"
+	ProjectSection(ProjectDependencies) = postProject
+		{5A272530-462C-44E5-9948-A758AB81AA49} = {5A272530-462C-44E5-9948-A758AB81AA49}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Engine", "Engine\Engine.vcxproj", "{5A272530-462C-44E5-9948-A758AB81AA49}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x86 = Debug|x86
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{4785B80E-F168-4D23-B39F-7E4DC879ABE3}.Debug|x86.ActiveCfg = Debug|Win32
+		{4785B80E-F168-4D23-B39F-7E4DC879ABE3}.Debug|x86.Build.0 = Debug|Win32
+		{4785B80E-F168-4D23-B39F-7E4DC879ABE3}.Release|x86.ActiveCfg = Release|Win32
+		{4785B80E-F168-4D23-B39F-7E4DC879ABE3}.Release|x86.Build.0 = Release|Win32
+		{5A272530-462C-44E5-9948-A758AB81AA49}.Debug|x86.ActiveCfg = Debug|Win32
+		{5A272530-462C-44E5-9948-A758AB81AA49}.Debug|x86.Build.0 = Debug|Win32
+		{5A272530-462C-44E5-9948-A758AB81AA49}.Release|x86.ActiveCfg = Release|Win32
+		{5A272530-462C-44E5-9948-A758AB81AA49}.Release|x86.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {A3DEBD7D-CDFA-4DDC-B941-21BC98A1E0D7}
+	EndGlobalSection
+EndGlobal
