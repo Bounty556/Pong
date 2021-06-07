@@ -1,5 +1,6 @@
 #pragma once
 
+#include <Defines.h>
 #include <Memory/MemoryManager.h>
 #include <Memory/ReferenceCounter.h>
 
@@ -58,8 +59,8 @@ namespace Soul
 		{
 			if (m_References->RemoveReference() == 0)
 			{
-				MemoryManager::FreeMemory(m_References);
-				MemoryManager::FreeMemory(m_Pointer);
+				FreeMemory(m_References);
+				FreeMemory(m_Pointer);
 			}
 		}
 	}
@@ -72,8 +73,8 @@ namespace Soul
 		{
 			if (m_Pointer && m_References->RemoveReference() == 0)
 			{
-				MemoryManager::FreeMemory(m_References);
-				MemoryManager::FreeMemory(m_Pointer);
+				FreeMemory(m_References);
+				FreeMemory(m_Pointer);
 			}
 
 			m_Pointer = otherPointer.m_Pointer;
@@ -89,8 +90,8 @@ namespace Soul
 	{
 		if (m_Pointer && m_References->RemoveReference() == 0)
 		{
-			MemoryManager::FreeMemory(m_References);
-			MemoryManager::FreeMemory(m_Pointer);
+			FreeMemory(m_References);
+			FreeMemory(m_Pointer);
 		}
 
 		m_Pointer = otherPointer.m_Pointer;

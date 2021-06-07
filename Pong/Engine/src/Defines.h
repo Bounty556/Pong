@@ -16,15 +16,15 @@ typedef signed long long i64;
 typedef float f32;
 typedef double f64;
 
-#define Kilobytes(x) (x * 1024)
-#define Megabytes(x) (Kilobytes(x) * 1024)
-#define Gigabytes(x) (Megabytes(x) * 1024)
+#define KILOBYTES(x) (x * 1024)
+#define MEGABYTES(x) (KILOBYTES(x) * 1024)
+#define GIGABYTES(x) (MEGABYTES(x) * 1024)
 
-#define ByteDistance(x, y) ((unsigned int)y - (unsigned int)x)
+#define BYTE_DISTANCE(x, y) ((unsigned int)y - (unsigned int)x)
 
-#define FloatMax 3.40282346e+38F
+#define FLOAT_MAX 3.40282346e+38F
 
-#define Assert(x) \
+#define ASSERT(x) \
 if (x) \
 	{} \
 else {*((int*)0) = 0;}

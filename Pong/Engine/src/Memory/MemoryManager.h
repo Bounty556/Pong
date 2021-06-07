@@ -3,6 +3,8 @@
 #include <Defines.h>
 #include <Core/Logger.h>
 
+#include <new>
+
 // Takes in the type of the object and calls its constructor
 #define PARTITION(type, ...) (new (Soul::PartitionMemory(sizeof(type))) type(__VA_ARGS__))
 
@@ -78,32 +80,7 @@ namespace Soul
 	a block of memory that's slightly larger for formatting
 	purposes. This will return nullptr if the partitioning failed.
 	*/
-	void* PartitionMemory(u32 bytes, u32 count = 1);
-
-	/*
-	Marks the memory at the given location as unused and calls 
-	deconstructor on object.
-	*/
-	template<class T>
-	void FreeMemory(T* location)
-	{
-		if (location == nullptr)
-		{
-			LOG_WARN("Nullptr was attempted to be freed.");
-			return;
-		}
-
-		// Check to see if this is an array we're freeing
-		PartitionHeader* header = (PartitionHeader*)((unsigned char*)location - sizeof(PartitionHeader));
-
-		int timesToLoop = header->Count;
-		for (int i = 0; i < timesToLoop; ++i)
-		{
-			location[i].~T();
-		}
-
-		AddNode(location);
-	}
+	SOULAPI void* PartitionMemory(u32 bytes, u32 count = 1);
 
 	/*
 	Because of the way that we store our variables in memory (with
@@ -112,24 +89,24 @@ namespace Soul
 	any allocated variable. Useful for not having to keep track of
 	those pesky array sizes.
 	*/
-	u32 GetByteSize(void* location);
+	SOULAPI u32 GetByteSize(void* location);
 
 	/*
 	Returns the total number of bytes that are considered *used*
 	within this memory arena.
 	*/
-	u32 GetTotalPartitionedMemory();
+	SOULAPI u32 GetTotalPartitionedMemory();
 
 	/*
 	Returns the total number of bytes that are considered free
 	within this memory arena.
 	*/
-	u32 GetTotalFreeMemory();
+	SOULAPI u32 GetTotalFreeMemory();
 		
 	/*
 	Draws a rough representation of memory to the console.
 	*/
-	void DrawMemory();
+	SOULAPI void DrawMemory();
 
 	/*
 	Walks the list of nodes, making sure all connections between
@@ -148,4 +125,11 @@ namespace Soul
 	arena.
 	*/
 	u32 CountNodes();
+
+	/*
+	Marks the memory at the given location as unused and calls 
+	deconstructor on object.
+	*/
+	template<class T>
+	void FreeMemory(T* location);
 }

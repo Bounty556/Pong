@@ -12,7 +12,7 @@ namespace Soul
 		LOG_DEBUG("Starting engine");
 
 		// Startup systems
-		if (!InitializeMemoryManager(Megabytes(512)))
+		if (!InitializeMemoryManager(MEGABYTES(512)))
 		{
 			LOG_FATAL("Failed to initialize memory.");
 			return false;

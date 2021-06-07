@@ -1,5 +1,6 @@
 #pragma once
 
+#include <Defines.h>
 #include <Memory/MemoryManager.h>
 
 namespace Soul
@@ -44,14 +45,14 @@ namespace Soul
 	UniquePointer<T>::~UniquePointer()
 	{
 		if (m_Pointer)
-			MemoryManager::FreeMemory(m_Pointer);
+			FreeMemory(m_Pointer);
 	}
 
 	template <class T>
 	UniquePointer<T>& UniquePointer<T>::operator=(UniquePointer<T>&& otherPointer)
 	{
 		if (m_Pointer)
-			MemoryManager::FreeMemory(m_Pointer);
+			FreeMemory(m_Pointer);
 
 		m_Pointer = otherPointer.m_Pointer;
 		otherPointer.m_Pointer = nullptr;
@@ -63,7 +64,7 @@ namespace Soul
 	UniquePointer<T>& UniquePointer<T>::operator=(T* otherPointer)
 	{
 		if (m_Pointer)
-			MemoryManager::FreeMemory(m_Pointer);
+			FreeMemory(m_Pointer);
 
 		m_Pointer = otherPointer;
 

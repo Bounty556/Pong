@@ -28,11 +28,15 @@ namespace Soul
 
 	void ShutdownMemoryManager()
 	{
+		ASSERT(memoryInitialized);
+
 		PlatformFreeMemory(allocatedMemory);
 	}
 
 	void* PartitionMemory(u32 bytes, u32 count)
 	{
+		ASSERT(memoryInitialized);
+
 		MemoryNode* currentNode = (MemoryNode*)allocMemoryStart;
 		MemoryNode* smallestValidNode = nullptr;
 
@@ -77,7 +81,7 @@ namespace Soul
 			else if (smallestValidNode->BlockSize >= actualBytes)
 			{
 				// If we try to remove our 0th node everything will break...
-				Assert(smallestValidNode != allocMemoryStart);
+				ASSERT(smallestValidNode != allocMemoryStart);
 
 				void* location = smallestValidNode;
 				u32 blockSize = smallestValidNode->BlockSize;
@@ -97,14 +101,13 @@ namespace Soul
 		// We couldn't find a valid memory block
 		DrawMemory();
 		LOG_ERROR("Failed to allocate %d bytes.", bytes);
-		Assert(false);
 		return (void*)nullptr;
 	}
 
 	u32 GetByteSize(void* location)
 	{
-		Assert(location >= allocMemoryStart);
-		Assert(location < allocMemoryEnd);
+		ASSERT(location >= allocMemoryStart);
+		ASSERT(location < allocMemoryEnd);
 
 		// Back newLocation up to where we put the header
 		PartitionHeader* header = (PartitionHeader*)((u8*)location - sizeof(PartitionHeader));
@@ -113,6 +116,8 @@ namespace Soul
 
 	u32 GetTotalPartitionedMemory()
 	{
+		ASSERT(memoryInitialized);
+
 		u32 freeBytes = GetTotalFreeMemory();
 		u32 partitionedBytes = (u32)allocMemoryEnd - (u32)allocMemoryStart - freeBytes;
 
@@ -121,6 +126,8 @@ namespace Soul
 
 	u32 GetTotalFreeMemory()
 	{
+		ASSERT(memoryInitialized);
+
 		MemoryNode* currentNode = (MemoryNode*)allocMemoryStart;
 		u32 freeBytes = currentNode->BlockSize;
 
@@ -135,6 +142,8 @@ namespace Soul
 
 	void DrawMemory()
 	{
+		ASSERT(memoryInitialized);
+
 		LOG_INFO("%d bytes available, %d bytes used. There are %d nodes in memory.",
 			GetTotalFreeMemory(), GetTotalPartitionedMemory(), CountNodes());
 	}
@@ -228,5 +237,26 @@ namespace Soul
 		}
 
 		return nodeCount;
+	}
+
+	template<class T>
+	void FreeMemory(T* location)
+	{
+		if (location == nullptr)
+		{
+			LOG_WARN("Nullptr was attempted to be freed.");
+			return;
+		}
+
+		// Check to see if this is an array we're freeing
+		PartitionHeader* header = (PartitionHeader*)((unsigned char*)location - sizeof(PartitionHeader));
+
+		int timesToLoop = header->Count;
+		for (int i = 0; i < timesToLoop; ++i)
+		{
+			location[i].~T();
+		}
+
+		AddNode(location);
 	}
 }
