@@ -164,6 +164,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="src\core\Logger.h" />
+    <ClInclude Include="src\Core\Timer.h" />
     <ClInclude Include="src\Defines.h" />
     <ClInclude Include="src\EntryPoint.h" />
     <ClInclude Include="src\Memory\MemoryManager.h" />
@@ -174,6 +175,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\core\Logger.cpp" />
+    <ClCompile Include="src\Core\Timer.cpp" />
     <ClCompile Include="src\EntryPoint.cpp" />
     <ClCompile Include="src\Memory\MemoryManager.cpp" />
     <ClCompile Include="src\Memory\ReferenceCounter.cpp" />

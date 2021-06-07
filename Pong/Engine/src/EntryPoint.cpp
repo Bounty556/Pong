@@ -4,6 +4,7 @@
 
 #include <Core/Logger.h>
 #include <Memory/MemoryManager.h>
+#include <Platform/Platform.h>
 
 namespace Soul
 {
@@ -12,6 +13,11 @@ namespace Soul
 		LOG_DEBUG("Starting engine");
 
 		// Startup systems
+		if (!PlatformInitialize())
+		{
+			LOG_FATAL("Failed to initialize platform layer.");
+			return false;
+		}
 		if (!MemoryManager::Initialize(MEGABYTES(512)))
 		{
 			LOG_FATAL("Failed to initialize memory.");
