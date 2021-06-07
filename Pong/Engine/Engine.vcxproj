@@ -172,6 +172,8 @@
     <ClInclude Include="src\Memory\SharedPointer.h" />
     <ClInclude Include="src\Memory\UniquePointer.h" />
     <ClInclude Include="src\Platform\Platform.h" />
+    <ClInclude Include="src\Structures\Iterators\StackIterator.h" />
+    <ClInclude Include="src\Structures\Stack.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\core\Logger.cpp" />
