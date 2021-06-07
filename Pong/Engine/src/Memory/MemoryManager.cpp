@@ -5,39 +5,39 @@
 
 namespace Soul
 {
-	u8* allocatedMemory; // Our entire allocated memory byte array
-	void* allocMemoryStart; // The location of the start of our stable memory block
-	void* allocMemoryEnd; // The location of the end of our stable memory block
-	bool memoryInitialized = false;
+	u8* MemoryManager::m_AllocatedMemory;
+	void* MemoryManager::m_AllocMemoryStart;
+	void* MemoryManager::m_AllocMemoryEnd;
+	bool MemoryManager::m_MemoryInitialized = false;
 
-	bool InitializeMemoryManager(u32 bytes)
+	bool MemoryManager::Initialize(u32 bytes)
 	{
-		allocatedMemory = (u8*)PlatformAllocateMemory(bytes);
-		allocMemoryStart = allocatedMemory;
-		allocMemoryEnd = allocatedMemory + bytes;
+		m_AllocatedMemory = (u8*)PlatformAllocateMemory(bytes);
+		m_AllocMemoryStart = m_AllocatedMemory;
+		m_AllocMemoryEnd = m_AllocatedMemory + bytes;
 
 		// Create our 0th node at the start
-		MemoryNode* memoryNode = (MemoryNode*)allocMemoryStart;
+		MemoryNode* memoryNode = (MemoryNode*)m_AllocMemoryStart;
 		memoryNode->BlockSize = bytes;
 		memoryNode->NextNode = nullptr;
 
-		memoryInitialized = true;
+		m_MemoryInitialized = true;
 
-		return allocatedMemory;
+		return m_AllocatedMemory;
 	}
 
-	void ShutdownMemoryManager()
+	void MemoryManager::Shutdown()
 	{
-		ASSERT(memoryInitialized);
+		ASSERT(m_MemoryInitialized);
 
-		PlatformFreeMemory(allocatedMemory);
+		PlatformFreeMemory(m_AllocatedMemory);
 	}
 
-	void* PartitionMemory(u32 bytes, u32 count)
+	void* MemoryManager::PartitionMemory(u32 bytes, u32 count)
 	{
-		ASSERT(memoryInitialized);
+		ASSERT(m_MemoryInitialized);
 
-		MemoryNode* currentNode = (MemoryNode*)allocMemoryStart;
+		MemoryNode* currentNode = (MemoryNode*)m_AllocMemoryStart;
 		MemoryNode* smallestValidNode = nullptr;
 
 		// Need more bytes to store the header for the partition we're making
@@ -81,7 +81,7 @@ namespace Soul
 			else if (smallestValidNode->BlockSize >= actualBytes)
 			{
 				// If we try to remove our 0th node everything will break...
-				ASSERT(smallestValidNode != allocMemoryStart);
+				ASSERT(smallestValidNode != m_AllocMemoryStart);
 
 				void* location = smallestValidNode;
 				u32 blockSize = smallestValidNode->BlockSize;
@@ -104,31 +104,31 @@ namespace Soul
 		return (void*)nullptr;
 	}
 
-	u32 GetByteSize(void* location)
+	u32 MemoryManager::GetByteSize(void* location)
 	{
-		ASSERT(location >= allocMemoryStart);
-		ASSERT(location < allocMemoryEnd);
+		ASSERT(location >= m_AllocMemoryStart);
+		ASSERT(location < m_AllocMemoryEnd);
 
 		// Back newLocation up to where we put the header
 		PartitionHeader* header = (PartitionHeader*)((u8*)location - sizeof(PartitionHeader));
 		return header->Bytes - sizeof(PartitionHeader);
 	}
 
-	u32 GetTotalPartitionedMemory()
+	u32 MemoryManager::GetTotalPartitionedMemory()
 	{
-		ASSERT(memoryInitialized);
+		ASSERT(m_MemoryInitialized);
 
 		u32 freeBytes = GetTotalFreeMemory();
-		u32 partitionedBytes = (u32)allocMemoryEnd - (u32)allocMemoryStart - freeBytes;
+		u32 partitionedBytes = (u32)m_AllocMemoryEnd - (u32)m_AllocMemoryStart - freeBytes;
 
 		return partitionedBytes;
 	}
 
-	u32 GetTotalFreeMemory()
+	u32 MemoryManager::GetTotalFreeMemory()
 	{
-		ASSERT(memoryInitialized);
+		ASSERT(m_MemoryInitialized);
 
-		MemoryNode* currentNode = (MemoryNode*)allocMemoryStart;
+		MemoryNode* currentNode = (MemoryNode*)m_AllocMemoryStart;
 		u32 freeBytes = currentNode->BlockSize;
 
 		while (currentNode->NextNode)
@@ -140,17 +140,17 @@ namespace Soul
 		return freeBytes;
 	}
 
-	void DrawMemory()
+	void MemoryManager::DrawMemory()
 	{
-		ASSERT(memoryInitialized);
+		ASSERT(m_MemoryInitialized);
 
 		LOG_INFO("%d bytes available, %d bytes used. There are %d nodes in memory.",
 			GetTotalFreeMemory(), GetTotalPartitionedMemory(), CountNodes());
 	}
 
-	void RemoveNode(MemoryNode* removedNode)
+	void MemoryManager::RemoveNode(MemoryNode* removedNode)
 	{
-		MemoryNode* currentNode = (MemoryNode*)allocMemoryStart;
+		MemoryNode* currentNode = (MemoryNode*)m_AllocMemoryStart;
 
 		while (currentNode->NextNode != nullptr)
 		{
@@ -161,7 +161,7 @@ namespace Soul
 		}
 	}
 
-	void AddNode(void* location)
+	void MemoryManager::AddNode(void* location)
 	{
 		// Back newLocation up to where we put the header
 		void* newLocation = (u8*)location - sizeof(PartitionHeader);
@@ -171,8 +171,8 @@ namespace Soul
 		MemoryNode* newNode = (MemoryNode*)newLocation;
 		newNode->BlockSize = size;
 
-		MemoryNode* previousNode = (MemoryNode*)allocMemoryStart;
-		MemoryNode* currentNode = (MemoryNode*)allocMemoryStart;
+		MemoryNode* previousNode = (MemoryNode*)m_AllocMemoryStart;
+		MemoryNode* currentNode = (MemoryNode*)m_AllocMemoryStart;
 		while (currentNode->NextNode)
 		{
 			currentNode = currentNode->NextNode;
@@ -225,9 +225,9 @@ namespace Soul
 		}
 	}
 
-	u32 CountNodes()
+	u32 MemoryManager::CountNodes()
 	{
-		MemoryNode* currentNode = (MemoryNode*)allocMemoryStart;
+		MemoryNode* currentNode = (MemoryNode*)m_AllocMemoryStart;
 		u32 nodeCount = 0;
 
 		while (currentNode)
@@ -237,26 +237,5 @@ namespace Soul
 		}
 
 		return nodeCount;
-	}
-
-	template<class T>
-	void FreeMemory(T* location)
-	{
-		if (location == nullptr)
-		{
-			LOG_WARN("Nullptr was attempted to be freed.");
-			return;
-		}
-
-		// Check to see if this is an array we're freeing
-		PartitionHeader* header = (PartitionHeader*)((unsigned char*)location - sizeof(PartitionHeader));
-
-		int timesToLoop = header->Count;
-		for (int i = 0; i < timesToLoop; ++i)
-		{
-			location[i].~T();
-		}
-
-		AddNode(location);
 	}
 }

@@ -3,6 +3,8 @@
 #include <Defines.h>
 #include <Memory/MemoryManager.h>
 
+// TODO: Allow UniquePointers to be able to be instantiated with no value, and just be "invalid".
+
 namespace Soul
 {
 	template <class T>
@@ -45,14 +47,14 @@ namespace Soul
 	UniquePointer<T>::~UniquePointer()
 	{
 		if (m_Pointer)
-			FreeMemory(m_Pointer);
+			MemoryManager::FreeMemory(m_Pointer);
 	}
 
 	template <class T>
 	UniquePointer<T>& UniquePointer<T>::operator=(UniquePointer<T>&& otherPointer)
 	{
 		if (m_Pointer)
-			FreeMemory(m_Pointer);
+			MemoryManager::FreeMemory(m_Pointer);
 
 		m_Pointer = otherPointer.m_Pointer;
 		otherPointer.m_Pointer = nullptr;
@@ -64,7 +66,7 @@ namespace Soul
 	UniquePointer<T>& UniquePointer<T>::operator=(T* otherPointer)
 	{
 		if (m_Pointer)
-			FreeMemory(m_Pointer);
+			MemoryManager::FreeMemory(m_Pointer);
 
 		m_Pointer = otherPointer;
 
