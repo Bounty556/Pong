@@ -6,9 +6,9 @@
 #include <new>
 
 // Takes in the type of the object and calls its constructor
-#define PARTITION(type, ...) (new (Soul::PartitionMemory(sizeof(type))) type(__VA_ARGS__))
+#define PARTITION(type, ...) (new (Soul::MemoryManager::PartitionMemory(sizeof(type))) type(__VA_ARGS__))
 
-#define PARTITION_ARRAY(type, count) ((type*)(Soul::PartitionMemory(sizeof(type), count)))
+#define PARTITION_ARRAY(type, count) ((type*)(Soul::MemoryManager::PartitionMemory(sizeof(type), count)))
 
 namespace Soul
 {
@@ -16,8 +16,8 @@ namespace Soul
 	Memory Manager for the Soul engine. This works by creating a memory arena that
 	can have memory partitioned in it from anywhere in the program.
 
-	This first needs to be initialized by calling InitializeMemoryManager(), and must
-	be cleaned up when the program closes via ShutdownMemoryManager().
+	This first needs to be initialized by calling Initialize(), and must
+	be cleaned up when the program closes via Shutdown().
 
 	There are currently two ways to partition memory:
 	
@@ -44,92 +44,127 @@ namespace Soul
 	partitioned, and then you can divide that by the size of the object/primitive
 	partitioned to get the array size.
 	*/
-	
-	/*
-	Placed at the start of each block of free memory in our memory
-	arena.
-	*/
-	struct MemoryNode
+	class SOULAPI MemoryManager
 	{
-		unsigned int BlockSize; // The size of the free memory block, including this node
-		MemoryNode* NextNode; // Location of the following node in memory
+	private:
+		/*
+		Placed at the start of each block of free memory in our memory
+		arena.
+		*/
+		struct MemoryNode
+		{
+			unsigned int BlockSize; // The size of the free memory block, including this node
+			MemoryNode* NextNode; // Location of the following node in memory
+		};
+
+		/*
+		Placed at the start of each partition to note how many bytes are stored.
+		*/
+		struct PartitionHeader
+		{
+			unsigned int Bytes; // The number of bytes stored in this partition, including header
+			unsigned int Count; // The number of objects store in this partition
+		};
+
+	public:
+		MemoryManager() = delete;
+		~MemoryManager() = delete;
+
+		/*
+		Initializes our whole memory block.
+		*/
+		static bool Initialize(u32 bytes);
+
+		/*
+		Cleans up all allocated memory.
+		*/
+		static void Shutdown();
+
+		/*
+		Attempts to mark a block of free memory as used, and returns
+		a pointer to the start of said used memory. This *can* return
+		a block of memory that's slightly larger for formatting
+		purposes. This will return nullptr if the partitioning failed.
+		*/
+		static void* PartitionMemory(u32 bytes, u32 count = 1);
+
+		/*
+		Marks the memory at the given location as unused and calls
+		deconstructor on object.
+		*/
+		template<class T>
+		static void FreeMemory(T* location);
+
+		/*
+		Because of the way that we store our variables in memory (with
+		a small header for each one indicating their byte size) we get
+		a free benefit in being able to tell the exact byte size of
+		any allocated variable. Useful for not having to keep track of
+		those pesky array sizes.
+		*/
+		static u32 GetByteSize(void* location);
+
+		/*
+		Returns the total number of bytes that are considered *used*
+		within this memory arena.
+		*/
+		static u32 GetTotalPartitionedMemory();
+
+		/*
+		Returns the total number of bytes that are considered free
+		within this memory arena.
+		*/
+		static u32 GetTotalFreeMemory();
+
+		/*
+		Draws a rough representation of memory to the console.
+		*/
+		static void DrawMemory();
+
+	private:
+		/*
+		Walks the list of nodes, making sure all connections between
+		nodes are up to date.
+		*/
+		static void RemoveNode(MemoryNode* removedNode);
+
+		/*
+		Walks the list of nodes, making sure all connections between
+		nodes are up to date.
+		*/
+		static void AddNode(void* newLocation);
+
+		/*
+		Returns the number of memory nodes (free blocks) in our memory
+		arena.
+		*/
+		static u32 CountNodes();
+
+	private:
+		static u8* m_AllocatedMemory; // Our entire allocated memory byte array
+		static void* m_AllocMemoryStart; // The location of the start of our stable memory block
+		static void* m_AllocMemoryEnd; // The location of the end of our stable memory block
+		static bool m_MemoryInitialized;
 	};
 
-	/*
-	Placed at the start of each partition to note how many bytes are stored.
-	*/
-	struct PartitionHeader
-	{
-		unsigned int Bytes; // The number of bytes stored in this partition, including header
-		unsigned int Count; // The number of objects store in this partition
-	};
-
-	/*
-	Initializes our whole memory block.
-	*/
-	bool InitializeMemoryManager(u32 bytes);
-
-	/*
-	Cleans up all allocated memory.
-	*/
-	void ShutdownMemoryManager();
-
-	/*
-	Attempts to mark a block of free memory as used, and returns
-	a pointer to the start of said used memory. This *can* return
-	a block of memory that's slightly larger for formatting
-	purposes. This will return nullptr if the partitioning failed.
-	*/
-	SOULAPI void* PartitionMemory(u32 bytes, u32 count = 1);
-
-	/*
-	Because of the way that we store our variables in memory (with
-	a small header for each one indicating their byte size) we get
-	a free benefit in being able to tell the exact byte size of 
-	any allocated variable. Useful for not having to keep track of
-	those pesky array sizes.
-	*/
-	SOULAPI u32 GetByteSize(void* location);
-
-	/*
-	Returns the total number of bytes that are considered *used*
-	within this memory arena.
-	*/
-	SOULAPI u32 GetTotalPartitionedMemory();
-
-	/*
-	Returns the total number of bytes that are considered free
-	within this memory arena.
-	*/
-	SOULAPI u32 GetTotalFreeMemory();
-		
-	/*
-	Draws a rough representation of memory to the console.
-	*/
-	SOULAPI void DrawMemory();
-
-	/*
-	Walks the list of nodes, making sure all connections between
-	nodes are up to date.
-	*/
-	void RemoveNode(MemoryNode* removedNode);
-		
-	/*
-	Walks the list of nodes, making sure all connections between
-	nodes are up to date.
-	*/
-	void AddNode(void* newLocation);
-
-	/*
-	Returns the number of memory nodes (free blocks) in our memory
-	arena.
-	*/
-	u32 CountNodes();
-
-	/*
-	Marks the memory at the given location as unused and calls 
-	deconstructor on object.
-	*/
 	template<class T>
-	void FreeMemory(T* location);
+	void MemoryManager::FreeMemory(T* location)
+	{
+		if (location == nullptr)
+		{
+			LOG_WARN("Nullptr was attempted to be freed.");
+			return;
+		}
+
+		// Check to see if this is an array we're freeing
+		PartitionHeader* header = (PartitionHeader*)((unsigned char*)location - sizeof(PartitionHeader));
+
+		int timesToLoop = header->Count;
+		for (int i = 0; i < timesToLoop; ++i)
+		{
+			location[i].~T();
+		}
+
+		AddNode(location);
+	}
 }

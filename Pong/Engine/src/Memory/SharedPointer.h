@@ -4,6 +4,8 @@
 #include <Memory/MemoryManager.h>
 #include <Memory/ReferenceCounter.h>
 
+// TODO: SharedPointer should be able to be initialized with no values, as well as be able to be reassigned to new values and behave accordingly. Fo SharedPointers, it should decrease the reference counter pointing to that value and potentially free the memory at that location. At the moment I'm not really using any SharedPointers however, so I'm going to leave this to future Jake.
+
 namespace Soul
 {
 	template <class T>
@@ -31,7 +33,7 @@ namespace Soul
 	SharedPointer<T>::SharedPointer(T* pointer) :
 		m_Pointer(pointer)
 	{
-		m_References = Partition(ReferenceCounter);
+		m_References = PARTITION(ReferenceCounter);
 		m_References->AddReference();
 	}
 
@@ -59,8 +61,8 @@ namespace Soul
 		{
 			if (m_References->RemoveReference() == 0)
 			{
-				FreeMemory(m_References);
-				FreeMemory(m_Pointer);
+				MemoryManager::FreeMemory(m_References);
+				MemoryManager::FreeMemory(m_Pointer);
 			}
 		}
 	}
@@ -73,8 +75,8 @@ namespace Soul
 		{
 			if (m_Pointer && m_References->RemoveReference() == 0)
 			{
-				FreeMemory(m_References);
-				FreeMemory(m_Pointer);
+				MemoryManager::FreeMemory(m_References);
+				MemoryManager::FreeMemory(m_Pointer);
 			}
 
 			m_Pointer = otherPointer.m_Pointer;
@@ -90,8 +92,8 @@ namespace Soul
 	{
 		if (m_Pointer && m_References->RemoveReference() == 0)
 		{
-			FreeMemory(m_References);
-			FreeMemory(m_Pointer);
+			MemoryManager::FreeMemory(m_References);
+			MemoryManager::FreeMemory(m_Pointer);
 		}
 
 		m_Pointer = otherPointer.m_Pointer;
