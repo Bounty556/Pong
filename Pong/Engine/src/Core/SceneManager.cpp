@@ -45,17 +45,25 @@ namespace Soul
 		ASSERT(m_Initialized);
 
 		// Find the first scene that disallows draw passing, if any
-		auto i = m_SceneStack->Begin();
-		for (; i != m_SceneStack->End(); i++)
+		auto i = m_SceneStack->RBegin();
+		bool blocked = false;
+		for (; i != m_SceneStack->REnd(); i++)
 		{
 			if ((*i)->DrawPass())
+			{
+				blocked = true;
 				break;
+			}
 		}
+
+		if (blocked)
+			i.Flip();
+		else
+			i = m_SceneStack->Begin();
 
 		// From there, draw the scenes in reverse so the early ones get drawn
 		// over
-		i.Flip();
-		for (; i != m_SceneStack->REnd(); i++)
+		for (; i != m_SceneStack->End(); i++)
 		{
 			(*i)->Draw(target, states);
 		}

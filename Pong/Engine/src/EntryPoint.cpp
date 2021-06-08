@@ -8,8 +8,7 @@
 #include <Memory/MemoryManager.h>
 #include <Platform/Platform.h>
 
-#include <SFML/Graphics/RenderWindow.hpp>
-#include <SFML/Window/Event.hpp>
+#include <SFML/Graphics.hpp>
 
 #define TARGET_FRAMERATE 6.94f // 144 FPS
 
@@ -18,7 +17,7 @@ namespace Soul
 	// TODO: Replace with more sophisticated window
 	sf::RenderWindow* window;
 
-	bool InitializeEngine(u32 WindowWidth, u32 WindowHeight, const char* WindowName)
+	bool InitializeEngine(u32 windowWidth, u32 windowHeight, const char* windowName)
 	{
 		LOG_DEBUG("Starting engine");
 
@@ -34,8 +33,8 @@ namespace Soul
 			return false;
 		}
 
-		window = PARTITION(sf::RenderWindow, sf::VideoMode(WindowWidth, WindowHeight), WindowName);
-
+		window = PARTITION(sf::RenderWindow, sf::VideoMode(windowWidth, windowHeight), windowName);
+		
 		return true;
 	}
 

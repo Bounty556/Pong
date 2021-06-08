@@ -6,7 +6,7 @@
 
 namespace Soul
 {
-	bool SOULAPI InitializeEngine(u32 WindowWidth, u32 WindowHeight, const char* WindowName);
+	bool SOULAPI InitializeEngine(u32 windowWidth, u32 windowHeight, const char* windowName);
 	void SOULAPI SetScene(Scene* initialScene);
 	void SOULAPI ShutdownEngine();
 	void ProcessEvents();
