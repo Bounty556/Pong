@@ -68,7 +68,6 @@ namespace Soul
 
 	public:
 		MemoryManager() = delete;
-		~MemoryManager() = delete;
 
 		/*
 		Initializes our whole memory block.

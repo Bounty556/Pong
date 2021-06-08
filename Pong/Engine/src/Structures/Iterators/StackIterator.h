@@ -17,6 +17,11 @@ namespace Soul
 		bool operator==(const StackIterator& other) const;
 		bool operator!=(const StackIterator& other) const;
 
+		/*
+		Reverse the iterator's direction
+		*/
+		void Flip();
+
 	private:
 		bool m_Reverse;
 		T* m_Ptr;
@@ -73,5 +78,11 @@ namespace Soul
 	bool StackIterator<T>::operator!=(const StackIterator<T>& other) const
 	{
 		return other.m_Ptr != m_Ptr;
+	}
+
+	template <class T>
+	void StackIterator<T>::Flip()
+	{
+		m_Reverse = !m_Reverse;
 	}
 }
