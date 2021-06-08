@@ -12,10 +12,7 @@ namespace Soul
 	class Stack
 	{
 	public:
-		friend class StackIterator<T>;
-
-	public:
-		Stack(u16 preallocated = 16);
+		Stack(u16 capacity = 16);
 		Stack(const Stack&) = delete;
 		Stack(Stack&& otherStack);
 
@@ -38,36 +35,36 @@ namespace Soul
 		bool Empty() const;
 
 	private:
-		u16 m_Allocated;
+		u16 m_Capacity;
 		u16 m_Size;
 		UniquePointer<T> m_Stack;
 	};
 
 	template <class T>
-	Stack<T>::Stack(u16 preallocated /* = 16 */) :
-		m_Allocated(preallocated),
+	Stack<T>::Stack(u16 capacity /* = 16 */) :
+		m_Capacity(capacity),
 		m_Size(0),
-		m_Stack(PARTITION_ARRAY(T, preallocated))
+		m_Stack(PARTITION_ARRAY(T, capacity))
 	{
 	}
 
 	template <class T>
 	Stack<T>::Stack(Stack&& otherStack) :
-		m_Allocated(otherStack.m_Allocated),
+		m_Capacity(otherStack.m_Capacity),
 		m_Size(otherStack.m_Size),
 		m_Stack(std::move(otherStack.m_Stack))
 	{
-		otherStack.m_Allocated = 0;
+		otherStack.m_Capacity = 0;
 		otherStack.m_Size = 0;
 	}
 
 	template <class T>
 	Stack<T>& Stack<T>::operator=(Stack&& otherStack)
 	{
-		m_Allocated = otherStack.m_Allocated;
+		m_Capacity = otherStack.m_Capacity;
 		m_Size = otherStack.m_Size;
 		m_Stack = std::move(otherStack.m_Stack);
-		otherStack.m_Allocated = 0;
+		otherStack.m_Capacity = 0;
 		otherStack.m_Size = 0;
 	}
 
