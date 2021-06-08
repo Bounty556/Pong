@@ -4,6 +4,7 @@
 #include <Core/Scene.h>
 #include <Memory/UniquePointer.h>
 #include <Structures/Stack.h>
+#include <Structures/Queue.h>
 
 #include <SFML/Graphics/RenderStates.hpp>
 #include <SFML/Graphics/RenderTarget.hpp>
@@ -29,8 +30,7 @@ namespace Soul
 		{
 			Push,
 			Pop,
-			Clear,
-			CommandCount
+			Clear
 		};
 
 		struct SceneCommand
@@ -45,7 +45,7 @@ namespace Soul
 		/*
 		SceneManager lifetime management
 		*/
-		static void Initialize(ScenePtr initialScene);
+		static void Initialize(Scene* initialScene);
 		static void Shutdown();
 
 		/*
@@ -72,7 +72,13 @@ namespace Soul
 		static bool HasScenes();
 
 	private:
+		static void PushScene(Scene* scene);
+		static void PopScene();
+		static void ClearScenes();
+
+	private:
 		static bool m_Initialized;
 		static Stack<ScenePtr>* m_SceneStack;
+		static Queue<SceneCommand>* m_CommandQueue;
 	};
 }

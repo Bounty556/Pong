@@ -3,6 +3,8 @@
 #include <Defines.h>
 #include <Memory/UniquePointer.h>
 
+// TODO: There may be some issues with storing objects in here that have non-copyable data, or with very deep data stored in them. May need to investigate and some more testing with this class.
+
 namespace Soul
 {
 	template <class T>

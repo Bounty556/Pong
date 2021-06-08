@@ -175,6 +175,7 @@
     <ClInclude Include="src\Memory\UniquePointer.h" />
     <ClInclude Include="src\Platform\Platform.h" />
     <ClInclude Include="src\Structures\Iterators\StackIterator.h" />
+    <ClInclude Include="src\Structures\Queue.h" />
     <ClInclude Include="src\Structures\Stack.h" />
   </ItemGroup>
   <ItemGroup>

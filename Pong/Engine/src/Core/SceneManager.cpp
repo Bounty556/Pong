@@ -1,26 +1,29 @@
 #include "SceneManager.h"
 
-// TODO: Write Queue class and then finish implementing
-
 namespace Soul
 {
 	bool SceneManager::m_Initialized = false;
 	Stack<SceneManager::ScenePtr>* SceneManager::m_SceneStack;
+	Queue<SceneManager::SceneCommand>* SceneManager::m_CommandQueue;
 
-	void SceneManager::Initialize(ScenePtr  initialScene)
+	void SceneManager::Initialize(Scene* initialScene)
 	{
 		ASSERT(!m_Initialized);
 
-		// TODO: Initialization
+		m_SceneStack = PARTITION(Stack<SceneManager::ScenePtr>);
+		m_CommandQueue = PARTITION(Queue<SceneManager::SceneCommand>);
 
 		m_Initialized = true;
+
+		PushScene(initialScene);
 	}
 
 	void SceneManager::Shutdown()
 	{
 		ASSERT(m_Initialized);
 
-		// TODO: Shutdown
+		MemoryManager::FreeMemory(m_SceneStack);
+		MemoryManager::FreeMemory(m_CommandQueue);
 	}
 
 
@@ -62,14 +65,35 @@ namespace Soul
 	{
 		ASSERT(m_Initialized);
 
-		// TODO: Push command to queue
+		m_CommandQueue->Que(command);
 	}
 
 	void SceneManager::ConsumeCommands()
 	{
 		ASSERT(m_Initialized);
 
-		// TODO: Consume all commands in queue
+		while (!m_CommandQueue->Empty())
+		{
+			SceneCommand command = m_CommandQueue->Deque();
+
+			switch (command.command)
+			{
+				case Commands::Push:
+				{
+					PushScene(command.scene);
+				} break;
+
+				case Commands::Pop:
+				{
+					PopScene();
+				} break;
+
+				case Commands::Clear:
+				{
+					ClearScenes();
+				} break;
+			}
+		}
 	}
 
 	bool SceneManager::HasScenes()
@@ -77,5 +101,23 @@ namespace Soul
 		ASSERT(m_Initialized);
 
 		return !m_SceneStack->Empty();
+	}
+
+	void SceneManager::PushScene(Scene* scene)
+	{
+		m_SceneStack->Push(ScenePtr(scene));
+	}
+
+	void SceneManager::PopScene()
+	{
+		m_SceneStack->Pop();
+	}
+
+	void SceneManager::ClearScenes()
+	{
+		while (!m_SceneStack->Empty())
+		{
+			m_SceneStack->Pop();
+		}
 	}
 }
