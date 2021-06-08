@@ -63,6 +63,7 @@ namespace Soul
 				SceneManager::Update(TARGET_FRAMERATE);
 
 				// Rendering
+				window->setActive(true);
 				window->clear();
 
 				SceneManager::Draw(*window, sf::RenderStates::Default);
