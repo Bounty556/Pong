@@ -50,7 +50,7 @@ namespace Soul
 		free(location);
 	}
 
-	void PlatformCopyMemory(void* from, void* to, i32 size)
+	void PlatformCopyMemory(void* from, const void* to, i32 size)
 	{
 		memcpy(from, to, size);
 	}
