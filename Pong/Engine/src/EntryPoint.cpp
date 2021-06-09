@@ -27,7 +27,7 @@ namespace Soul
 			LOG_FATAL("Failed to initialize platform layer.");
 			return false;
 		}
-		if (!MemoryManager::Initialize(MEGABYTES(512)))
+		if (!MemoryManager::Initialize(MEGABYTES(32)))
 		{
 			LOG_FATAL("Failed to initialize memory.");
 			return false;
