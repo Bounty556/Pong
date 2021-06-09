@@ -24,7 +24,7 @@ namespace Soul
 		Vector& operator=(const Vector<T>&) = delete;
 		Vector& operator=(Vector<T>&& otherVector);
 
-		T& operator[](unsigned int index) const;
+		T& operator[](u32 index) const;
 
 		void Push(const T& element);
 		void Push(T&& element);
@@ -74,6 +74,18 @@ namespace Soul
 	{
 		otherVector.m_Capacity = 0;
 		otherVector.m_Size = 0;
+	}
+
+	template <class T>
+	Vector<T>& Vector<T>::operator=(Vector<T>&& otherVector)
+	{
+		m_Capacity = otherVector.m_Capacity;
+		m_Size = otherVector.m_Size;
+		m_Vector = std::move(otherVector.m_Vector);
+		otherVector.m_Capacity = 0;
+		otherVector.m_Size = 0;
+
+		return *this;
 	}
 
 	template <class T>
@@ -178,9 +190,26 @@ namespace Soul
 	}
 
 	template <class T>
+	void Vector<T>::Remove(u32 index)
+	{
+		ASSERT(index > 0 && index < m_Size);
+
+		if (index == m_Size - 1)
+			--m_Size;
+		else
+			m_Vector[index] = std::move(m_Vector[--m_Size]);
+	}
+
+	template <class T>
 	u32 Vector<T>::Count() const
 	{
 		return m_Size;
+	}
+
+	template <class T>
+	bool Vector<T>::IsEmpty() const
+	{
+		return m_Size == 0;
 	}
 
 	template <class T>
