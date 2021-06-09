@@ -170,6 +170,8 @@
     <ClInclude Include="src\Core\Timer.h" />
     <ClInclude Include="src\Defines.h" />
     <ClInclude Include="src\EntryPoint.h" />
+    <ClInclude Include="src\Math\Hashes.h" />
+    <ClInclude Include="src\Math\Functions.h" />
     <ClInclude Include="src\Memory\MemoryManager.h" />
     <ClInclude Include="src\Memory\ReferenceCounter.h" />
     <ClInclude Include="src\Memory\SharedPointer.h" />
@@ -186,6 +188,8 @@
     <ClCompile Include="src\Core\String.cpp" />
     <ClCompile Include="src\Core\Timer.cpp" />
     <ClCompile Include="src\EntryPoint.cpp" />
+    <ClCompile Include="src\Math\Hashes.cpp" />
+    <ClCompile Include="src\Math\Functions.cpp" />
     <ClCompile Include="src\Memory\MemoryManager.cpp" />
     <ClCompile Include="src\Memory\ReferenceCounter.cpp" />
     <ClCompile Include="src\Platform\PlatformWin32.cpp" />

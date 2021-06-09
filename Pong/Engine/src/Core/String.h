@@ -20,7 +20,7 @@ namespace Soul
 
 		~String();
 
-		String& operator=(const String& otherString); // Copy assignment
+		String& operator=(const String& otherString);
 		String& operator=(String&& otherString);
 		String& operator=(const char* otherString);
 		String& operator=(const char otherChar);

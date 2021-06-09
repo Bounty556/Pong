@@ -1,5 +1,6 @@
 #include "String.h"
 
+#include <Math/Functions.h>
 #include <Memory/MemoryManager.h>
 #include <Platform/Platform.h>
 
@@ -11,7 +12,8 @@ namespace Soul
 	String::String(const char* initialString) :
 		m_StringLength(strlen(initialString))
 	{
-		// TODO: Why we do we have to do this?
+		// We do this so that the string length is always a power of 2, or, if
+		// represented in binary form, something like 00010000 or 00001000...
 		if (m_StringLength + 1 > m_MINIMUM_CAPACITY / 2)
 		{
 			// Determine capacity through doubling highest bit
@@ -71,10 +73,12 @@ namespace Soul
 
 	String::String(String&& otherString) :
 		m_StringLength(otherString.m_StringLength),
-		m_StringCapacity(otherString.m_StringCapacity)
+		m_StringCapacity(otherString.m_StringCapacity),
+		m_CString(otherString.m_CString)
 	{
-		m_CString = otherString.m_CString;
 		otherString.m_CString = nullptr;
+		otherString.m_StringCapacity = 0;
+		otherString.m_StringLength = 0;
 	}
 
 	String::~String()
@@ -96,6 +100,18 @@ namespace Soul
 
 		PlatformCopyMemory(m_CString, otherString.m_CString, m_StringLength);
 		m_CString[m_StringLength] = '\0';
+
+		return *this;
+	}
+
+	String& String::operator=(String&& otherString)
+	{
+		m_CString = otherString.m_CString;
+		m_StringCapacity = otherString.m_StringCapacity;
+		m_StringLength = otherString.m_StringLength;
+		otherString.m_CString = nullptr;
+		otherString.m_StringCapacity = 0;
+		otherString.m_StringLength = 0;
 
 		return *this;
 	}
@@ -327,11 +343,10 @@ namespace Soul
 		{
 			i32 convertedInt = 0;
 
-			for (i32 i = 0; i < number.Length(); ++i)
+			for (u32 i = 0; i < number.Length(); ++i)
 			{
-				i32 charValue = number[i] - 48;
-				// TODO: Add Math::PowInt
-				//convertedInt += charValue * Math::PowInt(10, number.Length() - (i + 1));
+				u8 charValue = number[i] - 48;
+				convertedInt += charValue * Math::PowInt(10, number.Length() - (i + 1));
 			}
 
 			if (isNegative)
