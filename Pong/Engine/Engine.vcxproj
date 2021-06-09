@@ -163,7 +163,9 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="src\Core\Listener.h" />
     <ClInclude Include="src\core\Logger.h" />
+    <ClInclude Include="src\Core\MessageBus.h" />
     <ClInclude Include="src\Core\Scene.h" />
     <ClInclude Include="src\Core\SceneManager.h" />
     <ClInclude Include="src\Core\String.h" />
@@ -183,7 +185,9 @@
     <ClInclude Include="src\Structures\Stack.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Core\Listener.cpp" />
     <ClCompile Include="src\core\Logger.cpp" />
+    <ClCompile Include="src\Core\MessageBus.cpp" />
     <ClCompile Include="src\Core\Scene.cpp" />
     <ClCompile Include="src\Core\SceneManager.cpp" />
     <ClCompile Include="src\Core\String.cpp" />
