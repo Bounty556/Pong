@@ -19,7 +19,7 @@ namespace Soul
 
 	bool InitializeEngine(u32 windowWidth, u32 windowHeight, const char* windowName)
 	{
-		LOG_DEBUG("Starting engine");
+		LOG_INFO("Starting engine");
 
 		// Startup systems
 		if (!PlatformInitialize())
@@ -75,7 +75,7 @@ namespace Soul
 
 	void ShutdownEngine()
 	{
-		LOG_DEBUG("Shutting down engine");
+		LOG_INFO("Shutting down engine");
 
 		SceneManager::Shutdown();
 		
