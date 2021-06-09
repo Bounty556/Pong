@@ -32,7 +32,7 @@ namespace Soul
 		StackIterator<T> REnd();
 
 		u16 Count() const;
-		bool Empty() const;
+		bool IsEmpty() const;
 
 	private:
 		u16 m_Capacity;
@@ -138,7 +138,7 @@ namespace Soul
 	}
 
 	template <class T>
-	bool Stack<T>::Empty() const
+	bool Stack<T>::IsEmpty() const
 	{
 		return m_Size == 0;
 	}

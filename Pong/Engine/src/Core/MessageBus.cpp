@@ -11,6 +11,8 @@ namespace Soul
 	bool MessageBus::Initialize()
 	{
 		m_Map = PARTITION(MessageBusMap);
+
+		return true;
 	}
 
 	void MessageBus::Shutdown()

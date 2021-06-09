@@ -2,12 +2,11 @@
 
 #include <Defines.h>
 #include <Structures/Map.h>
+#include <Structures/Vector.h>
 
 namespace Soul
 {
 	class Listener;
-	template <class K> // TODO: Remove
-	class Vector;
 
 	class SOULAPI MessageBus
 	{

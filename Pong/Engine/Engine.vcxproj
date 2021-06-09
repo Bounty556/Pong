@@ -183,6 +183,7 @@
     <ClInclude Include="src\Structures\Map.h" />
     <ClInclude Include="src\Structures\Queue.h" />
     <ClInclude Include="src\Structures\Stack.h" />
+    <ClInclude Include="src\Structures\Vector.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Core\Listener.cpp" />

@@ -28,7 +28,7 @@ namespace Soul
 		const T& Peek() const;
 
 		u16 Count() const;
-		bool Empty() const;
+		bool IsEmpty() const;
 
 	private:
 		u16 m_Capacity;
@@ -124,7 +124,7 @@ namespace Soul
 	}
 
 	template <class T>
-	bool Queue<T>::Empty() const
+	bool Queue<T>::IsEmpty() const
 	{
 		return m_Size == 0;
 	}

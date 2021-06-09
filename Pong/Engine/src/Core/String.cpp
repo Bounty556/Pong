@@ -379,6 +379,11 @@ namespace Soul
 			isNegative = true;
 			value = -value;
 		}
+		else if (value == 0)
+		{
+			converted += '0';
+			return converted;
+		}
 
 		while (value > 0)
 		{

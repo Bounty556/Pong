@@ -54,8 +54,18 @@ namespace Soul
 		SOULAPI f32 Max(f32 a, f32 b);
 
 		/*
+		Returns the max of the two values.
+		*/
+		SOULAPI i32 Max(i32 a, i32 b);
+
+		/*
 		Returns the min of the two values.
 		*/
 		SOULAPI f32 Min(f32 a, f32 b);
+
+		/*
+		Returns the min of the two values.
+		*/
+		SOULAPI i32 Min(i32 a, i32 b);
 	}
 }

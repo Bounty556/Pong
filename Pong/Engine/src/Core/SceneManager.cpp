@@ -80,7 +80,7 @@ namespace Soul
 	{
 		ASSERT(m_Initialized);
 
-		while (!m_CommandQueue->Empty())
+		while (!m_CommandQueue->IsEmpty())
 		{
 			SceneCommand command = m_CommandQueue->Deque();
 
@@ -108,7 +108,7 @@ namespace Soul
 	{
 		ASSERT(m_Initialized);
 
-		return !m_SceneStack->Empty();
+		return !m_SceneStack->IsEmpty();
 	}
 
 	void SceneManager::PushScene(Scene* scene)
@@ -123,7 +123,7 @@ namespace Soul
 
 	void SceneManager::ClearScenes()
 	{
-		while (!m_SceneStack->Empty())
+		while (!m_SceneStack->IsEmpty())
 		{
 			m_SceneStack->Pop();
 		}

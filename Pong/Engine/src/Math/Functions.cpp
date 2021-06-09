@@ -109,5 +109,21 @@ namespace Soul
 			else
 				return b;
 		}
+
+		i32 Max(i32 a, i32 b)
+		{
+			if (a >= b)
+				return a;
+			else
+				return b;
+		}
+
+		i32 Min(i32 a, i32 b)
+		{
+			if (a <= b)
+				return a;
+			else
+				return b;
+		}
 	}
 }
