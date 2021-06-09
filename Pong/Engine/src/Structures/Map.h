@@ -63,6 +63,16 @@ namespace Soul
 		//Vector<V*> GetValues() const;
 
 	private:
+		/*
+		Returns the first found open location based on the key given. Returns
+		-1 if none found.
+		*/
+		i64 FindOpenLocation(const K& key) const;
+		/*
+		Returns the location of the set that matches the provided key. Returns
+		-1 if none found.
+		*/
+		i64 FindExistingLocation(const K& key) const;
 		void Resize(u32 newCapacity);
 
 	private:
@@ -113,25 +123,12 @@ namespace Soul
 		if (m_Size + 1 >= m_Capacity)
 			Resize(Math::FindNextPrime(m_Capacity * 2));
 
-		// Find the location to place this pair
-		u64 hash = Math::Hash(key);
-		u32 location = hash % m_Capacity;
+		i64 openLocation = FindOpenLocation(key);
 
-		u32 attempts = 0;
-		u32 maxAttempts = m_Capacity - 1;
-		// Check to see if there is an object at that location
-		while (m_Map[location].IsInitialized)
-		{
-			// We couldn't find a spot
-			if (attempts++ >= maxAttempts)
-			{
-				LOG_ERROR("Error, could not find valid memory for new pair.\nCurrent capacity: %d\nCurrent pairs: %d",
-					m_Capacity, m_Size);
-				return false;
-			}
+		if (openLocation == -1)
+			return false;
 
-			location = (location + (attempts * attempts)) % m_Capacity;
-		}
+		u32 location = (u32)openLocation;
 
 		m_Map[location].IsInitialized = true;
 		new (&m_Map[location].Key) K(key);
@@ -149,25 +146,12 @@ namespace Soul
 		if (m_Size + 1 >= m_Capacity)
 			Resize(Math::FindNextPrime(m_Capacity * 2));
 
-		// Find the location to place this pair
-		u64 hash = Math::Hash(key);
-		u32 location = hash % m_Capacity;
+		i64 openLocation = FindOpenLocation(key);
 
-		u32 attempts = 0;
-		u32 maxAttempts = m_Capacity - 1;
-		// Check to see if there is an object at that location
-		while (m_Map[location].IsInitialized)
-		{
-			// We couldn't find a spot
-			if (attempts++ >= maxAttempts)
-			{
-				LOG_ERROR("Error, could not find valid memory for new pair.\nCurrent capacity: %d\nCurrent pairs: %d",
-					m_Capacity, m_Size);
-				return false;
-			}
+		if (openLocation == -1)
+			return false;
 
-			location = (location + (attempts * attempts)) % m_Capacity;
-		}
+		u32 location = (u32)openLocation;
 
 		m_Map[location].IsInitialized = true;
 		new (&m_Map[location].Key) K(std::move(key));
@@ -185,25 +169,12 @@ namespace Soul
 		if (m_Size + 1 >= m_Capacity)
 			Resize(Math::FindNextPrime(m_Capacity * 2));
 
-		// Find the location to place this pair
-		u64 hash = Math::Hash(key);
-		u32 location = hash % m_Capacity;
+		i64 openLocation = FindOpenLocation(key);
 
-		u32 attempts = 0;
-		u32 maxAttempts = m_Capacity - 1;
-		// Check to see if there is an object at that location
-		while (m_Map[location].IsInitialized)
-		{
-			// We couldn't find a spot
-			if (attempts++ >= maxAttempts)
-			{
-				LOG_ERROR("Error, could not find valid memory for new pair.\nCurrent capacity: %d\nCurrent pairs: %d",
-					m_Capacity, m_Size);
-				return false;
-			}
+		if (openLocation == -1)
+			return false;
 
-			location = (location + (attempts * attempts)) % m_Capacity;
-		}
+		u32 location = (u32)openLocation;
 
 		m_Map[location].IsInitialized = true;
 		new (&m_Map[location].Key) K(key);
@@ -213,6 +184,8 @@ namespace Soul
 
 		return true;
 	}
+	
+	// TODO: look into consolidating all of this duplicate code
 
 	template <class K, class V>
 	bool Map<K, V>::AddPair(K&& key, const V& value)
@@ -221,25 +194,12 @@ namespace Soul
 		if (m_Size + 1 >= m_Capacity)
 			Resize(Math::FindNextPrime(m_Capacity * 2));
 
-		// Find the location to place this pair
-		u64 hash = Math::Hash(key);
-		u32 location = hash % m_Capacity;
+		i64 openLocation = FindOpenLocation(key);
 
-		u32 attempts = 0;
-		u32 maxAttempts = m_Capacity - 1;
-		// Check to see if there is an object at that location
-		while (m_Map[location].IsInitialized)
-		{
-			// We couldn't find a spot
-			if (attempts++ >= maxAttempts)
-			{
-				LOG_ERROR("Error, could not find valid memory for new pair.\nCurrent capacity: %d\nCurrent pairs: %d",
-					m_Capacity, m_Size);
-				return false;
-			}
+		if (openLocation == -1)
+			return false;
 
-			location = (location + (attempts * attempts)) % m_Capacity;
-		}
+		u32 location = (u32)openLocation;
 
 		m_Map[location].IsInitialized = true;
 		new (&m_Map[location].Key) K(std::move(key));
@@ -271,26 +231,12 @@ namespace Soul
 	template <class K, class V>
 	V* Map<K, V>::GetValue(const K& key) const
 	{
-		// Find the location to place this pair
-		u64 hash = Math::Hash(key);
-		u32 location = hash % m_Capacity;
+		i64 existingLocation = FindExistingLocation(key);
 
-		u32 attempts = 0;
-		u32 maxAttempts = m_Capacity - 1;
+		if (existingLocation == -1)
+			return nullptr;
 
-		// Check to see if there is an object at that location
-		while ((m_Map[location].IsInitialized && m_Map[location].Key != key))
-		{
-			// We couldn't find a spot
-
-			if (attempts++ >= maxAttempts)
-			{
-				LOG_ERROR("Could not find value with hash: %lld", hash);
-				return nullptr;
-			}
-
-			location = (location + (attempts * attempts)) % m_Capacity;
-		}
+		u32 location = (u32)existingLocation;
 
 		if (!m_Map[location].IsInitialized)
 			return nullptr;
@@ -337,12 +283,54 @@ namespace Soul
 	template <class K, class V>
 	void Map<K, V>::RemovePair(const K& key)
 	{
+		i64 existingLocation = FindExistingLocation(key);
+
+		if (existingLocation == -1)
+			return;
+
+		u32 location = (u32)existingLocation;
+
+		// Assume we found the location where the pair resides
+		m_Map[location].Key.~K();
+		m_Map[location].Value.~V();
+		PlatformSetMemory(&m_Map[location], 0, sizeof(Set<K, V>));
+	}
+
+	template <class K, class V>
+	i64 Map<K, V>::FindOpenLocation(const K& key) const
+	{
 		// Find the location to place this pair
 		u64 hash = Math::Hash(key);
 		u32 location = hash % m_Capacity;
 
 		u32 attempts = 0;
-		u32 maxAttempts = m_Capacity - 1;
+		u32 maxAttempts = m_Capacity / 2;
+		// Check to see if there is an object at that location
+		while (m_Map[location].IsInitialized)
+		{
+			// We couldn't find a spot
+			if (attempts++ >= maxAttempts)
+			{
+				LOG_ERROR("Error, could not find valid memory for new pair.\nCurrent capacity: %d\nCurrent pairs: %d",
+					m_Capacity, m_Size);
+				return -1;
+			}
+
+			location = (location + (attempts * attempts)) % m_Capacity;
+		}
+
+		return location;
+	}
+
+	template <class K, class V>
+	i64 Map<K, V>::FindExistingLocation(const K& key) const
+	{
+		// Find the location to place this pair
+		u64 hash = Math::Hash(key);
+		u32 location = hash % m_Capacity;
+
+		u32 attempts = 0;
+		u32 maxAttempts = m_Capacity / 2;
 
 		// Check to see if there is an object at that location
 		while ((m_Map[location].IsInitialized && m_Map[location].Key != key))
@@ -351,16 +339,13 @@ namespace Soul
 			if (attempts++ >= maxAttempts)
 			{
 				LOG_ERROR("Could not find value with hash: %lld", hash);
-				return;
+				return -1;
 			}
 
 			location = (location + (attempts * attempts)) % m_Capacity;
 		}
 
-		// Assume we found the location where the pair resides
-		m_Map[location].Key.~K();
-		m_Map[location].Value.~V();
-		PlatformSetMemory(&m_Map[location], 0, sizeof(Set<K, V>));
+		return location;
 	}
 
 	template <class K, class V>
@@ -379,7 +364,7 @@ namespace Soul
 			u32 location = hash % newCapacity;
 
 			u32 attempts = 0;
-			u32 maxAttempts = m_Capacity - 1;
+			u32 maxAttempts = m_Capacity / 2;
 			// Check to see if there is an object at that location
 			while (newMemory[location].IsInitialized)
 			{

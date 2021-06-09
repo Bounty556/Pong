@@ -37,6 +37,25 @@ int main()
 		LOG_DEBUG("%s %s %s", stringMap.GetValue(keyTest)->GetCString
 			(), stringMap.GetValue(keyTest1)->GetCString(), stringMap.GetValue(keyTest3)->GetCString());
 
+		Soul::Map<const char*, const char*> cStringMap;
+		cStringMap.AddPair("abcd1", "1");
+		cStringMap.AddPair("abcd2", "2");
+		cStringMap.AddPair("abcd3", "3");
+		cStringMap.AddPair("abcd4", "4");
+		cStringMap.AddPair("abcd5", "1");
+		cStringMap.AddPair("abcd6", "2");
+		cStringMap.AddPair("abcd7", "3");
+		cStringMap.AddPair("abcd8", "4");
+
+		LOG_DEBUG("%s %s %s %s %s %s %s %s", *cStringMap.GetValue("abcd1"),
+			*cStringMap.GetValue("abcd2"),
+			*cStringMap.GetValue("abcd3"),
+			*cStringMap.GetValue("abcd4"),
+			*cStringMap.GetValue("abcd5"),
+			*cStringMap.GetValue("abcd6"),
+			*cStringMap.GetValue("abcd7"),
+			*cStringMap.GetValue("abcd8"));
+
 		TestScene* scene = PARTITION(TestScene);
 
 		Soul::SetScene(scene);
