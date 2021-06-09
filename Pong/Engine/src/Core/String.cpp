@@ -104,6 +104,7 @@ namespace Soul
 		return *this;
 	}
 
+	// TODO: Free our memory first
 	String& String::operator=(String&& otherString)
 	{
 		m_CString = otherString.m_CString;
