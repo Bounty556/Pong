@@ -23,37 +23,22 @@ namespace Soul
 			MaxControllers
 		};
 
-		enum ButtonState
-		{
-			Pressed,
-			Down,
-			Released,
-			None
-		};
-
-		struct ControlState
-		{
-			ButtonState state;
-			f32 xAxis;
-			f32 yAxis;
-		};
-
 	public:
 		InputManager() = delete;
 
 		static bool Initialize();
 		static void Shutdown();
 
-		static ControllerId RegisterKeyboard();
-		static ControllerId RegisterKeyboard(const char* controlsFile);
-		static ControllerId RegisterController();
-		static ControllerId RegisterController(const char* controlsFile);
+		static ControllerId RegisterGamepad();
+		static ControllerId RegisterGamepad(const char* controlsFile);
+
+		static void UpdateControllerControls(ControllerId id, const char* controlsFile);
 
 		static void DisconnectController(ControllerId id);
 
-		static void UpdateControllerStates();
+		static void UpdateControllerState(ControllerId id, sf::Event input);
 
-		static ControlState GetControlState(const char* control);
+		static Controller::ControlState GetControlState(ControllerId id, const char* control);
 
 	private:
 		static Controller* m_Controllers;

@@ -14,45 +14,52 @@ namespace Soul
 		m_ControllerCount = 0;
 
 		m_DefaultControls = PARTITION(ControlsMap, "res/defaultControls.controls");
+
+		// Set the keyboard up to use the default controls
+		new (m_Controllers) Controller(*m_DefaultControls, Controller::ControllerType::Keyboard);
 	}
 
 	void InputManager::Shutdown()
 	{
-
-	}
-
-	InputManager::ControllerId InputManager::RegisterKeyboard()
-	{
-
-	}
-
-	InputManager::ControllerId InputManager::RegisterKeyboard(const char* controlsFile)
-	{
-
+		MemoryManager::FreeMemory(m_Controllers);
+		MemoryManager::FreeMemory(m_DefaultControls);
 	}
 	
-	InputManager::ControllerId InputManager::RegisterController()
+	InputManager::ControllerId InputManager::RegisterGamepad()
 	{
+		ASSERT(m_ControllerCount < MaxControllers);
 
+		new (&m_Controllers[m_ControllerCount++]) Controller(*m_DefaultControls, Controller::ControllerType::Gamepad);
+
+		return (InputManager::ControllerId)m_ControllerCount;
 	}
 
-	InputManager::ControllerId InputManager::RegisterController(const char* controlsFile)
+	InputManager::ControllerId InputManager::RegisterGamepad(const char* controlsFile)
 	{
+		ASSERT(m_ControllerCount < MaxControllers);
 
+		new (&m_Controllers[m_ControllerCount++]) Controller(controlsFile, Controller::ControllerType::Gamepad);
+
+		return (InputManager::ControllerId)m_ControllerCount;
+	}
+
+	void InputManager::UpdateControllerControls(ControllerId id, const char* controlsFile)
+	{
+		m_Controllers[id].UpdateControlsFile(controlsFile);
 	}
 
 	void InputManager::DisconnectController(ControllerId id)
 	{
-
+		// TODO: Figure out
 	}
 
-	void InputManager::UpdateControllerStates()
+	void InputManager::UpdateControllerState(ControllerId id, sf::Event input)
 	{
-
+		m_Controllers[id].UpdateState(input);
 	}
 
-	InputManager::ControlState InputManager::GetControlState(const char* control)
+	Controller::ControlState InputManager::GetControlState(ControllerId id, const char* control)
 	{
-
+		return m_Controllers[id].GetControlState(control);
 	}
 }
