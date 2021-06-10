@@ -92,7 +92,7 @@ namespace Soul
 	template <class K, class V>
 	Map<K, V>::Map(Map<K, V>&& otherMap) :
 		m_Capacity(otherMap.m_Capacity),
-		m_Size(otherMap.m_Count),
+		m_Size(otherMap.m_Size),
 		m_Map(std::move(otherMap.m_Map))
 	{
 		otherMap.m_Capacity = 0;
@@ -108,6 +108,8 @@ namespace Soul
 		m_Map = std::move(otherMap.m_Map);
 		otherMap.m_Capacity = 0;
 		otherMap.m_Size = 0;
+
+		return *this;
 	}
 
 	template <class K, class V>

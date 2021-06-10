@@ -3,6 +3,7 @@
 #include "EntryPoint.h"
 
 #include <Core/Logger.h>
+#include <Core/MessageBus.h>
 #include <Core/Timer.h>
 #include <Core/SceneManager.h>
 #include <Memory/MemoryManager.h>
@@ -30,6 +31,11 @@ namespace Soul
 		if (!MemoryManager::Initialize(MEGABYTES(32)))
 		{
 			LOG_FATAL("Failed to initialize memory.");
+			return false;
+		}
+		if (!MessageBus::Initialize())
+		{
+			LOG_FATAL("Failed to initialize MessageBus.");
 			return false;
 		}
 
@@ -69,6 +75,8 @@ namespace Soul
 				SceneManager::Draw(*window, sf::RenderStates::Default);
 
 				window->display();
+
+				MessageBus::PumpQueue();
 			}
 		}
 	}
@@ -80,7 +88,8 @@ namespace Soul
 		SceneManager::Shutdown();
 		
 		MemoryManager::FreeMemory(window);
-
+		
+		MessageBus::Shutdown();
 		MemoryManager::Shutdown();
 	}
 

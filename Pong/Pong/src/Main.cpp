@@ -1,6 +1,7 @@
 #include <EntryPoint.h>
 #include <Memory/MemoryManager.h>
-#include <Structures/Vector.h>
+#include <Core/Listener.h>
+#include <Core/MessageBus.h>
 #include <Core/String.h>
 
 #include "TestScene.h"
@@ -9,24 +10,22 @@ int main()
 {
 	if (Soul::InitializeEngine(1280, 720, "Pong!"))
 	{
-		Soul::Vector<Soul::String> stringVector;
+		// Test for immediate messages
+		int testInt = 1;
+		Soul::String testString = "Testing!";
 
-		for (u8 i = 0; i < 15; ++i)
-		{
-			stringVector.Push(Soul::String::IntToString(i));
-		}
+		Soul::Listener listener;
 
-		stringVector.Clear();
+		listener.Subscribe("TestMessage", [&](void* data) { testInt = 2; });
+		listener.Subscribe("TestMessage2", [&](void* data) { testString = (const char*)(data); });
 
-		for (u8 i = 0; i < 15; ++i)
-		{
-			stringVector.Push(Soul::String::IntToString(i));
-		}
+		const char* testCString = "This works!";
 
-		for (u8 i = 0; i < 15; ++i)
-		{
-			LOG_DEBUG("%s", stringVector[i].GetCString());
-		}
+		Soul::MessageBus::ImmediateMessage("TestMessage", nullptr);
+		Soul::MessageBus::ImmediateMessage("TestMessage2", (void*)testCString);
+
+		LOG_DEBUG("%d", testInt);
+		LOG_DEBUG("%s", testString);
 
 		TestScene* scene = PARTITION(TestScene);
 

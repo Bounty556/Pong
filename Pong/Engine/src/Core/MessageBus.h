@@ -3,6 +3,7 @@
 #include <Defines.h>
 #include <Structures/Map.h>
 #include <Structures/Vector.h>
+#include <Structures/Queue.h>
 
 namespace Soul
 {
@@ -10,6 +11,13 @@ namespace Soul
 
 	class SOULAPI MessageBus
 	{
+	public:
+		struct Message
+		{
+			const char* message;
+			void* data;
+		};
+
 	public:
 		MessageBus() = delete;
 
@@ -50,5 +58,6 @@ namespace Soul
 		
 	private:
 		static Map<const char*, Vector<Listener*>>* m_Map;
+		static Queue<Message>* m_Messages;
 	};
 }
