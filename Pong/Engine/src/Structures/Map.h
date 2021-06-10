@@ -6,6 +6,7 @@
 #include <Math/Functions.h>
 #include <Math/Hashes.h>
 #include <Platform/Platform.h>
+#include <Structures/Vector.h>
 
 #define MapType Map<K, V>
 #define SetType Set<K, V>
@@ -51,16 +52,15 @@ namespace Soul
 		V* GetValue(const K& key) const;
 		u32 Count() const;
 
-		// TODO: Add Vectors
-		///*
-		//Returns a vector of all of the keys stored in this map.
-		//*/
-		//Vector<K*> GetKeys() const;
+		/*
+		Returns a vector of all of the keys stored in this map.
+		*/
+		Vector<K*> GetKeys() const;
 
-		///*
-		//Returns a vector of all of the values stored in this map.
-		//*/
-		//Vector<V*> GetValues() const;
+		/*
+		Returns a vector of all of the values stored in this map.
+		*/
+		Vector<V*> GetValues() const;
 
 	private:
 		/*
@@ -252,15 +252,15 @@ namespace Soul
 		return m_Size;
 	}
 
-	/*template <class K, class V>
-	Vector<K*> MapType::GetKeys() const
+	template <class K, class V>
+	Vector<K*> Map<K, V>::GetKeys() const
 	{
-		Vector<K*> keys(m_Count);
-		for (unsigned int i = 0; i < m_Capacity; ++i)
+		Vector<K*> keys(m_Size);
+		for (u32 i = 0; i < m_Capacity; ++i)
 		{
-			if (m_Memory[i].IsInitialized)
+			if (m_Map[i].IsInitialized)
 			{
-				keys.Push(&(m_Memory[i].Key));
+				keys.Push(&m_Map[i].Key);
 			}
 		}
 
@@ -268,19 +268,19 @@ namespace Soul
 	}
 
 	template <class K, class V>
-	Vector<V*> MapType::GetValues() const
+	Vector<V*> Map<K, V>::GetValues() const
 	{
-		Vector<V*> values(m_Count);
-		for (unsigned int i = 0; i < m_Capacity; ++i)
+		Vector<V*> values(m_Size);
+		for (u32 i = 0; i < m_Capacity; ++i)
 		{
-			if (m_Memory[i].IsInitialized)
+			if (m_Map[i].IsInitialized)
 			{
-				values.Push(&(m_Memory[i].Value));
+				values.Push(&m_Map[i].Value);
 			}
 		}
 
 		return values;
-	}*/
+	}
 
 	template <class K, class V>
 	void Map<K, V>::RemovePair(const K& key)

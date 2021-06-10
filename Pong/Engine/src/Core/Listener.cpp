@@ -1,12 +1,20 @@
 #include "Listener.h"
 
 #include <Core/MessageBus.h>
+#include <Structures/Vector.h>
 
 namespace Soul
 {
 	Listener::Listener() :
 		m_Callbacks()
 	{
+	}
+
+	Listener::~Listener()
+	{
+		Vector<const char**> messages(std::move(m_Callbacks.GetKeys()));
+		for (u32 i = 0; i < messages.Count(); ++i)
+			MessageBus::Unsubscribe(*messages[i], this);
 	}
 
 	void Listener::Subscribe(const char* message, std::function<void(void*)> callback)

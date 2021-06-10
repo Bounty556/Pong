@@ -5,8 +5,6 @@
 
 #include "TestScene.h"
 
-// TODO: unsubscribe listeners on destroy
-
 int main()
 {
 	if (Soul::InitializeEngine(1280, 720, "Pong!"))

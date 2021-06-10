@@ -11,6 +11,7 @@ namespace Soul
 	{
 	public:
 		Listener();
+		~Listener();
 
 		void Subscribe(const char* message, std::function<void(void*)> callback);
 		void Unsubscribe(const char* message);
