@@ -180,6 +180,9 @@
     <ClInclude Include="src\Core\Timer.h" />
     <ClInclude Include="src\Defines.h" />
     <ClInclude Include="src\EntryPoint.h" />
+    <ClInclude Include="src\IO\Controller.h" />
+    <ClInclude Include="src\IO\ControlsMap.h" />
+    <ClInclude Include="src\IO\InputManager.h" />
     <ClInclude Include="src\IO\TextFileReader.h" />
     <ClInclude Include="src\Math\Hashes.h" />
     <ClInclude Include="src\Math\Functions.h" />
@@ -203,6 +206,9 @@
     <ClCompile Include="src\Core\String.cpp" />
     <ClCompile Include="src\Core\Timer.cpp" />
     <ClCompile Include="src\EntryPoint.cpp" />
+    <ClCompile Include="src\IO\Controller.cpp" />
+    <ClCompile Include="src\IO\ControlsMap.cpp" />
+    <ClCompile Include="src\IO\InputManager.cpp" />
     <ClCompile Include="src\IO\TextFileReader.cpp" />
     <ClCompile Include="src\Math\Hashes.cpp" />
     <ClCompile Include="src\Math\Functions.cpp" />
