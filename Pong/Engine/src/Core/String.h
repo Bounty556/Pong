@@ -43,12 +43,6 @@ namespace Soul
 		u32 Length() const;
 
 		/*
-		Sets the length of this string. Should only be used if directly editing the buffer
-		itself, such as when loading file contents into the string.
-		*/
-		void SetLength(u32 length);
-
-		/*
 		Returns:
 		< 0 if this string is lexicographically less than the provided string.
 		0 if this string is lexicographically equivalent to the provided string.
@@ -85,6 +79,11 @@ namespace Soul
 		Reverses the characters in this String.
 		*/
 		void Reverse();
+
+		/*
+		Ensures the string has enough capacity for the c-string to be edited.
+		*/
+		void ReserveCapacity(u32 capacity);
 
 		/*
 		Utility function that converts an integer into a Soul::String.

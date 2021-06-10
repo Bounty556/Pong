@@ -288,11 +288,6 @@ namespace Soul
 		return m_StringLength;
 	}
 
-	void String::SetLength(u32 length)
-	{
-		m_StringLength = length;
-	}
-
 	i32 String::CompareTo(const String& otherString) const
 	{
 		return strcmp(m_CString, otherString.m_CString);
@@ -367,6 +362,27 @@ namespace Soul
 			char tempChar = m_CString[i];
 			m_CString[i] = m_CString[stringEnd - i];
 			m_CString[stringEnd - i] = tempChar;
+		}
+	}
+
+	void String::ReserveCapacity(u32 capacity)
+	{
+		bool isOverCapacity = false;
+		u32 oldStringCapacity = m_StringCapacity;
+		while(m_StringCapacity <= capacity + 1)
+		{
+			m_StringCapacity *= 2;
+			isOverCapacity = true;
+		}
+
+		if (isOverCapacity)
+		{
+			char* tempString = (char*)MemoryManager::PartitionMemory(m_StringCapacity);
+
+			PlatformCopyMemory(m_CString, tempString, oldStringCapacity);
+
+			MemoryManager::FreeMemory(m_CString);
+			m_CString = tempString;
 		}
 	}
 
