@@ -6,6 +6,7 @@
 #include <Core/MessageBus.h>
 #include <Core/Timer.h>
 #include <Core/SceneManager.h>
+#include <IO/InputManager.h>
 #include <Memory/MemoryManager.h>
 #include <Platform/Platform.h>
 
@@ -36,6 +37,11 @@ namespace Soul
 		if (!MessageBus::Initialize())
 		{
 			LOG_FATAL("Failed to initialize MessageBus.");
+			return false;
+		}
+		if (!InputManager::Initialize())
+		{
+			LOG_FATAL("Failed to initialize InputManager.");
 			return false;
 		}
 
@@ -98,6 +104,7 @@ namespace Soul
 		sf::Event e;
 		while (window->pollEvent(e))
 		{
+			InputManager::ReceivedInput(e);
 			switch (e.type)
 			{
 				case sf::Event::Closed:

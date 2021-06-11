@@ -1,6 +1,8 @@
 #pragma once
 
+#include <Defines.h>
 #include <IO/ControlsMap.h>
+
 #include <SFML/Window/Event.hpp>
 
 namespace Soul
@@ -8,12 +10,6 @@ namespace Soul
 	class Controller
 	{
 	public:
-		enum ControllerType
-		{
-			Keyboard,
-			Gamepad
-		};
-
 		enum ButtonState
 		{
 			Pressed,
@@ -25,22 +21,27 @@ namespace Soul
 		struct ControlState
 		{
 			ButtonState state;
-			f32 xAxis;
-			f32 yAxis;
+			f32 axis;
 		};
 
 	public:
-		Controller(const ControlsMap& map, ControllerType type);
-		Controller(const char* controlsFile, ControllerType type);
+		Controller(const char* controlsFile);
+
+		Controller(const Controller&) = delete;
+		Controller(Controller&& other);
+
+		virtual ~Controller();
+
+		Controller& operator=(const Controller&) = delete;
+		Controller& operator=(Controller&& other);
 
 		void UpdateControlsFile(const char* controlsFile);
 
-		void UpdateState(sf::Event input);
+		virtual void ButtonEvent(sf::Event event) = 0;
 
-		ControlState GetControlState(const char* control);
+		virtual ControlState GetControlState(const char* control) = 0;
 
-	private:
+	protected:
 		ControlsMap m_ControlsMap;
-		ControllerType m_ControllerType;
 	};
 }

@@ -4,62 +4,89 @@
 
 namespace Soul
 {
-	Controller* InputManager::m_Controllers;
-	u8 InputManager::m_ControllerCount;
-	ControlsMap* InputManager::m_DefaultControls;
+	Keyboard* InputManager::m_Keyboard;
+	Map<ControllerId, Gamepad>* InputManager::m_Gamepads;
 
 	bool InputManager::Initialize()
 	{
-		m_Controllers = PARTITION_ARRAY(Controller, InputManager::MaxControllers);
-		m_ControllerCount = 0;
+		typedef Map<ControllerId, Gamepad> GamepadMap;
+		m_Gamepads = PARTITION(GamepadMap, 8);
 
-		m_DefaultControls = PARTITION(ControlsMap, "res/defaultControls.controls");
+		m_Keyboard = PARTITION(Keyboard, "res/defaultControls.controls");
 
-		// Set the keyboard up to use the default controls
-		new (m_Controllers) Controller(*m_DefaultControls, Controller::ControllerType::Keyboard);
+		return true;
 	}
 
 	void InputManager::Shutdown()
 	{
-		MemoryManager::FreeMemory(m_Controllers);
-		MemoryManager::FreeMemory(m_DefaultControls);
-	}
-	
-	InputManager::ControllerId InputManager::RegisterGamepad()
-	{
-		ASSERT(m_ControllerCount < MaxControllers);
-
-		new (&m_Controllers[m_ControllerCount++]) Controller(*m_DefaultControls, Controller::ControllerType::Gamepad);
-
-		return (InputManager::ControllerId)m_ControllerCount;
-	}
-
-	InputManager::ControllerId InputManager::RegisterGamepad(const char* controlsFile)
-	{
-		ASSERT(m_ControllerCount < MaxControllers);
-
-		new (&m_Controllers[m_ControllerCount++]) Controller(controlsFile, Controller::ControllerType::Gamepad);
-
-		return (InputManager::ControllerId)m_ControllerCount;
+		MemoryManager::FreeMemory(m_Keyboard);
+		MemoryManager::FreeMemory(m_Gamepads);
 	}
 
 	void InputManager::UpdateControllerControls(ControllerId id, const char* controlsFile)
 	{
-		m_Controllers[id].UpdateControlsFile(controlsFile);
+		if (id == -1)
+			m_Keyboard->UpdateControlsFile(controlsFile);
+		else
+			m_Gamepads->GetValue(id)->UpdateControlsFile(controlsFile);
 	}
 
-	void InputManager::DisconnectController(ControllerId id)
+	void InputManager::ReceivedInput(sf::Event input)
 	{
-		// TODO: Figure out
-	}
+		switch (input.type)
+		{
+			case sf::Event::JoystickButtonPressed:
+			case sf::Event::JoystickButtonReleased:
+			{
+				ControllerId id = input.joystickButton.joystickId;
+				if (!m_Gamepads->GetValue(id))
+					RegisterGamepad(id);
 
-	void InputManager::UpdateControllerState(ControllerId id, sf::Event input)
-	{
-		m_Controllers[id].UpdateState(input);
+				m_Gamepads->GetValue(id)->ButtonEvent(input);
+			} break;
+
+			case sf::Event::JoystickMoved:
+			{
+				ControllerId id = input.joystickButton.joystickId;
+				if (!m_Gamepads->GetValue(id))
+					RegisterGamepad(id);
+
+				m_Gamepads->GetValue(id)->AxisEvent(input);
+			} break;
+
+			case sf::Event::KeyPressed:
+			case sf::Event::KeyReleased:
+			{
+				m_Keyboard->ButtonEvent(input);
+			} break;
+
+			case sf::Event::JoystickConnected:
+			{
+				RegisterGamepad(input.joystickConnect.joystickId);
+			} break;
+
+			case sf::Event::JoystickDisconnected:
+			{
+				DisconnectGamepad(input.joystickConnect.joystickId);
+			} break;
+		}
 	}
 
 	Controller::ControlState InputManager::GetControlState(ControllerId id, const char* control)
 	{
-		return m_Controllers[id].GetControlState(control);
+		if (id == -1)
+			return m_Keyboard->GetControlState(control);
+		else
+			return m_Gamepads->GetValue(id)->GetControlState(control);
+	}
+
+	void InputManager::RegisterGamepad(ControllerId id)
+	{
+		m_Gamepads->AddPair(id, "res/defaultControls.controls");
+	}
+
+	void InputManager::DisconnectGamepad(ControllerId id)
+	{
+		m_Gamepads->RemovePair(id);
 	}
 }
