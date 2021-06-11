@@ -194,6 +194,7 @@
     <ClInclude Include="src\Memory\UniquePointer.h" />
     <ClInclude Include="src\Platform\Platform.h" />
     <ClInclude Include="src\Platform\Timer.h" />
+    <ClInclude Include="src\Rendering\Renderer.h" />
     <ClInclude Include="src\Resources\FontManager.h" />
     <ClInclude Include="src\Resources\SoundManager.h" />
     <ClInclude Include="src\Resources\TextureManager.h" />
@@ -224,6 +225,7 @@
     <ClCompile Include="src\Memory\ReferenceCounter.cpp" />
     <ClCompile Include="src\Platform\PlatformWin32.cpp" />
     <ClCompile Include="src\Platform\TimerWin32.cpp" />
+    <ClCompile Include="src\Rendering\Renderer.cpp" />
     <ClCompile Include="src\Resources\FontManager.cpp" />
     <ClCompile Include="src\Resources\SoundManager.cpp" />
     <ClCompile Include="src\Resources\TextureManager.cpp" />

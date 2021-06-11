@@ -16,7 +16,7 @@ public:
 	TestScene();
 
 	virtual void Update(f32 dt) override;
-	virtual void Draw(sf::RenderTarget& target, sf::RenderStates states) const override;
+	virtual void Draw(sf::RenderStates states) const override;
 
 private:
 	sf::Sprite m_Sprite;

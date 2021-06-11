@@ -2,6 +2,7 @@
 
 #include <Core/Logger.h>
 #include <IO/InputManager.h>
+#include <Rendering/Renderer.h>
 
 TestScene::TestScene() :
 	Scene(true, true),
@@ -20,8 +21,6 @@ TestScene::TestScene() :
 	m_Sprite2.setPosition(50, 550);
 	m_Sprite3.setPosition(50, 600);
 
-	LOG_DEBUG("%d", m_Textures.Count());
-
 	m_Sound.setBuffer(*m_Sounds.RequestSound("res/sound.ogg"));
 	m_Sound.play();
 }
@@ -35,11 +34,11 @@ void TestScene::Update(f32 dt)
 	}
 }
 
-void TestScene::Draw(sf::RenderTarget& target, sf::RenderStates states) const
+void TestScene::Draw(sf::RenderStates states) const
 {
 	// TODO: Need to have proper drawable components that keep track of their own renderstates
 
-	target.draw(m_Sprite, states);
-	target.draw(m_Sprite2, states);
-	target.draw(m_Sprite3, states);
+	Soul::Renderer::Render(m_Sprite, states);
+	Soul::Renderer::Render(m_Sprite2, states);
+	Soul::Renderer::Render(m_Sprite3, states);
 }

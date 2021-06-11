@@ -52,7 +52,7 @@ namespace Soul
 		For keeping the scenes in the stack drawn and updated.
 		*/
 		static void Update(f32 dt);
-		static void Draw(sf::RenderTarget& target, sf::RenderStates states);
+		static void Draw(sf::RenderStates states);
 
 		/*
 		Adds a command to the Scene Command Queue

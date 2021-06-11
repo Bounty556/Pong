@@ -9,6 +9,7 @@
 #include <Memory/MemoryManager.h>
 #include <Platform/Platform.h>
 #include <Platform/Timer.h>
+#include <Rendering/Renderer.h>
 
 #include <SFML/Graphics.hpp>
 
@@ -16,7 +17,7 @@
 
 namespace Soul
 {
-	// TODO: Replace with more sophisticated window
+	// TODO: Replace with more sophisticated window?
 	sf::RenderWindow* window;
 
 	bool InitializeEngine(u32 windowWidth, u32 windowHeight, const char* windowName)
@@ -49,6 +50,12 @@ namespace Soul
 		window->setVerticalSyncEnabled(false);
 		window->setFramerateLimit(0);
 
+		if (!Renderer::Initialize(window))
+		{
+			LOG_FATAL("Failed to initial renderer.");
+			return false;
+		}
+
 		return true;
 	}
 
@@ -58,14 +65,15 @@ namespace Soul
 
 		Timer gameTimer;
 		PlatformTime accumulatedTime = 0.0f;
-		PlatformTime accumulatedTime2 = 0.0f;
-		u32 frames = 0;
 		gameTimer.Start();
 		while (SceneManager::HasScenes())
 		{
 			accumulatedTime += gameTimer.GetDeltaTime();
 			while (accumulatedTime >= TARGET_FRAMERATE)
 			{
+				if (accumulatedTime > 1000.0f)
+					accumulatedTime = 0.0f;
+
 				ProcessEvents(); // Input, window events, etc.
 
 				SceneManager::ConsumeCommands();
@@ -75,7 +83,7 @@ namespace Soul
 				// Rendering
 				window->clear();
 
-				SceneManager::Draw(*window, sf::RenderStates::Default);
+				SceneManager::Draw(sf::RenderStates::Default);
 
 				window->display();
 
@@ -91,7 +99,8 @@ namespace Soul
 		LOG_INFO("Shutting down engine");
 
 		SceneManager::Shutdown();
-		
+		Renderer::Shutdown();
+
 		MemoryManager::FreeMemory(window);
 		
 		InputManager::Shutdown();

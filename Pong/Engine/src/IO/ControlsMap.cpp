@@ -57,8 +57,6 @@ namespace Soul
 			if (button != -1)
 				mapping.jButton = (u32)button;
 
-			LOG_DEBUG("Added control '%s'", control.GetCString());
-
 			m_ControlMappings.AddPair(control.GetCString(), mapping);
 		}
 	}

@@ -20,7 +20,7 @@ namespace Soul
 		Updating and drawing the scene and the objects within
 		*/
 		virtual void Update(f32 dt) = 0;
-		virtual void Draw(sf::RenderTarget& target, sf::RenderStates states) const = 0;
+		virtual void Draw(sf::RenderStates states) const = 0;
 
 		/*
 		Can scenes below this in the Scene stack be updated or drawn?

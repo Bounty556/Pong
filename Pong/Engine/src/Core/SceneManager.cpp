@@ -40,7 +40,7 @@ namespace Soul
 		}
 	}
 
-	void SceneManager::Draw(sf::RenderTarget& target, sf::RenderStates states)
+	void SceneManager::Draw(sf::RenderStates states)
 	{
 		ASSERT(m_Initialized);
 
@@ -65,7 +65,7 @@ namespace Soul
 		// over
 		for (; i != m_SceneStack->End(); i++)
 		{
-			(*i)->Draw(target, states);
+			(*i)->Draw(states);
 		}
 	}
 
