@@ -77,16 +77,25 @@ namespace Soul
 		if (id == -1)
 			return m_Keyboard->GetControlState(control);
 		else
-			return m_Gamepads->GetValue(id)->GetControlState(control);
+		{
+			Gamepad* gamepad = m_Gamepads->GetValue(id);
+
+			if (gamepad)
+				return gamepad->GetControlState(control);
+			else
+				return Controller::ControlState{};
+		}
 	}
 
 	void InputManager::RegisterGamepad(ControllerId id)
 	{
 		m_Gamepads->AddPair(id, "res/defaultControls.controls");
+		LOG_DEBUG("Gamepad %d added", id);
 	}
 
 	void InputManager::DisconnectGamepad(ControllerId id)
 	{
 		m_Gamepads->RemovePair(id);
+		LOG_DEBUG("Gamepad %d disconnected", id);
 	}
 }

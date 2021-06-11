@@ -43,6 +43,7 @@ namespace Soul
 		void* fileHandle = PlatformOpenFile(fileName);
 		u64 fileSize = PlatformGetOpenFileSize(fileHandle);
 		m_FileContents.ReserveCapacity((u32)fileSize);
+		m_FileContents.SetLength((u32)fileSize);
 		PlatformReadOpenFile(fileHandle, m_FileContents.GetBufferStart(), fileSize);
 		PlatformCloseFile(fileHandle);
 		m_FileOpened = true;

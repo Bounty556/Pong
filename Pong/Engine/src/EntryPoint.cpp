@@ -46,7 +46,8 @@ namespace Soul
 		}
 
 		window = PARTITION(sf::RenderWindow, sf::VideoMode(windowWidth, windowHeight), windowName);
-		
+		window->setVerticalSyncEnabled(false);
+
 		return true;
 	}
 
@@ -56,17 +57,16 @@ namespace Soul
 
 		Timer gameTimer;
 		PlatformTime accumulatedTime = 0.0f;
+		PlatformTime accumulatedTime2 = 0.0f;
+		u32 frames = 0;
 		gameTimer.Start();
 		while (SceneManager::HasScenes())
 		{
-			accumulatedTime += gameTimer.GetDeltaTime();
+			PlatformTime time = gameTimer.GetDeltaTime();
+			accumulatedTime += time;
 			while (accumulatedTime >= TARGET_FRAMERATE)
 			{
 				accumulatedTime -= TARGET_FRAMERATE;
-
-				// Ensure we don't try to process a ton of frames at once
-				if (accumulatedTime > 1.0f)
-					accumulatedTime = 0.0f;
 
 				ProcessEvents(); // Input, window events, etc.
 

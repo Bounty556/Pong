@@ -386,6 +386,11 @@ namespace Soul
 		}
 	}
 
+	void String::SetLength(u32 stringLength)
+	{
+		m_StringLength = stringLength;
+	}
+
 	String String::IntToString(i32 value)
 	{
 		String converted;

@@ -51,9 +51,7 @@ namespace Soul
 			if (currentNode->BlockSize >= actualBytes)
 			{
 				if ((smallestValidNode && currentNode->BlockSize <= smallestValidNode->BlockSize) || !smallestValidNode)
-				{
 					smallestValidNode = currentNode;
-				}
 			}
 			currentNode = currentNode->NextNode;
 		}

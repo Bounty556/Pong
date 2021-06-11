@@ -33,6 +33,6 @@ namespace Soul
 		void LoadControlsFromFile(const char* fileName);
 
 	private:
-		Map<const char*, ControlMapping> m_ControlMappings;
+		Map<String, ControlMapping> m_ControlMappings;
 	};
 }

@@ -20,6 +20,8 @@ namespace Soul
 		Keyboard& operator=(Keyboard&& other) noexcept;
 
 		virtual void ButtonEvent(sf::Event event) override;
+		void KeyboardEvent(sf::Event event);
+		void MouseEvent(sf::Event event);
 		virtual ControlState GetControlState(const char* control) override;
 
 	private:

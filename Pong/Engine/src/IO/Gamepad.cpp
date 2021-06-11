@@ -1,5 +1,8 @@
 #include "Gamepad.h"
 
+#include <IO/ControlsMap.h>
+#include <Math/Functions.h>
+
 namespace Soul
 {
 	Gamepad::Gamepad(const char* controlsFile) :
@@ -25,19 +28,48 @@ namespace Soul
 
 	void Gamepad::ButtonEvent(sf::Event event)
 	{
-		// TODO: Update button state in ControlsMap
+		u32 button = event.joystickButton.button;
+		ControlState* controlState = m_ButtonStates.GetValue(button);
+		i8 difference = (event.type == sf::Event::JoystickButtonPressed) ? 1 : -1;
+
+
+		if (!controlState)
+		{
+			m_ButtonStates.AddPair(button, { (Controller::ButtonState)difference, 0.0f });
+			return;
+		}
+
+		controlState->state = (Controller::ButtonState)difference;
 	}
 
 	void Gamepad::AxisEvent(sf::Event event)
 	{
-		// TODO: Update axis state in ControlsMap
+		u32 axis = event.joystickMove.axis;
+		f32 position = event.joystickMove.position;
+		ControlState* controlState = m_AxisStates.GetValue(axis);
+
+		if (!controlState)
+		{
+			m_AxisStates.AddPair(axis, { Controller::None, position });
+			return;
+		}
+
+		controlState->axis = position;
 	}
 
 	Controller::ControlState Gamepad::GetControlState(const char* control)
 	{
-		// TODO: DO
-		Controller::ControlState state{};
+		ControlsMap::ControlMapping mapping = m_ControlsMap.GetControlMapping(control);
+		ControlState* buttonState = m_ButtonStates.GetValue(mapping.jButton);
+		ControlState* axisState = m_AxisStates.GetValue(mapping.axis);
 
-		return state;
+		ControlState finalState = {};
+
+		if (buttonState)
+			finalState.state = buttonState->state;
+		if (axisState)
+			finalState.axis = axisState->axis;
+
+		return finalState;
 	}
 }

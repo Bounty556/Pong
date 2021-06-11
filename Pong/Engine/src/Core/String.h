@@ -86,6 +86,11 @@ namespace Soul
 		void ReserveCapacity(u32 capacity);
 
 		/*
+		To be used very carefully.
+		*/
+		void SetLength(u32 stringLength);
+
+		/*
 		Utility function that converts an integer into a Soul::String.
 		*/
 		static String IntToString(i32 value);

@@ -187,8 +187,6 @@ namespace Soul
 		return true;
 	}
 	
-	// TODO: look into consolidating all of this duplicate code
-
 	template <class K, class V>
 	bool Map<K, V>::AddPair(K&& key, const V& value)
 	{
@@ -204,7 +202,7 @@ namespace Soul
 		u32 location = (u32)openLocation;
 
 		m_Map[location].IsInitialized = true;
-		new (&m_Map[location].Key) K(std::move(key));
+		new (&(m_Map[location].Key)) K(std::move(key));
 		new (&m_Map[location].Value) V(value);
 
 		m_Size++;
@@ -257,12 +255,8 @@ namespace Soul
 	{
 		Vector<K*> keys(m_Size);
 		for (u32 i = 0; i < m_Capacity; ++i)
-		{
 			if (m_Map[i].IsInitialized)
-			{
 				keys.Push(&m_Map[i].Key);
-			}
-		}
 
 		return keys;
 	}
@@ -272,12 +266,8 @@ namespace Soul
 	{
 		Vector<V*> values(m_Size);
 		for (u32 i = 0; i < m_Capacity; ++i)
-		{
 			if (m_Map[i].IsInitialized)
-			{
 				values.Push(&m_Map[i].Value);
-			}
-		}
 
 		return values;
 	}
@@ -335,7 +325,7 @@ namespace Soul
 		u32 maxAttempts = m_Capacity / 2;
 
 		// Check to see if there is an object at that location
-		while ((m_Map[location].IsInitialized && m_Map[location].Key != key))
+		while (m_Map[location].IsInitialized && m_Map[location].Key != key)
 		{
 			// We couldn't find a spot
 			if (attempts++ >= maxAttempts)
@@ -362,11 +352,12 @@ namespace Soul
 				continue;
 
 			// Find the location to place this pair
+			auto key = m_Map[i].Key;
 			u64 hash = Math::Hash(m_Map[i].Key);
 			u32 location = hash % newCapacity;
 
 			u32 attempts = 0;
-			u32 maxAttempts = m_Capacity / 2;
+			u32 maxAttempts = newCapacity / 2;
 			// Check to see if there is an object at that location
 			while (newMemory[location].IsInitialized)
 			{

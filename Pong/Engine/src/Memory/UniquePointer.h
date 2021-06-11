@@ -22,7 +22,7 @@ namespace Soul
 
 		T* operator->() const;
 		T& operator*() const;
-		T& operator[](unsigned int index) const;
+		T& operator[](u32 index) const;
 
 		T* Raw() const;
 
@@ -86,7 +86,7 @@ namespace Soul
 	}
 
 	template <class T>
-	T& UniquePointer<T>::operator[](unsigned int index) const
+	T& UniquePointer<T>::operator[](u32 index) const
 	{
 		return m_Pointer[index];
 	}

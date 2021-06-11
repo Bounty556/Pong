@@ -12,10 +12,9 @@ namespace Soul
 	public:
 		enum ButtonState
 		{
-			Pressed,
-			Down,
-			Released,
-			None
+			Released = -1,
+			None = 0,
+			Pressed = 1
 		};
 
 		struct ControlState
