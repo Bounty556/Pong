@@ -13,10 +13,10 @@ namespace Soul
 	public:
 		struct ControlMapping
 		{
-			sf::Keyboard::Key key;
-			sf::Mouse::Button mButton;
-			sf::Joystick::Axis axis;
-			u32 jButton;
+			i32 key;
+			i32 mButton;
+			i32 axis;
+			i32 jButton;
 		};
 
 	public:

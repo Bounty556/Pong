@@ -53,16 +53,26 @@ namespace Soul
 		for (u32 i = 0; i < axes.Count(); ++i)
 		{
 			ControlState* buttonState = m_AxisStates.GetValue(*axes[i]);
-
 			f32 axisPos = sf::Joystick::getAxisPosition((u32)m_ControllerId, (sf::Joystick::Axis) * axes[i]);
-			if (axisPos != 0.0f)
+			const f32 THRESHOLD = 15.0f;
+			if (Math::Abs(axisPos) > THRESHOLD)
 			{
-				buttonState->axis = axisPos;
-				PressButton(buttonState->axisHeld);
+				// If the player jammed the controller to from top to bottom, take a frame to reset
+				if ((axisPos < -THRESHOLD && buttonState->axis > THRESHOLD) ||
+					(axisPos > THRESHOLD && buttonState->axis < -THRESHOLD))
+				{
+					buttonState->axis = 0.0f;
+					ReleaseButton(buttonState->axisHeld);
+				}
+				else
+				{
+					buttonState->axis = axisPos;
+					PressButton(buttonState->axisHeld);
+				}
 			}
 			else
 			{
-				axisPos = 0.0f;
+				buttonState->axis = 0.0f;
 				ReleaseButton(buttonState->axisHeld);
 			}
 		}

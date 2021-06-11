@@ -53,14 +53,10 @@ namespace Soul
 			// Create mapping
 			ControlMapping mapping{};
 
-			if (keyboard != -1)
-				mapping.key = (sf::Keyboard::Key)keyboard;
-			if (mouse != -1)
-				mapping.mButton = (sf::Mouse::Button)mouse;
-			if (axis != -1)
-				mapping.axis = (sf::Joystick::Axis)axis;
-			if (button != -1)
-				mapping.jButton = (u32)button;
+			mapping.key = keyboard;
+			mapping.mButton = mouse;
+			mapping.axis = axis;
+			mapping.jButton = button;
 
 			m_ControlMappings.AddPair(control.GetCString(), mapping);
 		}

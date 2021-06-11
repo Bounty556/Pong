@@ -32,7 +32,8 @@ TestScene::TestScene() :
 void TestScene::Update(f32 dt)
 {
 	// Nothing to update here
-	if (Soul::InputManager::GetControlState(-1, "Right").state == Soul::Controller::Pressed)
+	if (Soul::InputManager::GetControlState(-1, "Right").state == Soul::Controller::Pressed ||
+		Soul::InputManager::GetControlState(-1, "Right").state == Soul::Controller::Down)
 		m_Sprite.move(0.1f * dt, 0.0f);
 
 	m_UI.Update(dt);

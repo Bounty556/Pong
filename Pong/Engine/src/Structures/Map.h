@@ -298,7 +298,8 @@ namespace Soul
 		u32 attempts = 0;
 		u32 maxAttempts = m_Capacity / 2;
 		// Check to see if there is an object at that location
-		while (m_Map[location].IsInitialized)
+		// TODO: store hash?
+		while (m_Map[location].IsInitialized && Math::Hash(m_Map[location].Key) != hash)
 		{
 			// We couldn't find a spot
 			if (attempts++ >= maxAttempts)
