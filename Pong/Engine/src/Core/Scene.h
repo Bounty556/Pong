@@ -23,6 +23,12 @@ namespace Soul
 		virtual void Draw(sf::RenderStates states) const = 0;
 
 		/*
+		If this scene is reset, we can pass data to it to give it some initial
+		information to start the scene off with.
+		*/
+		virtual void ResetSceneData(void* data);
+
+		/*
 		Can scenes below this in the Scene stack be updated or drawn?
 		*/
 		bool UpdatePass() const;

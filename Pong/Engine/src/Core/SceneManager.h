@@ -30,7 +30,8 @@ namespace Soul
 		{
 			Push,
 			Pop,
-			Clear
+			Clear,
+			Reset
 		};
 
 		struct SceneCommand
@@ -71,6 +72,12 @@ namespace Soul
 		*/
 		static bool HasScenes();
 
+		/*
+		Reinstantiates the scene with the provided data and constructor args.
+		*/
+		template <class T, class ...Args>
+		static void ResetScene(T* scene, void* data, Args&& ...args);
+
 	private:
 		static void PushScene(Scene* scene);
 		static void PopScene();
@@ -81,4 +88,12 @@ namespace Soul
 		static Stack<ScenePtr>* m_SceneStack;
 		static Queue<SceneCommand>* m_CommandQueue;
 	};
+
+	template <class T, class ...Args>
+	void SceneManager::ResetScene(T* scene, void* data, Args&& ...args)
+	{
+		MemoryManager::FreeMemory(scene);
+		scene = PARTITION(T, std::forward<Args>(args)...);
+		((Scene*)scene)->ResetSceneData(data);
+	}
 }

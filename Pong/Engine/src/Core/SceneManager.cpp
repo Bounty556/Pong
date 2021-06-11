@@ -26,7 +26,6 @@ namespace Soul
 		MemoryManager::FreeMemory(m_CommandQueue);
 	}
 
-
 	void SceneManager::Update(f32 dt)
 	{
 		ASSERT(m_Initialized);
@@ -106,6 +105,7 @@ namespace Soul
 
 	bool SceneManager::HasScenes()
 	{
+		// TODO: See if we have commands queued to push scenes?
 		ASSERT(m_Initialized);
 
 		return !m_SceneStack->IsEmpty();

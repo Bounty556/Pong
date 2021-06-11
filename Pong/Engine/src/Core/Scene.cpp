@@ -13,6 +13,10 @@ namespace Soul
 
 	}
 
+	void Scene::ResetSceneData(void* data)
+	{
+	}
+
 	bool Scene::UpdatePass() const
 	{
 		return m_UpdatePass;
