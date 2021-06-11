@@ -9,7 +9,7 @@ namespace Soul
 	class Gamepad : public Controller
 	{
 	public:
-		Gamepad(const char* controlsFile);
+		Gamepad(const char* controlsFile, i32 controllerId);
 
 		Gamepad(const Gamepad&) = delete;
 		Gamepad(Gamepad&& other) noexcept;
@@ -17,13 +17,13 @@ namespace Soul
 		Gamepad& operator=(const Gamepad&) = delete;
 		Gamepad& operator=(Gamepad&& other) noexcept;
 
-		virtual void ButtonEvent(sf::Event event) override;
-		void AxisEvent(sf::Event event);
-
+		virtual void LoadMappings(ControlsMap& mappings) override;
+		virtual void UpdateStates() override;
 		virtual ControlState GetControlState(const char* control) override;
 
 	private:
 		Map<u32, ControlState> m_ButtonStates;
 		Map<u32, ControlState> m_AxisStates;
+		i32 m_ControllerId;
 	};
 }

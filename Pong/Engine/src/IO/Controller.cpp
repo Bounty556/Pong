@@ -27,4 +27,36 @@ namespace Soul
 	{
 		m_ControlsMap = ControlsMap(controlsFile);
 	}
+
+	void Controller::PressButton(ButtonState& state)
+	{
+		switch (state)
+		{
+			case ButtonState::None:
+			case ButtonState::Released:
+			{
+				state = ButtonState::Pressed;
+			} break;
+			case ButtonState::Pressed:
+			{
+				state = ButtonState::Down;
+			} break;
+		}
+	}
+
+	void Controller::ReleaseButton(ButtonState& state)
+	{
+		switch (state)
+		{
+			case ButtonState::Pressed:
+			case ButtonState::Down:
+			{
+				state = ButtonState::Released;
+			} break;
+			case ButtonState::Released:
+			{
+				state = ButtonState::None;
+			} break;
+		}
+	}
 }

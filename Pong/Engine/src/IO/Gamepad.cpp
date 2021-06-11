@@ -5,15 +5,18 @@
 
 namespace Soul
 {
-	Gamepad::Gamepad(const char* controlsFile) :
-		Controller(controlsFile)
+	Gamepad::Gamepad(const char* controlsFile, i32 controllerId) :
+		Controller(controlsFile),
+		m_ControllerId(controllerId)
 	{
+		LoadMappings(m_ControlsMap);
 	}
 
 	Gamepad::Gamepad(Gamepad&& other) noexcept :
 		Controller(std::move(other)),
 		m_ButtonStates(std::move(other.m_ButtonStates)),
-		m_AxisStates(std::move(other.m_AxisStates))
+		m_AxisStates(std::move(other.m_AxisStates)),
+		m_ControllerId(other.m_ControllerId)
 	{
 	}
 
@@ -22,39 +25,58 @@ namespace Soul
 		Controller::operator=(std::move(other));
 		m_ButtonStates = std::move(other.m_ButtonStates);
 		m_AxisStates = std::move(other.m_AxisStates);
+		m_ControllerId = other.m_ControllerId;
 
 		return *this;
 	}
 
-	void Gamepad::ButtonEvent(sf::Event event)
+	void Gamepad::LoadMappings(ControlsMap& mappings)
 	{
-		u32 button = event.joystickButton.button;
-		ControlState* controlState = m_ButtonStates.GetValue(button);
-		i8 difference = (event.type == sf::Event::JoystickButtonPressed) ? 1 : -1;
+		Vector<ControlsMap::ControlMapping*> maps = m_ControlsMap.GetAllMappings();
 
-
-		if (!controlState)
+		for (u32 i = 0; i < maps.Count(); ++i)
 		{
-			m_ButtonStates.AddPair(button, { (Controller::ButtonState)difference, 0.0f });
-			return;
-		}
+			ControlsMap::ControlMapping& current = *maps[i];
 
-		controlState->state = (Controller::ButtonState)difference;
+			ControlState temp = {};
+
+			if (current.axis != -1)
+				m_AxisStates.AddPair(current.axis, temp);
+			if (current.jButton != -1)
+				m_ButtonStates.AddPair(current.jButton, temp);
+		}
 	}
 
-	void Gamepad::AxisEvent(sf::Event event)
+	void Gamepad::UpdateStates()
 	{
-		u32 axis = event.joystickMove.axis;
-		f32 position = event.joystickMove.position;
-		ControlState* controlState = m_AxisStates.GetValue(axis);
-
-		if (!controlState)
+		Vector<u32*> axes = m_AxisStates.GetKeys();
+		for (u32 i = 0; i < axes.Count(); ++i)
 		{
-			m_AxisStates.AddPair(axis, { Controller::None, position });
-			return;
+			ControlState* buttonState = m_AxisStates.GetValue(*axes[i]);
+
+			f32 axisPos = sf::Joystick::getAxisPosition((u32)m_ControllerId, (sf::Joystick::Axis) * axes[i]);
+			if (axisPos != 0.0f)
+			{
+				buttonState->axis = axisPos;
+				PressButton(buttonState->axisHeld);
+			}
+			else
+			{
+				axisPos = 0.0f;
+				ReleaseButton(buttonState->axisHeld);
+			}
 		}
 
-		controlState->axis = position;
+		Vector<u32*> buttons = m_ButtonStates.GetKeys();
+		for (u32 i = 0; i < buttons.Count(); ++i)
+		{
+			ControlState* buttonState = m_ButtonStates.GetValue(*buttons[i]);
+
+			if (sf::Joystick::isButtonPressed(m_ControllerId, *buttons[i]))
+				PressButton(buttonState->state);
+			else
+				ReleaseButton(buttonState->state);
+		}
 	}
 
 	Controller::ControlState Gamepad::GetControlState(const char* control)
@@ -68,7 +90,10 @@ namespace Soul
 		if (buttonState)
 			finalState.state = buttonState->state;
 		if (axisState)
+		{
 			finalState.axis = axisState->axis;
+			finalState.axisHeld = axisState->axisHeld;
+		}
 
 		return finalState;
 	}

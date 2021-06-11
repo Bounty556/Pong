@@ -28,6 +28,11 @@ namespace Soul
 		return *m_ControlMappings.GetValue(control);
 	}
 
+	Vector<ControlsMap::ControlMapping*> ControlsMap::GetAllMappings()
+	{
+		return m_ControlMappings.GetValues();
+	}
+
 	void ControlsMap::LoadControlsFromFile(const char* fileName)
 	{
 		TextFileReader controlsFile(fileName);

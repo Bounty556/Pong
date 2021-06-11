@@ -12,14 +12,16 @@ namespace Soul
 	public:
 		enum ButtonState
 		{
-			Released = -1,
 			None = 0,
-			Pressed = 1
+			Released = 1,
+			Pressed = 2,
+			Down = 3
 		};
 
 		struct ControlState
 		{
 			ButtonState state;
+			ButtonState axisHeld;
 			f32 axis;
 		};
 
@@ -36,9 +38,13 @@ namespace Soul
 
 		void UpdateControlsFile(const char* controlsFile);
 
-		virtual void ButtonEvent(sf::Event event) = 0;
-
+		virtual void LoadMappings(ControlsMap& mappings) = 0;
+		virtual void UpdateStates() = 0;
 		virtual ControlState GetControlState(const char* control) = 0;
+
+	protected:
+		void PressButton(ButtonState& state);
+		void ReleaseButton(ButtonState& state);
 
 	protected:
 		ControlsMap m_ControlsMap;

@@ -31,6 +31,15 @@ namespace Soul
 			m_Gamepads->GetValue(id)->UpdateControlsFile(controlsFile);
 	}
 
+	void InputManager::UpdateControllers()
+	{
+		m_Keyboard->UpdateStates();
+
+		Vector<ControllerId*> ids = m_Gamepads->GetKeys();
+		for (u32 i = 0; i < ids.Count(); i++)
+			m_Gamepads->GetValue(*ids[i])->UpdateStates();
+	}
+
 	void InputManager::ReceivedInput(sf::Event input)
 	{
 		switch (input.type)
@@ -41,8 +50,6 @@ namespace Soul
 				ControllerId id = input.joystickButton.joystickId;
 				if (!m_Gamepads->GetValue(id))
 					RegisterGamepad(id);
-
-				m_Gamepads->GetValue(id)->ButtonEvent(input);
 			} break;
 
 			case sf::Event::JoystickMoved:
@@ -50,21 +57,11 @@ namespace Soul
 				ControllerId id = input.joystickButton.joystickId;
 				if (!m_Gamepads->GetValue(id))
 					RegisterGamepad(id);
-
-				m_Gamepads->GetValue(id)->AxisEvent(input);
 			} break;
-
-			case sf::Event::KeyPressed:
-			case sf::Event::KeyReleased:
-			{
-				m_Keyboard->ButtonEvent(input);
-			} break;
-
 			case sf::Event::JoystickConnected:
 			{
 				RegisterGamepad(input.joystickConnect.joystickId);
 			} break;
-
 			case sf::Event::JoystickDisconnected:
 			{
 				DisconnectGamepad(input.joystickConnect.joystickId);
@@ -89,7 +86,7 @@ namespace Soul
 
 	void InputManager::RegisterGamepad(ControllerId id)
 	{
-		m_Gamepads->AddPair(id, "res/defaultControls.controls");
+		m_Gamepads->AddPair(id, Gamepad("res/defaultControls.controls", id));
 		LOG_DEBUG("Gamepad %d added", id);
 	}
 

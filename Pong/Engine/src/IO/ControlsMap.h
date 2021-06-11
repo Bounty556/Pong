@@ -2,6 +2,7 @@
 
 #include <Defines.h>
 #include <Structures/Map.h>
+#include <Structures/Vector.h>
 
 #include <SFML/Window.hpp>
 
@@ -28,6 +29,8 @@ namespace Soul
 		ControlsMap& operator=(ControlsMap&& other) noexcept;
 
 		ControlMapping& GetControlMapping(const char* control);
+
+		Vector<ControlMapping*> GetAllMappings();
 
 	private:
 		void LoadControlsFromFile(const char* fileName);

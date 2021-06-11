@@ -75,6 +75,7 @@ namespace Soul
 					accumulatedTime = 0.0f;
 
 				ProcessEvents(); // Input, window events, etc.
+				InputManager::UpdateControllers();
 
 				SceneManager::ConsumeCommands();
 

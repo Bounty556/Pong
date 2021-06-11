@@ -14,18 +14,15 @@ namespace Soul
 		Keyboard(const Keyboard&) = delete;
 		Keyboard(Keyboard&& other) noexcept;
 
-		~Keyboard();
-
 		Keyboard& operator=(const Keyboard&) = delete;
 		Keyboard& operator=(Keyboard&& other) noexcept;
 
-		virtual void ButtonEvent(sf::Event event) override;
-		void KeyboardEvent(sf::Event event);
-		void MouseEvent(sf::Event event);
+		virtual void LoadMappings(ControlsMap& mappings) override;
+		virtual void UpdateStates() override;
 		virtual ControlState GetControlState(const char* control) override;
 
 	private:
-		ControlState* m_MouseStates;
+		Map<u32, ControlState> m_MouseStates;
 		Map<u32, ControlState> m_KeyboardStates;
 	};
 }

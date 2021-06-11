@@ -19,12 +19,18 @@ namespace Soul
 		static bool Initialize();
 		static void Shutdown();
 
+
 		/*
 		Used to update an already-connected controller's controls. If the
 		keyboard controls are being updated, id should be -1.
 		*/
 		static void UpdateControllerControls(ControllerId id, const char* controlsFile);
 
+		/*
+		Called every frame to update control states.
+		*/
+		static void UpdateControllers();
+		
 		/*
 		Called every time input is detected to update all connected
 		controllers.
