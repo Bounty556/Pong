@@ -14,7 +14,6 @@ public:
 
 	virtual void Update(f32 dt) override;
 	virtual void Draw(sf::RenderStates states) const override;
-	virtual void ResetSceneData(void* data) override;
 
 private:
 	sf::Sprite m_Sprite;

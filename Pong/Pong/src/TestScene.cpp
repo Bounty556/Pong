@@ -38,24 +38,10 @@ void TestScene::Update(f32 dt)
 		m_Sprite.move(0.1f * dt, 0.0f);
 
 	m_UI.Update(dt);
-
-	if (Soul::InputManager::GetControlState(-1, "Jump").state == Soul::Controller::Pressed)
-	{
-		i32* i = PARTITION(i32, 5);
-		Soul::SceneManager::ResetScene(this, i);
-		LOG_DEBUG("Hello");
-		return;
-	}
 }
 
 void TestScene::Draw(sf::RenderStates states) const
 {
 	Soul::Renderer::Render(m_Sprite, states);
 	m_UI.Draw(states);
-}
-
-void TestScene::ResetSceneData(void* data)
-{
-	LOG_DEBUG("%d", *(i32*)data);
-	Soul::MemoryManager::FreeMemory((i32*)data);
 }
