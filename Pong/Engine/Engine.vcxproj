@@ -203,6 +203,9 @@
     <ClInclude Include="src\Structures\Queue.h" />
     <ClInclude Include="src\Structures\Stack.h" />
     <ClInclude Include="src\Structures\Vector.h" />
+    <ClInclude Include="src\UI\UIButton.h" />
+    <ClInclude Include="src\UI\UIComponent.h" />
+    <ClInclude Include="src\UI\UIContainer.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Core\Listener.cpp" />
@@ -229,6 +232,9 @@
     <ClCompile Include="src\Resources\FontManager.cpp" />
     <ClCompile Include="src\Resources\SoundManager.cpp" />
     <ClCompile Include="src\Resources\TextureManager.cpp" />
+    <ClCompile Include="src\UI\UIButton.cpp" />
+    <ClCompile Include="src\UI\UIComponent.cpp" />
+    <ClCompile Include="src\UI\UIContainer.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

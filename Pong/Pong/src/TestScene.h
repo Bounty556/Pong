@@ -3,12 +3,9 @@
 #include <Core/Scene.h>
 
 #include <SFML/Graphics/Sprite.hpp>
-#include <SFML/Graphics/Texture.hpp>
 #include <Resources/TextureManager.h>
-#include <Resources/SoundManager.h>
 #include <Resources/FontManager.h>
-
-#include <SFML/Audio/Sound.hpp>
+#include <UI/UIContainer.h>
 
 class TestScene : public Soul::Scene
 {
@@ -20,10 +17,7 @@ public:
 
 private:
 	sf::Sprite m_Sprite;
-	sf::Sprite m_Sprite2;
-	sf::Sprite m_Sprite3;
 	Soul::TextureManager m_Textures;
-	Soul::FontManager m_Font;
-	Soul::SoundManager m_Sounds;
-	sf::Sound m_Sound;
+	Soul::FontManager m_Fonts;
+	Soul::UIContainer m_UI;
 };
