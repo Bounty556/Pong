@@ -28,12 +28,12 @@ namespace Soul
 		Controller(const char* controlsFile);
 
 		Controller(const Controller&) = delete;
-		Controller(Controller&& other);
+		Controller(Controller&& other) noexcept;
 
 		virtual ~Controller();
 
 		Controller& operator=(const Controller&) = delete;
-		Controller& operator=(Controller&& other);
+		Controller& operator=(Controller&& other) noexcept;
 
 		void UpdateControlsFile(const char* controlsFile);
 

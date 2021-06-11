@@ -7,7 +7,7 @@ namespace Soul
 	{
 	}
 
-	Controller::Controller(Controller&& other) :
+	Controller::Controller(Controller&& other) noexcept :
 		m_ControlsMap(std::move(other.m_ControlsMap))
 	{
 	}
@@ -16,7 +16,7 @@ namespace Soul
 	{
 	}
 
-	Controller& Controller::operator=(Controller&& other)
+	Controller& Controller::operator=(Controller&& other) noexcept
 	{
 		m_ControlsMap = std::move(other.m_ControlsMap);
 
