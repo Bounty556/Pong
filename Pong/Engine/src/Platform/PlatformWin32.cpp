@@ -1,8 +1,8 @@
 #include "Platform.h"
 
-#include <Windows.h>
-
 #ifdef WIN32
+
+#include <Windows.h>
 
 namespace Soul
 {

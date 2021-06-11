@@ -4,6 +4,11 @@
 
 #include <SFML/Graphics/Sprite.hpp>
 #include <SFML/Graphics/Texture.hpp>
+#include <Resources/TextureManager.h>
+#include <Resources/SoundManager.h>
+#include <Resources/FontManager.h>
+
+#include <SFML/Audio/Sound.hpp>
 
 class TestScene : public Soul::Scene
 {
@@ -15,5 +20,10 @@ public:
 
 private:
 	sf::Sprite m_Sprite;
-	sf::Texture m_Texture;
+	sf::Sprite m_Sprite2;
+	sf::Sprite m_Sprite3;
+	Soul::TextureManager m_Textures;
+	Soul::FontManager m_Font;
+	Soul::SoundManager m_Sounds;
+	sf::Sound m_Sound;
 };

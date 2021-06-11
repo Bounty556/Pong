@@ -4,11 +4,11 @@
 
 #include <Core/Logger.h>
 #include <Core/MessageBus.h>
-#include <Core/Timer.h>
 #include <Core/SceneManager.h>
 #include <IO/InputManager.h>
 #include <Memory/MemoryManager.h>
 #include <Platform/Platform.h>
+#include <Platform/Timer.h>
 
 #include <SFML/Graphics.hpp>
 
@@ -47,6 +47,7 @@ namespace Soul
 
 		window = PARTITION(sf::RenderWindow, sf::VideoMode(windowWidth, windowHeight), windowName);
 		window->setVerticalSyncEnabled(false);
+		window->setFramerateLimit(0);
 
 		return true;
 	}
@@ -62,12 +63,9 @@ namespace Soul
 		gameTimer.Start();
 		while (SceneManager::HasScenes())
 		{
-			PlatformTime time = gameTimer.GetDeltaTime();
-			accumulatedTime += time;
+			accumulatedTime += gameTimer.GetDeltaTime();
 			while (accumulatedTime >= TARGET_FRAMERATE)
 			{
-				accumulatedTime -= TARGET_FRAMERATE;
-
 				ProcessEvents(); // Input, window events, etc.
 
 				SceneManager::ConsumeCommands();
@@ -75,7 +73,6 @@ namespace Soul
 				SceneManager::Update(TARGET_FRAMERATE);
 
 				// Rendering
-				window->setActive(true);
 				window->clear();
 
 				SceneManager::Draw(*window, sf::RenderStates::Default);
@@ -83,6 +80,8 @@ namespace Soul
 				window->display();
 
 				MessageBus::PumpQueue();
+
+				accumulatedTime -= TARGET_FRAMERATE;
 			}
 		}
 	}
@@ -95,6 +94,7 @@ namespace Soul
 		
 		MemoryManager::FreeMemory(window);
 		
+		InputManager::Shutdown();
 		MessageBus::Shutdown();
 		MemoryManager::Shutdown();
 	}
