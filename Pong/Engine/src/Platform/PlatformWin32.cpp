@@ -7,19 +7,10 @@
 namespace Soul
 {
 	bool isInitialized = false;
-	f64 performanceFrequency; // Divide performance counter by this to get time
-	PlatformTime startTime; // Start time as microseconds
-	const f64 TO_FREQUENCY = 1000000.0; // Microseconds
 
 	bool PlatformInitialize()
 	{
 		isInitialized = true;
-
-		LARGE_INTEGER frequency;
-		QueryPerformanceFrequency(&frequency);
-		performanceFrequency = (f64)frequency.QuadPart / TO_FREQUENCY; // We want this in microseconds, not seconds
-
-		startTime = PlatformCurrentTime();
 
 		return true;
 	}
@@ -65,9 +56,21 @@ namespace Soul
 		memset(location, 0, size);
 	}
 
-	void PlatformWriteFile(const char* fileName, const char* contents, u64 bytesToWrite)
+	void PlatformOverwriteFile(const char* fileName, const char* contents, u64 bytesToWrite)
 	{
 		HANDLE fileHandle = CreateFileA(fileName, GENERIC_WRITE, 0, 0, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
+
+		ASSERT(fileHandle != INVALID_HANDLE_VALUE);
+
+		DWORD bytesWritten;
+		ASSERT(WriteFile(fileHandle, contents, (DWORD)bytesToWrite, &bytesWritten, 0));
+
+		CloseHandle(fileHandle);
+	}
+
+	void PlatformAppendFile(const char* fileName, const char* contents, u64 bytesToWrite)
+	{
+		HANDLE fileHandle = CreateFileA(fileName, FILE_APPEND_DATA, 0, 0, OPEN_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
 
 		ASSERT(fileHandle != INVALID_HANDLE_VALUE);
 
@@ -100,14 +103,6 @@ namespace Soul
 	void PlatformCloseFile(void* handle)
 	{
 		CloseHandle((HANDLE)handle);
-	}
-
-	PlatformTime PlatformCurrentTime()
-	{
-		LARGE_INTEGER performanceCount;
-		QueryPerformanceCounter(&performanceCount);
-
-		return (PlatformTime)(performanceCount.QuadPart / performanceFrequency);
 	}
 }
 

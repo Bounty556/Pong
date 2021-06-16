@@ -81,7 +81,8 @@ namespace Soul
 
 		// Add element at Queue head
 		new (&m_Queue[m_Head]) T(element);
-		m_Size = (m_Size + 1) % m_Capacity;
+		m_Head = (m_Head + 1) % m_Capacity;
+		m_Size++;
 	}
 
 	template <class T>
@@ -91,7 +92,8 @@ namespace Soul
 
 		// Add element at Queue head
 		new (&m_Queue[m_Head]) T(std::move(element));
-		m_Size = (m_Size + 1) % m_Capacity;
+		m_Head = (m_Head + 1) % m_Capacity;
+		m_Size++;
 	}
 
 	template <class T>

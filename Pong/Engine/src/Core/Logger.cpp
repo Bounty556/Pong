@@ -1,6 +1,8 @@
 #include "Logger.h"
 
 #include <Platform/Platform.h>
+#include <IO/LoggerFile.h>
+#include <Memory/MemoryManager.h>
 
 #include <stdarg.h>
 
@@ -9,13 +11,26 @@
 
 namespace Soul
 {
-	bool InitiateLogger(const char* logFile)
+	LoggerFile* loggerFile = nullptr;
+	bool logFileInitialized = false;
+
+	bool InitializeLogger(const char* logFile)
 	{
+		logFileInitialized = true;
+		loggerFile = PARTITION(LoggerFile, logFile, 3000);
+		loggerFile->LogInfo("-----------------------------");
+
 		return true;
 	}
 
 	bool ShutdownLogger()
 	{
+		if (logFileInitialized)
+		{
+			loggerFile->OutputToFile();
+			MemoryManager::FreeMemory(loggerFile);
+		}
+		
 		return true;
 	}
 
@@ -49,5 +64,8 @@ namespace Soul
 			PlatformWriteErrorToConsole(finalMessage, strlen(finalMessage), LOG_LEVEL_COLORS[logLevel]);
 		else
 			PlatformWriteToConsole(finalMessage, strlen(finalMessage), LOG_LEVEL_COLORS[logLevel]);
+	
+		if (logFileInitialized)
+			loggerFile->LogInfo(finalMessage);
 	}
 }

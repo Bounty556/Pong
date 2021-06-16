@@ -30,9 +30,14 @@ namespace Soul
 			LOG_FATAL("Failed to initialize platform layer.");
 			return false;
 		}
-		if (!MemoryManager::Initialize(MEGABYTES(32)))
+		if (!MemoryManager::Initialize(MEGABYTES(4)))
 		{
 			LOG_FATAL("Failed to initialize memory.");
+			return false;
+		}
+		if (!InitializeLogger("debugLogs.txt"))
+		{
+			LOG_FATAL("Failed to initialize logger.");
 			return false;
 		}
 		if (!MessageBus::Initialize())
@@ -46,7 +51,7 @@ namespace Soul
 			return false;
 		}
 
-		window = PARTITION(sf::RenderWindow, sf::VideoMode(windowWidth, windowHeight), windowName);
+		window = PARTITION(sf::RenderWindow, sf::VideoMode(windowWidth, windowHeight), windowName, sf::Style::Close | sf::Style::Titlebar);
 		window->setVerticalSyncEnabled(false);
 		window->setFramerateLimit(0);
 
@@ -74,18 +79,17 @@ namespace Soul
 				if (accumulatedTime > 1000.0f)
 					accumulatedTime = 0.0f;
 
-				ProcessEvents(); // Input, window events, etc.
+				// Input
+				ProcessEvents();
 				InputManager::UpdateControllers();
 
+				// Updates
 				SceneManager::ConsumeCommands();
-
 				SceneManager::Update(TARGET_FRAMERATE);
 
 				// Rendering
 				window->clear();
-
 				SceneManager::Draw(sf::RenderStates::Default);
-
 				window->display();
 
 				MessageBus::PumpQueue();
@@ -106,6 +110,7 @@ namespace Soul
 		
 		InputManager::Shutdown();
 		MessageBus::Shutdown();
+		ShutdownLogger();
 		MemoryManager::Shutdown();
 	}
 
@@ -120,12 +125,6 @@ namespace Soul
 				case sf::Event::Closed:
 				{
 					SceneManager::PushCommand({ SceneManager::Clear, nullptr });
-				} break;
-
-				case sf::Event::KeyPressed:
-				{
-					if (e.key.code == sf::Keyboard::Escape)
-						SceneManager::PushCommand({ SceneManager::Clear, nullptr });
 				} break;
 			}
 		}

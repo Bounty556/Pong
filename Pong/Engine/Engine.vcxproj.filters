@@ -120,6 +120,21 @@
     <ClInclude Include="src\UI\UIButton.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\Math\Constants.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Math\Vectors.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\UI\UILabel.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\UI\UISprite.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\IO\LoggerFile.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\core\Logger.cpp">
@@ -201,6 +216,18 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\UI\UIComponent.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Math\Vectors.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\UI\UILabel.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\UI\UISprite.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\IO\LoggerFile.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

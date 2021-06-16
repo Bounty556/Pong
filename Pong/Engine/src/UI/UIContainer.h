@@ -12,7 +12,13 @@ namespace Soul
 	public:
 		UIContainer();
 		
+		UIContainer(const UIContainer&) = delete;
+		UIContainer(UIContainer&& other) noexcept;
+
 		~UIContainer();
+
+		UIContainer& operator=(const UIContainer&) = delete;
+		UIContainer& operator=(UIContainer&& other) noexcept;
 
 		/*
 		Adds a new UI Component to this UI Container, which will automatically be drawn and

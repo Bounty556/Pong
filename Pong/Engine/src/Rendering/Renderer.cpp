@@ -23,4 +23,9 @@ namespace Soul
 
 		target->draw(toRender, states);
 	}
+
+	const sf::RenderWindow& Renderer::GetWindow()
+	{
+		return *m_Window;
+	}
 }

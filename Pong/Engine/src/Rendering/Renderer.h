@@ -16,6 +16,8 @@ namespace Soul
 
 		static void Render(const sf::Drawable& toRender, sf::RenderStates states, sf::RenderTarget* target = nullptr);
 
+		static const sf::RenderWindow& GetWindow();
+
 	private:
 		static sf::RenderWindow* m_Window;
 	};

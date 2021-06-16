@@ -21,7 +21,7 @@ namespace Soul
 	must be either active or in the Scene Command Queue at any given time in
 	order for the engine to be running.
 	*/
-	class SceneManager
+	class SOULAPI SceneManager
 	{
 	public:
 		typedef UniquePointer<Scene> ScenePtr;
@@ -30,8 +30,7 @@ namespace Soul
 		{
 			Push,
 			Pop,
-			Clear,
-			Reset
+			Clear
 		};
 
 		struct SceneCommand
@@ -85,15 +84,22 @@ namespace Soul
 
 	private:
 		static bool m_Initialized;
-		static Stack<ScenePtr>* m_SceneStack;
+		static Stack<Scene*>* m_SceneStack;
 		static Queue<SceneCommand>* m_CommandQueue;
 	};
 
 	template <class T, class ...Args>
 	void SceneManager::ResetScene(T* scene, void* data, Args&& ...args)
 	{
-		MemoryManager::FreeMemory(scene);
-		scene = PARTITION(T, std::forward<Args>(args)...);
-		((Scene*)scene)->ResetSceneData(data);
+		for (auto i = m_SceneStack->Begin(); i != m_SceneStack->End(); ++i)
+		{
+			if (*i == scene)
+			{
+				MemoryManager::FreeMemory(*i);
+				*i = PARTITION(T, std::forward<Args>(args)...);
+				(*i)->ResetSceneData(data);
+				break;
+			}
+		}
 	}
 }

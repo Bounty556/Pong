@@ -184,10 +184,13 @@
     <ClInclude Include="src\IO\Gamepad.h" />
     <ClInclude Include="src\IO\InputManager.h" />
     <ClInclude Include="src\IO\Keyboard.h" />
+    <ClInclude Include="src\IO\LoggerFile.h" />
     <ClInclude Include="src\IO\StringReader.h" />
     <ClInclude Include="src\IO\TextFileReader.h" />
+    <ClInclude Include="src\Math\Constants.h" />
     <ClInclude Include="src\Math\Hashes.h" />
     <ClInclude Include="src\Math\Functions.h" />
+    <ClInclude Include="src\Math\Vectors.h" />
     <ClInclude Include="src\Memory\MemoryManager.h" />
     <ClInclude Include="src\Memory\ReferenceCounter.h" />
     <ClInclude Include="src\Memory\SharedPointer.h" />
@@ -206,6 +209,8 @@
     <ClInclude Include="src\UI\UIButton.h" />
     <ClInclude Include="src\UI\UIComponent.h" />
     <ClInclude Include="src\UI\UIContainer.h" />
+    <ClInclude Include="src\UI\UILabel.h" />
+    <ClInclude Include="src\UI\UISprite.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Core\Listener.cpp" />
@@ -220,10 +225,12 @@
     <ClCompile Include="src\IO\Gamepad.cpp" />
     <ClCompile Include="src\IO\InputManager.cpp" />
     <ClCompile Include="src\IO\Keyboard.cpp" />
+    <ClCompile Include="src\IO\LoggerFile.cpp" />
     <ClCompile Include="src\IO\StringReader.cpp" />
     <ClCompile Include="src\IO\TextFileReader.cpp" />
     <ClCompile Include="src\Math\Hashes.cpp" />
     <ClCompile Include="src\Math\Functions.cpp" />
+    <ClCompile Include="src\Math\Vectors.cpp" />
     <ClCompile Include="src\Memory\MemoryManager.cpp" />
     <ClCompile Include="src\Memory\ReferenceCounter.cpp" />
     <ClCompile Include="src\Platform\PlatformWin32.cpp" />
@@ -235,6 +242,8 @@
     <ClCompile Include="src\UI\UIButton.cpp" />
     <ClCompile Include="src\UI\UIComponent.cpp" />
     <ClCompile Include="src\UI\UIContainer.cpp" />
+    <ClCompile Include="src\UI\UILabel.cpp" />
+    <ClCompile Include="src\UI\UISprite.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

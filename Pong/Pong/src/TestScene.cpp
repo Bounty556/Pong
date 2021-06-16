@@ -16,8 +16,8 @@ TestScene::TestScene() :
 	m_Sprite.setTexture(*m_Textures.RequestTexture("res/player.png"));
 	m_Sprite.setPosition(50, 500);
 
-	Soul::UIButton* button1 = PARTITION(Soul::UIButton, "Start", m_Fonts, []() { LOG_DEBUG("Hello"); });
-	Soul::UIButton* button2 = PARTITION(Soul::UIButton, "Quit", m_Fonts, []() { LOG_DEBUG("Quitting"); });
+	Soul::UIButton* button1 = PARTITION(Soul::UIButton, "Start", *m_Fonts.RequestFont("res/Fonts/font.otf"), []() { LOG_DEBUG("Hello"); });
+	Soul::UIButton* button2 = PARTITION(Soul::UIButton, "Quit", *m_Fonts.RequestFont("res/Fonts/font.otf"), []() { LOG_DEBUG("Quitting"); });
 	button1->AddConnection(Soul::UIComponent::Up, button2);
 	button1->AddConnection(Soul::UIComponent::Down, button2);
 	button2->AddConnection(Soul::UIComponent::Up, button1);

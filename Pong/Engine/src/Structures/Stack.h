@@ -128,7 +128,12 @@ namespace Soul
 	template <class T>
 	StackIterator<T> Stack<T>::REnd()
 	{
-		return StackIterator<T>(true, m_Stack.Raw() - 1);
+		if (m_Size > 0)
+			return StackIterator<T>(true, m_Stack.Raw() - 1);
+		else
+			return StackIterator<T>(true, m_Stack.Raw());
+
+		//return StackIterator<T>(true, m_Stack.Raw() - 1);
 	}
 
 	template <class T>

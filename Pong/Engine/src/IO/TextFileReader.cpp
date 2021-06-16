@@ -52,7 +52,7 @@ namespace Soul
 	void TextFileReader::WriteToCurrentFile()
 	{
 		if (m_FileOpened)
-			PlatformWriteFile(m_FilePath.GetCString(), m_FileContents.GetCString(), m_FileContents.Length());
+			PlatformOverwriteFile(m_FilePath.GetCString(), m_FileContents.GetCString(), m_FileContents.Length());
 	}
 
 	String& TextFileReader::GetString()

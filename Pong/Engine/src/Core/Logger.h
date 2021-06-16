@@ -16,7 +16,7 @@ namespace Soul
 		LogLevelCount
 	};
 
-	bool InitiateLogger(const char* logFile);
+	bool InitializeLogger(const char* logFile);
 	bool ShutdownLogger();
 
 	void SOULAPI LogMessage(LogLevel logLevel, const char* message, ...);

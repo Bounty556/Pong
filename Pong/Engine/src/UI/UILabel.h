@@ -9,17 +9,17 @@
 namespace Soul
 {
 	/*
-	A UI Button. This must be provided a callback function that gets called when the button is
+	This must be provided a callback function that gets called when the button is
 	activated.
 	*/
-	class SOULAPI UIButton : public UIComponent
+	class SOULAPI UILabel : public UIComponent
 	{
 	public:
-		UIButton(const char* buttonText, const sf::Font& font, std::function<void()> activate);
-
-		virtual void Update(f32 dt) override;
+		UILabel(const char* text, const sf::Font& font);
 
 		virtual void Draw(sf::RenderStates states) const override;
+
+		void SetText(const char* text);
 
 	private:
 		sf::Text m_Text;

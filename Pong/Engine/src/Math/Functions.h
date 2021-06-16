@@ -46,7 +46,7 @@ namespace Soul
 		Calculates fast square root of number.
 		From: https://www.codeproject.com/Articles/69941/Best-Square-Root-Method-Algorithm-Function-Precisi
 		*/
-		SOULAPI f32 Sqrt(f32 number);
+		SOULAPI f32 Sqrt(const f32 number);
 
 		/*
 		Returns the max of the two values.
@@ -67,5 +67,31 @@ namespace Soul
 		Returns the min of the two values.
 		*/
 		SOULAPI i32 Min(i32 a, i32 b);
+
+		/*
+		Returns the provided degrees in radians.
+		*/
+		SOULAPI f32 ToRadians(f32 deg);
+
+		SOULAPI f32 ToDegrees(f32 rad);
+
+		/*
+		Returns the cosine of the provided radians.
+		*/
+		SOULAPI f64 Cos(f32 rad);
+
+		/*
+		Returns the sine of the provided radians.
+		*/
+		SOULAPI f64 Sin(f32 rad);
+
+		// Handbook of Mathematical Functions
+		// M. Abramowitz and I.A. Stegun, Ed.
+		// Absolute error <= 6.7e-5
+		// https://developer.download.nvidia.com/cg/acos.html
+		SOULAPI f32 Acos(f32 x);
+
+		// https://developer.download.nvidia.com/cg/atan2.html
+		SOULAPI f32 Atan2(f32 y, f32 x);
 	}
 }

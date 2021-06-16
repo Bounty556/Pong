@@ -10,10 +10,24 @@ namespace Soul
 	{
 	}
 
+	UIContainer::UIContainer(UIContainer&& other) noexcept :
+		m_Components(std::move(other.m_Components)),
+		m_HoveredComponent(other.m_HoveredComponent)
+	{
+	}
+
 	UIContainer::~UIContainer()
 	{
-		for (unsigned int i = 0; i < m_Components.Count(); ++i)
+		for (u32 i = 0; i < m_Components.Count(); ++i)
 			MemoryManager::FreeMemory(m_Components[i]);
+	}
+
+	UIContainer& UIContainer::operator=(UIContainer&& other) noexcept
+	{
+		m_Components = std::move(other.m_Components);
+		m_HoveredComponent = other.m_HoveredComponent;
+
+		return *this;
 	}
 
 	void UIContainer::AddUIComponent(UIComponent* component)

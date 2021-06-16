@@ -71,8 +71,12 @@ namespace Soul
 	Controller::ControlState Keyboard::GetControlState(const char* control)
 	{
 		ControlsMap::ControlMapping mapping = m_ControlsMap.GetControlMapping(control);
-		ControlState* keyState = m_KeyboardStates.GetValue(mapping.key);
-		ControlState* mouseState = m_MouseStates.GetValue(mapping.jButton);
+		ControlState* keyState = nullptr;
+		ControlState* mouseState = nullptr;
+		if (mapping.key != -1)
+			keyState = m_KeyboardStates.GetValue(mapping.key);
+		if (mapping.mButton != -1)
+			mouseState = m_MouseStates.GetValue(mapping.mButton);
 
 		ControlState finalState = {};
 

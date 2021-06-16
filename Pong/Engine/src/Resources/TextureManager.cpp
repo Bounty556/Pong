@@ -24,7 +24,7 @@ namespace Soul
 		return *this;
 	}
 
-	const sf::Texture* TextureManager::RequestTexture(const char* textureName)
+	const sf::Texture* TextureManager::RequestTexture(const char* textureName, bool isRepeated /* = false */)
 	{
 		// Check to see if the texture is already allocated.
 		sf::Texture** result = m_TextureMap.GetValue(textureName);
@@ -37,6 +37,7 @@ namespace Soul
 			// If not, allocate a new one and return
 			if (texture->loadFromFile(textureName))
 			{
+				texture->setRepeated(isRepeated);
 				m_TextureMap.AddPair(textureName, texture);
 				return texture;
 			}

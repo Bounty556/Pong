@@ -12,7 +12,7 @@ namespace Soul
 		typedef Map<ControllerId, Gamepad> GamepadMap;
 		m_Gamepads = PARTITION(GamepadMap, 8);
 
-		m_Keyboard = PARTITION(Keyboard, "res/defaultControls.controls");
+		m_Keyboard = PARTITION(Keyboard, "res/Controls/defaultControls.controls");
 
 		return true;
 	}
@@ -86,7 +86,7 @@ namespace Soul
 
 	void InputManager::RegisterGamepad(ControllerId id)
 	{
-		m_Gamepads->AddPair(id, Gamepad("res/defaultControls.controls", id));
+		m_Gamepads->AddPair(id, Gamepad("res/Controls/defaultControls.controls", id));
 		LOG_DEBUG("Gamepad %d added", id);
 	}
 

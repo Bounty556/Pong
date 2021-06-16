@@ -17,6 +17,18 @@ namespace Soul
 			MessageBus::Unsubscribe(*messages[i], this);
 	}
 
+	Listener::Listener(Listener&& other) noexcept :
+		m_Callbacks(std::move(other.m_Callbacks))
+	{
+	}
+
+	Listener& Listener::operator=(Listener&& other) noexcept
+	{
+		m_Callbacks = std::move(other.m_Callbacks);
+
+		return *this;
+	}
+
 	void Listener::Subscribe(const char* message, std::function<void(void*)> callback)
 	{
 		MessageBus::Subscribe(message, this);

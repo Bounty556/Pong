@@ -31,7 +31,7 @@ namespace Soul
 		};
 
 	public:
-		Map(u32 capacity = 7);
+		Map(u32 capacity = 11);
 
 		Map(const Map&) = delete;
 		Map(Map&& otherMap);
@@ -122,7 +122,7 @@ namespace Soul
 	bool Map<K, V>::AddPair(const K& key, const V& value)
 	{
 		// Check to make sure adding this doesn't fill our capacity
-		if (m_Size + 1 >= m_Capacity)
+		if (m_Size + 1 >= (u32)(m_Capacity * .5f))
 			Resize(Math::FindNextPrime(m_Capacity * 2));
 
 		i64 openLocation = FindOpenLocation(key);
@@ -145,7 +145,7 @@ namespace Soul
 	bool Map<K, V>::AddPair(K&& key, V&& value)
 	{
 		// Check to make sure adding this doesn't fill our capacity
-		if (m_Size + 1 >= m_Capacity)
+		if (m_Size + 1 >= (u32)(m_Capacity * .5f))
 			Resize(Math::FindNextPrime(m_Capacity * 2));
 
 		i64 openLocation = FindOpenLocation(key);
@@ -168,7 +168,7 @@ namespace Soul
 	bool Map<K, V>::AddPair(const K& key, V&& value)
 	{
 		// Check to make sure adding this doesn't fill our capacity
-		if (m_Size + 1 >= m_Capacity)
+		if (m_Size + 1 >= (u32)(m_Capacity * .5f))
 			Resize(Math::FindNextPrime(m_Capacity * 2));
 
 		i64 openLocation = FindOpenLocation(key);
@@ -191,7 +191,7 @@ namespace Soul
 	bool Map<K, V>::AddPair(K&& key, const V& value)
 	{
 		// Check to make sure adding this doesn't fill our capacity
-		if (m_Size + 1 >= m_Capacity)
+		if (m_Size + 1 >= (u32)(m_Capacity * .5f))
 			Resize(Math::FindNextPrime(m_Capacity * 2));
 
 		i64 openLocation = FindOpenLocation(key);
@@ -296,7 +296,7 @@ namespace Soul
 		u32 location = hash % m_Capacity;
 
 		u32 attempts = 0;
-		u32 maxAttempts = m_Capacity / 2;
+		u32 maxAttempts = m_Capacity / 2 + 1;
 		// Check to see if there is an object at that location
 		// TODO: store hash?
 		while (m_Map[location].IsInitialized && Math::Hash(m_Map[location].Key) != hash)
@@ -304,7 +304,7 @@ namespace Soul
 			// We couldn't find a spot
 			if (attempts++ >= maxAttempts)
 			{
-				LOG_ERROR("Error, could not find valid memory for new pair.\nCurrent capacity: %d\nCurrent pairs: %d",
+				LOG_DEBUG("Could not find valid memory for new pair.\nCurrent capacity: %d\nCurrent pairs: %d",
 					m_Capacity, m_Size);
 				return -1;
 			}
@@ -323,7 +323,7 @@ namespace Soul
 		u32 location = hash % m_Capacity;
 
 		u32 attempts = 0;
-		u32 maxAttempts = m_Capacity / 2;
+		u32 maxAttempts = m_Capacity / 2 + 1;
 
 		// Check to see if there is an object at that location
 		while (m_Map[location].IsInitialized && m_Map[location].Key != key)
@@ -331,7 +331,7 @@ namespace Soul
 			// We couldn't find a spot
 			if (attempts++ >= maxAttempts)
 			{
-				LOG_ERROR("Could not find value with hash: %lld", hash);
+				LOG_DEBUG("Could not find value with hash: %lld", hash);
 				return -1;
 			}
 

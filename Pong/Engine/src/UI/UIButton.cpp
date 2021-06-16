@@ -4,9 +4,9 @@
 
 namespace Soul
 {
-	UIButton::UIButton(const char* buttonText, FontManager& fontManager, std::function<void()> activate) :
+	UIButton::UIButton(const char* buttonText, const sf::Font& font, std::function<void()> activate) :
 		UIComponent(activate),
-		m_Text(buttonText, *(fontManager.RequestFont("res/font.otf")))
+		m_Text(buttonText, font)
 	{
 	}
 

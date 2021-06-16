@@ -41,8 +41,8 @@ namespace Soul
 		/*
 		Removes the provided element, replacing it with the final element.
 		*/
-		void Remove(const T& element);
-		void Remove(u32 index);
+		T* Remove(const T& element);
+		T* Remove(u32 index);
 		void Clear();
 
 		u32 Count() const;
@@ -175,29 +175,39 @@ namespace Soul
 	}
 
 	template <class T>
-	void Vector<T>::Remove(const T& element)
+	T* Vector<T>::Remove(const T& element)
 	{
 		for (u32 i = 0; i < m_Size; ++i)
 		{
 			if (m_Vector[i] == element)
 			{
 				if (i == m_Size - 1)
-					--m_Size;
+					return &m_Vector[--m_Size - 1];
 				else
+				{
 					m_Vector[i] = std::move(m_Vector[--m_Size]);
+					return &m_Vector[i];
+				}
 			}
 		}
+		
+		return nullptr;
 	}
 
 	template <class T>
-	void Vector<T>::Remove(u32 index)
+	T* Vector<T>::Remove(u32 index)
 	{
 		ASSERT(index > 0 && index < m_Size);
 
 		if (index == m_Size - 1)
-			--m_Size;
+			return &m_Vector[--m_Size - 1];
 		else
+		{
 			m_Vector[index] = std::move(m_Vector[--m_Size]);
+			return &m_Vector[index];
+		}
+
+		return nullptr;
 	}
 
 	template <class T>

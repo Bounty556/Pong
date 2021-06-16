@@ -31,7 +31,7 @@ namespace Soul
 		TextureManager& operator=(const TextureManager&) = delete;
 		TextureManager& operator=(TextureManager&& other) noexcept;
 
-		const sf::Texture* RequestTexture(const char* textureName);
+		const sf::Texture* RequestTexture(const char* textureName, bool isRepeated = false);
 
 		void ClearAllTextures();
 
