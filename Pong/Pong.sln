@@ -10,6 +10,11 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Pong", "Pong\Pong.vcxproj",
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Engine", "Engine\Engine.vcxproj", "{5A272530-462C-44E5-9948-A758AB81AA49}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TestBed", "TestBed\TestBed.vcxproj", "{707D40E6-3DCF-4CB4-8A3F-BC70281281B9}"
+	ProjectSection(ProjectDependencies) = postProject
+		{5A272530-462C-44E5-9948-A758AB81AA49} = {5A272530-462C-44E5-9948-A758AB81AA49}
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x86 = Debug|x86
@@ -24,6 +29,10 @@ Global
 		{5A272530-462C-44E5-9948-A758AB81AA49}.Debug|x86.Build.0 = Debug|Win32
 		{5A272530-462C-44E5-9948-A758AB81AA49}.Release|x86.ActiveCfg = Release|Win32
 		{5A272530-462C-44E5-9948-A758AB81AA49}.Release|x86.Build.0 = Release|Win32
+		{707D40E6-3DCF-4CB4-8A3F-BC70281281B9}.Debug|x86.ActiveCfg = Debug|Win32
+		{707D40E6-3DCF-4CB4-8A3F-BC70281281B9}.Debug|x86.Build.0 = Debug|Win32
+		{707D40E6-3DCF-4CB4-8A3F-BC70281281B9}.Release|x86.ActiveCfg = Release|Win32
+		{707D40E6-3DCF-4CB4-8A3F-BC70281281B9}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
