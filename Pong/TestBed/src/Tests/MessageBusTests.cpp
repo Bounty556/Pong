@@ -61,16 +61,5 @@ void ObjectListeningTest()
 void MessageBusTests::RunAllTests()
 {
 	RUN_TEST(BasicListeningTest);
-	RUN_TEST(BasicListeningTest);
-	RUN_TEST(BasicListeningTest);
-	RUN_TEST(BasicListeningTest);
-	RUN_TEST(BasicListeningTest);
-	RUN_TEST(BasicListeningTest);
-	RUN_TEST(BasicListeningTest);
-	RUN_TEST(BasicListeningTest);
-	RUN_TEST(BasicListeningTest);
-	RUN_TEST(BasicListeningTest);
-	RUN_TEST(BasicListeningTest);
-	RUN_TEST(BasicListeningTest);
 	RUN_TEST(ObjectListeningTest);
 }
