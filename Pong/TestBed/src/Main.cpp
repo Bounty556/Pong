@@ -1,25 +1,33 @@
 #include "TestMacros.h"
 
-void Initialize()
+#include <EntryPoint.h>
+#include <Memory/MemoryManager.h>
+
+#include "TestScene.h"
+
+#include "Tests/MessageBusTests.h"
+
+void RunTestSuite(ITestSuite* suite)
 {
-	// TODO: Init systems
+	suite->RunAllTests();
+	delete suite;
 }
 
 void RunAllTestSuites()
 {
-	// TODO: Make tests
-}
-
-void Shutdown()
-{
-	// TODO: Shutdown systems
+	CREATE_TEST_SUITE(MessageBusTests);
 }
 
 int main()
 {
-	Initialize();
-	RunAllTestSuites();
-	Shutdown();
+	if (Soul::InitializeEngine(1280, 720, "Soul Tests"))
+	{
+		RunAllTestSuites();
+		LOG_INFO("All tests finished.");
 
+		TestScene* scene = PARTITION(TestScene);
+		Soul::SetScene(scene);
+	}
+	Soul::ShutdownEngine();
 	return 0;
 }

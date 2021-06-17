@@ -60,6 +60,7 @@
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>$(SolutionDir)Engine\src\;$(SolutionDir)vendor\SFML\include\</AdditionalIncludeDirectories>
+      <DisableSpecificWarnings>4251</DisableSpecificWarnings>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -77,6 +78,7 @@
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>$(SolutionDir)Engine\src\;$(SolutionDir)vendor\SFML\include\</AdditionalIncludeDirectories>
+      <DisableSpecificWarnings>4251</DisableSpecificWarnings>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -89,10 +91,14 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="src\Main.cpp" />
+    <ClCompile Include="src\TestScene.cpp" />
+    <ClCompile Include="src\Tests\MessageBusTests.cpp" />
     <ClCompile Include="src\Tests\TestClass.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\ITestSuite.h" />
+    <ClInclude Include="src\TestScene.h" />
+    <ClInclude Include="src\Tests\ITestSuite.h" />
+    <ClInclude Include="src\Tests\MessageBusTests.h" />
     <ClInclude Include="src\Tests\TestClass.h" />
     <ClInclude Include="src\TestMacros.h" />
   </ItemGroup>

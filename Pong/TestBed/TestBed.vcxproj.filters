@@ -21,15 +21,27 @@
     <ClCompile Include="src\Tests\TestClass.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\Tests\MessageBusTests.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\TestScene.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\ITestSuite.h">
+    <ClInclude Include="src\Tests\ITestSuite.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Tests\TestClass.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\TestMacros.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Tests\MessageBusTests.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\TestScene.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

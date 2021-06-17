@@ -1,10 +1,7 @@
 #pragma once
 
-namespace Soul
+class ITestSuite
 {
-	class ITestSuite
-	{
-	public:
-		virtual void RunAllTests() = 0;
-	};
-}
+public:
+	virtual void RunAllTests() = 0;
+};
