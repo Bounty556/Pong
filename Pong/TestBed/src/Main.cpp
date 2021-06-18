@@ -5,6 +5,7 @@
 
 #include "TestScene.h"
 
+#include "Tests/MathTests.h"
 #include "Tests/MessageBusTests.h"
 #include "Tests/StringTests.h"
 
@@ -16,6 +17,7 @@ void RunTestSuite(ITestSuite* suite)
 
 void RunAllTestSuites()
 {
+	CREATE_TEST_SUITE(MathTests);
 	CREATE_TEST_SUITE(MessageBusTests);
 	CREATE_TEST_SUITE(StringTests);
 }
