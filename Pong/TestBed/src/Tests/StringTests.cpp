@@ -157,6 +157,66 @@ void EditChar()
 	END_MEMORY_CHECK();
 }
 
+void IntToString()
+{
+	START_MEMORY_CHECK();
+
+	i32 positiveInt = 10975693;
+	Soul::String positiveIntString = Soul::String::IntToString(positiveInt);
+
+	ASSERT_EQUAL(positiveIntString[0], '1', "Failed to convert positive int to string.");
+	ASSERT_EQUAL(positiveIntString[1], '0', "Failed to convert positive int to string.");
+	ASSERT_EQUAL(positiveIntString[2], '9', "Failed to convert positive int to string.");
+	ASSERT_EQUAL(positiveIntString[3], '7', "Failed to convert positive int to string.");
+	ASSERT_EQUAL(positiveIntString[4], '5', "Failed to convert positive int to string.");
+	ASSERT_EQUAL(positiveIntString[5], '6', "Failed to convert positive int to string.");
+	ASSERT_EQUAL(positiveIntString[6], '9', "Failed to convert positive int to string.");
+	ASSERT_EQUAL(positiveIntString[7], '3', "Failed to convert positive int to string.");
+
+	i32 negativeInt = -19675793;
+	Soul::String negativeIntString = Soul::String::IntToString(negativeInt);
+
+	ASSERT_EQUAL(negativeIntString[0], '-', "Failed to convert negative int to string.");
+	ASSERT_EQUAL(negativeIntString[1], '1', "Failed to convert negative int to string.");
+	ASSERT_EQUAL(negativeIntString[2], '9', "Failed to convert negative int to string.");
+	ASSERT_EQUAL(negativeIntString[3], '6', "Failed to convert negative int to string.");
+	ASSERT_EQUAL(negativeIntString[4], '7', "Failed to convert negative int to string.");
+	ASSERT_EQUAL(negativeIntString[5], '5', "Failed to convert negative int to string.");
+	ASSERT_EQUAL(negativeIntString[6], '7', "Failed to convert negative int to string.");
+	ASSERT_EQUAL(negativeIntString[7], '9', "Failed to convert negative int to string.");
+	ASSERT_EQUAL(negativeIntString[8], '3', "Failed to convert negative int to string.");
+
+	i32 zeroInt = 0;
+	Soul::String zeroIntString = Soul::String::IntToString(zeroInt);
+
+	ASSERT_EQUAL(zeroIntString[0], '0', "Failed to convert zero int to string.");
+
+	END_MEMORY_CHECK();
+}
+
+void StringToInt()
+{
+	START_MEMORY_CHECK();
+
+	Soul::String positiveIntString = "10975693";
+
+	i32 positiveInt = positiveIntString.ToInt();
+
+	ASSERT_EQUAL(positiveInt, 10975693, "Failed to convert string to positive int.");
+
+	Soul::String negativeIntString = "-19675793";
+	i32 negativeInt = negativeIntString.ToInt();
+
+	ASSERT_EQUAL(negativeInt, -19675793, "Failed to convert string to negative int.");
+
+	Soul::String zeroIntString = "0";
+	i32 zeroInt = zeroIntString.ToInt();
+
+	ASSERT_EQUAL(zeroInt, 0, "Failed to convert string to zero int.");
+
+	END_MEMORY_CHECK();
+}
+
 void StringTests::RunAllTests()
 {
 	RUN_TEST(InitString);
@@ -166,4 +226,6 @@ void StringTests::RunAllTests()
 	RUN_TEST(CharCastString);
 	RUN_TEST(Substring);
 	RUN_TEST(IndexOfChar);
+	RUN_TEST(IntToString);
+	RUN_TEST(StringToInt);
 }

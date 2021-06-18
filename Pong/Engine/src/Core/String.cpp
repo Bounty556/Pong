@@ -104,9 +104,11 @@ namespace Soul
 		return *this;
 	}
 
-	// TODO: Free our memory first
 	String& String::operator=(String&& otherString)
 	{
+		// Clear our memory first
+		MemoryManager::FreeMemory(m_CString);
+
 		m_CString = otherString.m_CString;
 		m_StringCapacity = otherString.m_StringCapacity;
 		m_StringLength = otherString.m_StringLength;
