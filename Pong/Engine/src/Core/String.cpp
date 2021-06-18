@@ -257,6 +257,27 @@ namespace Soul
 		return *this;
 	}
 
+	String String::operator+(const String& otherString)
+	{
+		String newString(*this);
+		newString += otherString;
+		return newString;
+	}
+
+	String String::operator+(const char* otherString)
+	{
+		String newString(*this);
+		newString += otherString;
+		return newString;
+	}
+
+	String String::operator+(const char otherChar)
+	{
+		String newString(*this);
+		newString += otherChar;
+		return newString;
+	}
+
 	bool String::operator==(const String& otherString) const
 	{
 		return CompareTo(otherString) == 0;
@@ -280,6 +301,12 @@ namespace Soul
 	const char String::operator[](u32 index) const
 	{
 		ASSERT(index >= 0 && index < m_StringLength)
+		return m_CString[index];
+	}
+
+	char& String::operator[](u32 index)
+	{
+		ASSERT(index >= 0 && index < m_StringLength);
 		return m_CString[index];
 	}
 
@@ -389,6 +416,32 @@ namespace Soul
 	void String::SetLength(u32 stringLength)
 	{
 		m_StringLength = stringLength;
+	}
+
+	i32 String::FindFirstOf(char character) const
+	{
+		for (u32 i = 0; i < m_StringLength; ++i)
+			if (m_CString[i] == character)
+				return (i32)i;
+
+		return -1;
+	}
+
+	String String::Substring(u32 start, u32 end) const
+	{
+		ASSERT(end > start);
+		ASSERT(end >= 0 && end <= m_StringLength);
+		ASSERT(start >= 0 && start < m_StringLength);
+		String newString(end - start + 1);
+		for (u32 i = start; i < end; ++i)
+			newString += m_CString[i];
+
+		return newString;
+	}
+
+	String String::Substring(u32 start) const
+	{
+		return Substring(start, m_StringLength);
 	}
 
 	String String::IntToString(i32 value)

@@ -66,19 +66,19 @@ void ConcatString()
 
 	Soul::String string1("This is ");
 	const char* string2 = "a concatenated string.";
-	// TODO: Soul::String string3(string1 + string2);
+	Soul::String string3(string1 + string2);
 
-	//ASSERT_EQUAL(string3[4], ' ', "Failed to concatenate string1.");
-	//ASSERT_EQUAL(string3[15], 't', "Failed to concatenate string2.");
-	//ASSERT_EQUAL(string3.Length(), 30, "Incorrect concatenated length.");
+	ASSERT_EQUAL(string3[4], ' ', "Failed to concatenate string1.");
+	ASSERT_EQUAL(string3[15], 't', "Failed to concatenate string2.");
+	ASSERT_EQUAL(string3.Length(), 30, "Incorrect concatenated length.");
 
-	/*Soul::String string4("This is ");
+	Soul::String string4("This is ");
 	Soul::String string5 = "a concatenated string.";
 	Soul::String string6(string4 + string5);
 
 	ASSERT_EQUAL(string6[4], ' ', "Failed to concatenate string1.");
 	ASSERT_EQUAL(string6[15], 't', "Failed to concatenate string2.");
-	ASSERT_EQUAL(string6.Length(), 30, "Incorrect concatenated length.");*/
+	ASSERT_EQUAL(string6.Length(), 30, "Incorrect concatenated length.");
 
 	END_MEMORY_CHECK();
 }
@@ -119,15 +119,14 @@ void Substring()
 {
 	START_MEMORY_CHECK();
 
-	// TODO:
-	/*Soul::String string1("Testing");
+	Soul::String string1("Testing");
 	Soul::String string2(string1.Substring(2));
 	Soul::String string3(string1.Substring(2, 3));
 
 	ASSERT_EQUAL(string2[1], 't', "Substring construction failed.");
 	ASSERT_EQUAL(string2.Length(), 5, "Substring construction failed.");
 	ASSERT_EQUAL(string3[0], 's', "Substring construction failed.");
-	ASSERT_EQUAL(string3.Length(), 1, "Substring construction failed.");*/
+	ASSERT_EQUAL(string3.Length(), 1, "Substring construction failed.");
 
 	END_MEMORY_CHECK();
 }
@@ -136,12 +135,11 @@ void IndexOfChar()
 {
 	START_MEMORY_CHECK();
 
-	// TODO:
-	/*Soul::String string("testing");
+	Soul::String string("testing");
 
 	ASSERT_EQUAL(string.FindFirstOf('t'), 0, "Failed to find 't'.");
 	ASSERT_EQUAL(string.FindFirstOf('i'), 4, "Failed to find 'i'.");
-	ASSERT_EQUAL(string.FindFirstOf('x'), -1, "Found incorrect character.");*/
+	ASSERT_EQUAL(string.FindFirstOf('x'), -1, "Found incorrect character.");
 
 	END_MEMORY_CHECK();
 }
@@ -150,12 +148,11 @@ void EditChar()
 {
 	START_MEMORY_CHECK();
 
-	// TODO:
-	/*Soul::String string("Testing");
+	Soul::String string("Testing");
 
 	string[0] = 'R';
 
-	ASSERT_EQUAL(string[0], 'R', "Failed to edit character in string.");*/
+	ASSERT_EQUAL(string[0], 'R', "Failed to edit character in string.");
 
 	END_MEMORY_CHECK();
 }
