@@ -3,16 +3,13 @@
 #include <Defines.h>
 #include <Memory/UniquePointer.h>
 
-// TODO: There may be some issues with storing objects in here that have non-copyable data, or with very deep data stored in them. May need to investigate and some more testing with this class.
-// TODO: May need to add resizing
-
 namespace Soul
 {
 	template <class T>
 	class Queue
 	{
 	public:
-		Queue(u16 capacity = 32);
+		Queue(u16 capacity = 8);
 		Queue(const Queue&) = delete;
 		Queue(Queue&& otherQueue);
 
@@ -24,12 +21,15 @@ namespace Soul
 		*/
 		void Que(const T& element);
 		void Que(T&& element);
-		T&& Deque();
+		T Deque();
 		T& Peek();
 		const T& Peek() const;
 
 		u16 Count() const;
 		bool IsEmpty() const;
+
+	private:
+		void Resize(u32 newCapacity);
 
 	private:
 		u16 m_Capacity;
@@ -44,9 +44,9 @@ namespace Soul
 	Queue<T>::Queue(u16 capacity /* = 32 */) :
 		m_Capacity(capacity),
 		m_Size(0),
-		m_Queue(PARTITION_ARRAY(T, capacity)),
 		m_Head(0),
-		m_Tail(0)
+		m_Tail(0),
+		m_Queue(PARTITION_ARRAY(T, capacity))
 	{
 	}
 
@@ -54,9 +54,9 @@ namespace Soul
 	Queue<T>::Queue(Queue&& otherQueue) :
 		m_Capacity(otherQueue.m_Capacity),
 		m_Size(otherQueue.m_Size),
-		m_Queue(std::move(otherQueue.m_Queue)),
 		m_Head(otherQueue.m_Head),
-		m_Tail(otherQueue.m_Tail)
+		m_Tail(otherQueue.m_Tail),
+		m_Queue(std::move(otherQueue.m_Queue))
 	{
 		otherQueue.m_Capacity = 0;
 		otherQueue.m_Size = 0;
@@ -67,17 +67,21 @@ namespace Soul
 	{
 		m_Capacity = otherQueue.m_Capacity;
 		m_Size = otherQueue.m_Size;
-		m_Queue = std::move(otherQueue.m_Queue);
 		m_Head = otherQueue.m_Head;
 		m_Tail = otherQueue.m_Tail;
+		m_Queue = std::move(otherQueue.m_Queue);
 		otherQueue.m_Capacity = 0;
 		otherQueue.m_Size = 0;
+
+		return *this;
 	}
 
 	template <class T>
 	void Queue<T>::Que(const T& element)
 	{
-		ASSERT(m_Size < m_Capacity);
+		// Resize if we're over capacity
+		if (m_Size + 1 >= m_Capacity)
+			Resize(m_Capacity * 2);
 
 		// Add element at Queue head
 		new (&m_Queue[m_Head]) T(element);
@@ -88,7 +92,9 @@ namespace Soul
 	template <class T>
 	void Queue<T>::Que(T&& element)
 	{
-		ASSERT(m_Size < m_Capacity);
+		// Resize if we're over capacity
+		if (m_Size + 1 >= m_Capacity)
+			Resize(m_Capacity * 2);
 
 		// Add element at Queue head
 		new (&m_Queue[m_Head]) T(std::move(element));
@@ -97,7 +103,7 @@ namespace Soul
 	}
 
 	template <class T>
-	T&& Queue<T>::Deque()
+	T Queue<T>::Deque()
 	{
 		ASSERT(m_Size > 0);
 
@@ -130,5 +136,20 @@ namespace Soul
 	bool Queue<T>::IsEmpty() const
 	{
 		return m_Size == 0;
+	}
+
+	template <class T>
+	void Queue<T>::Resize(u32 newCapacity)
+	{
+		UniquePointer<T> newQueue = PARTITION_ARRAY(T, newCapacity);
+
+		for (u32 i = 0; i < m_Size; i++)
+		{
+			u32 currentQueueIndex = (m_Tail + i) % m_Capacity;
+			new(&newQueue[i]) T(std::move(m_Queue[currentQueueIndex]));
+		}
+
+		m_Capacity = newCapacity;
+		m_Queue = std::move(newQueue);
 	}
 }

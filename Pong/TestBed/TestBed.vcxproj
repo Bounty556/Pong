@@ -95,6 +95,7 @@
     <ClCompile Include="src\Tests\MathTests.cpp" />
     <ClCompile Include="src\TestScene.cpp" />
     <ClCompile Include="src\Tests\MessageBusTests.cpp" />
+    <ClCompile Include="src\Tests\QueueTests.cpp" />
     <ClCompile Include="src\Tests\StringTests.cpp" />
     <ClCompile Include="src\Tests\TestClass.cpp" />
   </ItemGroup>
@@ -104,6 +105,7 @@
     <ClInclude Include="src\TestScene.h" />
     <ClInclude Include="src\Tests\ITestSuite.h" />
     <ClInclude Include="src\Tests\MessageBusTests.h" />
+    <ClInclude Include="src\Tests\QueueTests.h" />
     <ClInclude Include="src\Tests\StringTests.h" />
     <ClInclude Include="src\Tests\TestClass.h" />
     <ClInclude Include="src\TestMacros.h" />
