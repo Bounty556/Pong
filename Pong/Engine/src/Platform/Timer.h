@@ -11,7 +11,7 @@ namespace Soul
 	whether the timer is running or not, GetElapsedMilliseconds() can be called to get the current number
 	of elapsed milliseconds.
 	*/
-	class Timer
+	class SOULAPI Timer
 	{
 	public:
 		Timer();

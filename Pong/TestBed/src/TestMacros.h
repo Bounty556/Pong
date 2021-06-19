@@ -2,12 +2,18 @@
 
 #include <Defines.h>
 #include <Core/Logger.h>
+#include <Platform/Timer.h>
 
 #define TO_STRING(x) #x
 #define STRINGIFY(x) TO_STRING(x)
 
-#define CREATE_TEST_SUITE(x) LOG_WARN("Running Suite " STRINGIFY(x)); \
-RunTestSuite(new x);
+#define CREATE_TEST_SUITE(x) { \
+	LOG_WARN("Running Suite " STRINGIFY(x)); \
+	Soul::Timer timer; \
+	timer.Start(); \
+	RunTestSuite(new x); \
+	LOG_WARN("Suite took %dms milliseconds to run", timer.GetElapsedMilliseconds()); \
+}
 
 #define RUN_TEST(x) LOG_INFO("Running test " STRINGIFY(x)); \
 x();
