@@ -45,25 +45,29 @@ namespace Soul
 
 		u32 FindNextPrime(u32 number)
 		{
-			while (!IsPrime(number))
+			if (number % 2 == 0 && number > 3)
 				number++;
+			while (!IsPrime(number))
+				number += 2;
 
 			return number;
 		}
 
-		bool IsPrime(u32 number)
+		/*
+		From https://en.wikipedia.org/wiki/Primality_test
+		*/
+		bool IsPrime(u32 n)
 		{
-			// Check to see if even
-			if (number % 2 == 0)
-				return false;
+			if (n == 2 || n == 3)
+				return true;
 
-			// Start at half, and divide by all numbers below to check for prime
-			u32 divisor = number / 2;
-			while (divisor >= 3)
+			if (n <= 1 || n % 2 == 0 || n % 3 == 0)
+				return false;
+			
+			for (u32 i = 5; i * i <= n; i += 6)
 			{
-				if (number % divisor == 0)
+				if (n % i == 0 || n % (i + 2) == 0)
 					return false;
-				divisor -= 1;
 			}
 
 			return true;
@@ -78,12 +82,13 @@ namespace Soul
 
 		i32 Round(f32 number)
 		{
-			f32 num = number - (i32)number;
-
-			if (num > 0.5f)
-				return (i32)(number + 1.0f);
+			i8 negative = (number < 0.0f) ? -1 : 1;
+			number *= negative;
+			f32 remainder = number - (i32)number;
+			if (remainder >= 0.5f)
+				return (i32)(negative * (number + 1.0f));
 			else
-				return (i32)(number);
+				return (i32)(negative * number);
 		}
 
 		/*
@@ -183,7 +188,22 @@ namespace Soul
 			return negate * PI + ret;
 		}
 
-		SOULAPI f32 Atan2(f32 y, f32 x)
+		f32 Asin(f32 x)
+		{
+			f32 negate = f32(x < 0.0f);
+			x = Abs(x);
+			f32 ret = -0.0187293f;
+			ret *= x;
+			ret += 0.0742610f;
+			ret *= x;
+			ret -= 0.2121144f;
+			ret *= x;
+			ret += 1.5707288f;
+			ret = HALF_PI - Sqrt(1.0f - x) * ret;
+			return ret - 2 * negate * ret;
+		}
+
+		f32 Atan2(f32 y, f32 x)
 		{
 			f32 t0, t1, t3, t4;
 
@@ -203,9 +223,9 @@ namespace Soul
 			t0 = t0 * t4 + 0.999995630f;
 			t3 = t0 * t3;
 
-			t3 = (Abs(y) > Abs(x)) ? 1.570796327f - t3 : t3;
-			t3 = (x < 0) ? 3.141592654f - t3 : t3;
-			t3 = (y < 0) ? -t3 : t3;
+			t3 = (Abs(y) > Abs(x)) ? HALF_PI - t3 : t3;
+			t3 = (x < 0.0f) ? PI - t3 : t3;
+			t3 = (y < 0.0f) ? -t3 : t3;
 
 			return t3;
 		}

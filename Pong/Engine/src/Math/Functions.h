@@ -73,6 +73,9 @@ namespace Soul
 		*/
 		SOULAPI f32 ToRadians(f32 deg);
 
+		/*
+		Returns the provided radians in degrees.
+		*/
 		SOULAPI f32 ToDegrees(f32 rad);
 
 		/*
@@ -90,6 +93,12 @@ namespace Soul
 		// Absolute error <= 6.7e-5
 		// https://developer.download.nvidia.com/cg/acos.html
 		SOULAPI f32 Acos(f32 x);
+
+		// Handbook of Mathematical Functions
+		// M. Abramowitz and I.A. Stegun, Ed.
+		// Absolute error <= 6.7e-5
+		// https://developer.download.nvidia.com/cg/acos.html
+		SOULAPI f32 Asin(f32 x);
 
 		// https://developer.download.nvidia.com/cg/atan2.html
 		SOULAPI f32 Atan2(f32 y, f32 x);
