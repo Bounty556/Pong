@@ -286,6 +286,7 @@ namespace Soul
 		m_Map[location].Key.~K();
 		m_Map[location].Value.~V();
 		PlatformSetMemory(&m_Map[location], 0, sizeof(Set<K, V>));
+		m_Size--;
 	}
 
 	template <class K, class V>
