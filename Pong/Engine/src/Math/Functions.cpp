@@ -169,7 +169,7 @@ namespace Soul
 
 		f64 Sin(f32 rad)
 		{
-			return Cos(rad + HALF_PI);
+			return Cos(rad - HALF_PI);
 		}
 
 		f32 Acos(f32 x)

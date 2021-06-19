@@ -97,7 +97,7 @@ namespace Soul
 		// Handbook of Mathematical Functions
 		// M. Abramowitz and I.A. Stegun, Ed.
 		// Absolute error <= 6.7e-5
-		// https://developer.download.nvidia.com/cg/acos.html
+		// https://developer.download.nvidia.com/cg/asin.html
 		SOULAPI f32 Asin(f32 x);
 
 		// https://developer.download.nvidia.com/cg/atan2.html

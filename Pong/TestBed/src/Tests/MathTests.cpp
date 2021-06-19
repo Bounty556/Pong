@@ -3,11 +3,14 @@
 #include <Core/Logger.h>
 #include <Math/Constants.h>
 #include <Math/Functions.h>
+#include <Math/Vectors.h>
 #include <Memory/MemoryManager.h>
 
 #include "../TestMacros.h"
 
 #include <utility>
+
+#include <SFML/System/Vector2.hpp>
 
 void ClampTest()
 {
@@ -111,14 +114,62 @@ void ACosASinTest()
 
 void ATanTest()
 {
-	ASSERT_CLOSE(Soul::Math::Atan2(4.56f, 2.55f), 1.0609f, 0.001f,
-		"Failed to find four quadrant inverse tangent of (y,x)(4.56f, 1.55f)");
-	ASSERT_CLOSE(Soul::Math::Atan2(-1.66f, 8.1f), -0.20213f, 0.001f,
-		"Failed to find four quadrant inverse tangent of (y,x)(4-1.66, 8.1f)");
-	ASSERT_CLOSE(Soul::Math::Atan2(-3.61f, -9.62f), -2.78259, 0.001f,
-		"Failed to find four quadrant inverse tangent of (y,x)(-3.61f, -9.62f)");
-	ASSERT_CLOSE(Soul::Math::Atan2(5.93f, -6.19f), 2.37764f, 0.001f,
-		"Failed to find four quadrant inverse tangent of (y,x)(5.93f, -6.19f)");
+	ASSERT_CLOSE(Soul::Math::Atan2(4.56f, 2.55f), 1.0609f, 0.001f, "Failed to find four quadrant inverse tangent of (y,x)(4.56f, 1.55f).");
+	ASSERT_CLOSE(Soul::Math::Atan2(-1.66f, 8.1f), -0.20213f, 0.001f, "Failed to find four quadrant inverse tangent of (y,x)(4-1.66, 8.1f).");
+	ASSERT_CLOSE(Soul::Math::Atan2(-3.61f, -9.62f), -2.78259, 0.001f, "Failed to find four quadrant inverse tangent of (y,x)(-3.61f, -9.62f).");
+	ASSERT_CLOSE(Soul::Math::Atan2(5.93f, -6.19f), 2.37764f, 0.001f, "Failed to find four quadrant inverse tangent of (y,x)(5.93f, -6.19f).");
+}
+
+void DistanceTest()
+{
+	ASSERT_CLOSE(Soul::Math::Distance(sf::Vector2f(5.0f, 5.0f), sf::Vector2f(6.0, 6.0f)), 1.44f, 0.001f, "Failed to calculate distance between points (5.0f, 5.0f) and (6.0f, 6.0f).");
+}
+
+void MagnitudeTest()
+{
+	ASSERT_CLOSE(Soul::Math::Magnitude(sf::Vector2f(-1.0f, 1.0f)), 1.44f, 0.001f, "Failed to calculate magnitude of (-1.0f, 1.0f).");
+}
+
+void NormalizeTest()
+{
+	sf::Vector2f normalized = Soul::Math::Normalize(sf::Vector2f(15.0f, 12.0f));
+	ASSERT_CLOSE(normalized.x, 0.780868f, 0.001f, "Failed to normalized (15.0f, 12.0f).");
+	ASSERT_CLOSE(normalized.y, 0.624695f, 0.001f, "Failed to normalized (15.0f, 12.0f).");
+}
+
+void NormalTest()
+{
+	sf::Vector2f normal = Soul::Math::Normal(sf::Vector2f(15.0f, 12.0f));
+	ASSERT_CLOSE(normal.x, -12.0f, 0.001f, "Failed to find normal vector for (15.0f, 12.0f).");
+	ASSERT_CLOSE(normal.y, 15.0f, 0.001f, "Failed to find normal vector for (15.0f, 12.0f).");
+}
+
+void AngleToVectorTest()
+{
+	sf::Vector2f result = Soul::Math::AngleToVector(45.0f);
+	sf::Vector2f result1 = Soul::Math::AngleToVector(135.0f);
+	sf::Vector2f result2 = Soul::Math::AngleToVector(225.0f);
+	sf::Vector2f result3 = Soul::Math::AngleToVector(315.0f);
+
+	ASSERT_CLOSE(result.x, 0.70710f, 0.001f, "Failed to calculate vector from angle 45 degrees.");
+	ASSERT_CLOSE(result.y, 0.70710f, 0.001f, "Failed to calculate vector from angle 45 degrees.");
+
+	ASSERT_CLOSE(result1.x, -0.70710f, 0.001f, "Failed to calculate vector from angle 135 degrees.");
+	ASSERT_CLOSE(result1.y, 0.70710f, 0.001f, "Failed to calculate vector from angle 135 degrees.");
+
+	ASSERT_CLOSE(result2.x, -0.70710f, 0.001f, "Failed to calculate vector from angle 225 degrees.");
+	ASSERT_CLOSE(result2.y, -0.70710f, 0.001f, "Failed to calculate vector from angle 225 degrees.");
+
+	ASSERT_CLOSE(result3.x, 0.70710f, 0.001f, "Failed to calculate vector from angle 315 degrees.");
+	ASSERT_CLOSE(result3.y, -0.70710f, 0.001f, "Failed to calculate vector from angle 315 degrees.");
+}
+
+void VectorToAngleTest()
+{
+	ASSERT_CLOSE(Soul::Math::VectorToAngle(sf::Vector2f(0.70710f, 0.70710f)), 45.0f, 0.001f, "Failed to calculate angle from vector (0.70710f, 0.70710f).");
+	ASSERT_CLOSE(Soul::Math::VectorToAngle(sf::Vector2f(-0.70710f, 0.70710f)), 135.0f, 0.001f, "Failed to calculate angle from vector (-0.70710f, 0.70710f).");
+	ASSERT_CLOSE(Soul::Math::VectorToAngle(sf::Vector2f(-0.70710f, -0.70710f)), 225.0f, 0.001f, "Failed to calculate angle from vector (-0.70710f, -0.70710f).");
+	ASSERT_CLOSE(Soul::Math::VectorToAngle(sf::Vector2f(0.70710f, -0.70710f)), 315.0f, 0.001f, "Failed to calculate angle from vector (0.70710f, -0.70710f).");
 }
 
 void MathTests::RunAllTests()
@@ -134,4 +185,10 @@ void MathTests::RunAllTests()
 	RUN_TEST(CosSinTest);
 	RUN_TEST(ACosASinTest);
 	RUN_TEST(ATanTest);
+	RUN_TEST(DistanceTest);
+	RUN_TEST(MagnitudeTest);
+	RUN_TEST(NormalizeTest);
+	RUN_TEST(NormalTest);
+	RUN_TEST(AngleToVectorTest);
+	RUN_TEST(VectorToAngleTest);
 }
