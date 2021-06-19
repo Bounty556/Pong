@@ -1,6 +1,7 @@
 #include "MapTests.h"
 
 #include <Defines.h>
+#include <Core/String.h>
 #include <Memory/MemoryManager.h>
 #include <Structures/Map.h>
 
@@ -139,6 +140,44 @@ void ClearTest()
 	END_MEMORY_CHECK();
 }
 
+void StringKeyTest()
+{
+	START_MEMORY_CHECK();
+
+	Soul::Map<Soul::String, Soul::String> stringMap;
+
+	stringMap.AddPair(Soul::String("number1"), Soul::String("Hello"));
+	stringMap.AddPair(Soul::String("number2"), Soul::String("My"));
+	stringMap.AddPair(Soul::String("number3"), Soul::String("Name"));
+	stringMap.AddPair(Soul::String("number4"), Soul::String("Jeff"));
+
+	ASSERT_EQUAL(*stringMap.GetValue(Soul::String("number1")), Soul::String("Hello"), "Failed to store String in map.");
+	ASSERT_EQUAL(*stringMap.GetValue(Soul::String("number2")), Soul::String("My"), "Failed to store String in map.");
+	ASSERT_EQUAL(*stringMap.GetValue(Soul::String("number3")), Soul::String("Name"), "Failed to store String in map.");
+	ASSERT_EQUAL(*stringMap.GetValue(Soul::String("number4")), Soul::String("Jeff"), "Failed to store String in map.");
+	
+	END_MEMORY_CHECK();
+}
+
+void CStringKeyTest()
+{
+	START_MEMORY_CHECK();
+
+	Soul::Map<const char*, const char*> stringMap;
+
+	stringMap.AddPair("number1", "Hello");
+	stringMap.AddPair("number2", "My");
+	stringMap.AddPair("number3", "Name");
+	stringMap.AddPair("number4", "Jeff");
+
+	ASSERT_EQUAL(*stringMap.GetValue("number1"), "Hello", "Failed to store String in map.");
+	ASSERT_EQUAL(*stringMap.GetValue("number2"), "My", "Failed to store String in map.");
+	ASSERT_EQUAL(*stringMap.GetValue("number3"), "Name", "Failed to store String in map.");
+	ASSERT_EQUAL(*stringMap.GetValue("number4"), "Jeff", "Failed to store String in map.");
+
+	END_MEMORY_CHECK();
+}
+
 void MapTests::RunAllTests()
 {
 	RUN_TEST(PodMapTest);
@@ -147,4 +186,6 @@ void MapTests::RunAllTests()
 	RUN_TEST(CompareMapsTest);
 	RUN_TEST(RemovePairsTest);
 	RUN_TEST(ClearTest);
+	RUN_TEST(StringKeyTest);
+	RUN_TEST(CStringKeyTest);
 }
