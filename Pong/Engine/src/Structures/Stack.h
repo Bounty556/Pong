@@ -2,9 +2,6 @@
 
 #include <Defines.h>
 #include <Memory/UniquePointer.h>
-#include <Structures/Iterators/StackIterator.h>
-
-// TODO: There may be some issues with storing objects in here that have non-copyable data, or with very deep data stored in them. May need to investigate and some more testing with this class.
 
 namespace Soul
 {
@@ -19,20 +16,20 @@ namespace Soul
 		Stack& operator=(const Stack&) = delete;
 		Stack& operator=(Stack&& otherStack);
 
+		const T& operator[](u32 index) const;
+		T& operator[](u32 index);
+
 		void Push(const T& element);
 		void Push(T&& element);
 		T&& Pop();
 		T& Peek();
 		const T& Peek() const;
 
-		StackIterator<T> Begin();
-		StackIterator<T> End();
-
-		StackIterator<T> RBegin();
-		StackIterator<T> REnd();
-
 		u16 Count() const;
 		bool IsEmpty() const;
+
+	private:
+		void Resize(u32 newCapacity);
 
 	private:
 		u16 m_Capacity;
@@ -69,6 +66,18 @@ namespace Soul
 	}
 
 	template <class T>
+	const T& Stack<T>::operator[](u32 index) const
+	{
+		return m_Stack[index];
+	}
+
+	template <class T>
+	T& Stack<T>::operator[](u32 index)
+	{
+		return m_Stack[index];
+	}
+
+	template <class T>
 	void Stack<T>::Push(const T& element)
 	{
 		new (&m_Stack[m_Size]) T(element);
@@ -102,41 +111,6 @@ namespace Soul
 	}
 
 	template <class T>
-	StackIterator<T> Stack<T>::Begin()
-	{
-		return StackIterator<T>(false, m_Stack.Raw());
-	}
-
-	template <class T>
-	StackIterator<T> Stack<T>::End()
-	{
-		if (m_Size > 0)
-			return StackIterator<T>(false, &m_Stack[m_Size]);
-		else
-			return StackIterator<T>(false, m_Stack.Raw());
-	}
-
-	template <class T>
-	StackIterator<T> Stack<T>::RBegin()
-	{
-		if (m_Size > 0)
-			return StackIterator<T>(true, &m_Stack[m_Size - 1]);
-		else
-			return StackIterator<T>(true, m_Stack.Raw());
-	}
-
-	template <class T>
-	StackIterator<T> Stack<T>::REnd()
-	{
-		if (m_Size > 0)
-			return StackIterator<T>(true, m_Stack.Raw() - 1);
-		else
-			return StackIterator<T>(true, m_Stack.Raw());
-
-		//return StackIterator<T>(true, m_Stack.Raw() - 1);
-	}
-
-	template <class T>
 	u16 Stack<T>::Count() const
 	{
 		return m_Size;
@@ -146,5 +120,17 @@ namespace Soul
 	bool Stack<T>::IsEmpty() const
 	{
 		return m_Size == 0;
+	}
+
+	template <class T>
+	void Stack<T>::Resize(u32 newCapacity)
+	{
+		UniquePointer<T> newStack = PARTITION_ARRAY(T, newCapacity);
+
+		for (u32 i = 0; i < m_Size; i++)
+			new(&newStack[i]) T(std::move(m_Stack[i]));
+
+		m_Capacity = newCapacity;
+		m_Stack = std::move(newStack);
 	}
 }

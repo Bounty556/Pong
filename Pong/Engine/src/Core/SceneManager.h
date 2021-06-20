@@ -91,13 +91,13 @@ namespace Soul
 	template <class T, class ...Args>
 	void SceneManager::ResetScene(T* scene, void* data, Args&& ...args)
 	{
-		for (auto i = m_SceneStack->Begin(); i != m_SceneStack->End(); ++i)
+		for (u32 i = 0; i < m_SceneStack->Count(); ++i)
 		{
-			if (*i == scene)
+			if ((*m_SceneStack)[i] == scene)
 			{
-				MemoryManager::FreeMemory(*i);
-				*i = PARTITION(T, std::forward<Args>(args)...);
-				(*i)->ResetSceneData(data);
+				MemoryManager::FreeMemory((*m_SceneStack)[i]);
+				(*m_SceneStack)[i] = PARTITION(T, std::forward<Args>(args)...);
+				(*m_SceneStack)[i]->ResetSceneData(data);
 				break;
 			}
 		}

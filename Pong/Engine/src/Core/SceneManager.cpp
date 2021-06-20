@@ -22,8 +22,8 @@ namespace Soul
 	{
 		ASSERT(m_Initialized);
 
-		for (auto i = m_SceneStack->Begin(); i != m_SceneStack->End(); i++)
-			MemoryManager::FreeMemory(*i);
+		for (u32 i = 0 ; i < m_SceneStack->Count(); ++i)
+			MemoryManager::FreeMemory((*m_SceneStack)[i]);
 
 		MemoryManager::FreeMemory(m_SceneStack);
 		MemoryManager::FreeMemory(m_CommandQueue);
@@ -33,11 +33,11 @@ namespace Soul
 	{
 		ASSERT(m_Initialized);
 
-		for (auto i = m_SceneStack->RBegin(); i != m_SceneStack->REnd(); i++)
+		for (i32 i = (i32)m_SceneStack->Count() - 1; i >= 0; --i)
 		{
-			(*i)->Update(dt);
+			(*m_SceneStack)[i]->Update(dt);
 
-			if (!(*i)->UpdatePass())
+			if (!(*m_SceneStack)[i]->UpdatePass())
 				break;
 		}
 	}
@@ -47,26 +47,18 @@ namespace Soul
 		ASSERT(m_Initialized);
 
 		// Find the first scene that disallows draw passing, if any
-		auto i = m_SceneStack->RBegin();
-		bool blocked = false;
-		for (; i != m_SceneStack->REnd(); i++)
-		{
-			if (!(*i)->DrawPass())
-			{
-				blocked = true;
+		i32 i = m_SceneStack->Count() - 1;
+		for (; i > 0; --i)
+			if (!(*m_SceneStack)[i]->DrawPass())
 				break;
-			}
-		}
 
-		if (blocked)
-			i.Flip();
-		else
-			i = m_SceneStack->Begin();
+		if (i < 0)
+			i = 0;
 
-		// From there, draw the scenes in reverse so the early ones get drawn
+		// From here, draw the scenes in reverse so the early ones get drawn
 		// over
-		for (; i != m_SceneStack->End(); i++)
-			(*i)->Draw(states);
+		for (; i < (i32)m_SceneStack->Count(); ++i)
+			(*m_SceneStack)[i]->Draw(states);
 	}
 
 	void SceneManager::PushCommand(SceneCommand command)

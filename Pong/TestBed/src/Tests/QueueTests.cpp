@@ -48,9 +48,9 @@ void MoveQueueTest()
 
 	Soul::Queue<TestClass> classQueue2(std::move(classQueue));
 
-	ASSERT_EQUAL(classQueue2.Deque(), TestClass(1, 2, 3), "Failed to retrieve value from queue.");
-	ASSERT_EQUAL(classQueue2.Deque(), TestClass(4, 5, 6), "Failed to retrieve value from queue.");
-	ASSERT_EQUAL(classQueue2.Deque(), TestClass(7, 8, 9), "Failed to retrieve value from queue.");
+	ASSERT_EQUAL(classQueue2.Deque(), TestClass(1, 2, 3), "Failed to move queue.");
+	ASSERT_EQUAL(classQueue2.Deque(), TestClass(4, 5, 6), "Failed to move queue.");
+	ASSERT_EQUAL(classQueue2.Deque(), TestClass(7, 8, 9), "Failed to move queue.");
 
 	Soul::Queue<TestClass> classQueue3;
 
@@ -61,9 +61,9 @@ void MoveQueueTest()
 	Soul::Queue<TestClass> classQueue4;
 	classQueue4 = std::move(classQueue3);
 
-	ASSERT_EQUAL(classQueue4.Deque(), TestClass(1, 2, 3), "Failed to retrieve value from queue.");
-	ASSERT_EQUAL(classQueue4.Deque(), TestClass(4, 5, 6), "Failed to retrieve value from queue.");
-	ASSERT_EQUAL(classQueue4.Deque(), TestClass(7, 8, 9), "Failed to retrieve value from queue.");
+	ASSERT_EQUAL(classQueue4.Deque(), TestClass(1, 2, 3), "Failed to move queue.");
+	ASSERT_EQUAL(classQueue4.Deque(), TestClass(4, 5, 6), "Failed to move queue.");
+	ASSERT_EQUAL(classQueue4.Deque(), TestClass(7, 8, 9), "Failed to move queue.");
 
 	END_MEMORY_CHECK();
 }

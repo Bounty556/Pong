@@ -42,9 +42,6 @@
     <ClInclude Include="src\Structures\Stack.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Structures\Iterators\StackIterator.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="src\Core\SceneManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>

@@ -201,7 +201,6 @@
     <ClInclude Include="src\Resources\FontManager.h" />
     <ClInclude Include="src\Resources\SoundManager.h" />
     <ClInclude Include="src\Resources\TextureManager.h" />
-    <ClInclude Include="src\Structures\Iterators\StackIterator.h" />
     <ClInclude Include="src\Structures\Map.h" />
     <ClInclude Include="src\Structures\Queue.h" />
     <ClInclude Include="src\Structures\Stack.h" />
