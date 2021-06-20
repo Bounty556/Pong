@@ -34,10 +34,10 @@ namespace Soul
 		Map(u32 capacity = 11);
 
 		Map(const Map&) = delete;
-		Map(Map&& otherMap);
+		Map(Map&& otherMap) noexcept;
 		
 		Map& operator=(const Map&) = delete;
-		Map& operator=(Map&& otherMap);
+		Map& operator=(Map&& otherMap) noexcept;
 
 		bool operator==(const Map& otherMap) const;
 
@@ -90,7 +90,7 @@ namespace Soul
 	}
 
 	template <class K, class V>
-	Map<K, V>::Map(Map<K, V>&& otherMap) :
+	Map<K, V>::Map(Map<K, V>&& otherMap) noexcept :
 		m_Capacity(otherMap.m_Capacity),
 		m_Size(otherMap.m_Size),
 		m_Map(std::move(otherMap.m_Map))
@@ -100,7 +100,7 @@ namespace Soul
 	}
 
 	template <class K, class V>
-	Map<K, V>& Map<K, V>::operator=(Map<K, V>&& otherMap)
+	Map<K, V>& Map<K, V>::operator=(Map<K, V>&& otherMap) noexcept
 	{
 		Clear();
 		m_Capacity = otherMap.m_Capacity;

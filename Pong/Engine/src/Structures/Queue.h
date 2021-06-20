@@ -11,10 +11,10 @@ namespace Soul
 	public:
 		Queue(u16 capacity = 8);
 		Queue(const Queue&) = delete;
-		Queue(Queue&& otherQueue);
+		Queue(Queue&& otherQueue) noexcept;
 
 		Queue& operator=(const Queue&) = delete;
-		Queue& operator=(Queue&& otherQueue);
+		Queue& operator=(Queue&& otherQueue) noexcept;
 
 		/*
 		Queueing/Dequeueing elements
@@ -51,7 +51,7 @@ namespace Soul
 	}
 
 	template <class T>
-	Queue<T>::Queue(Queue&& otherQueue) :
+	Queue<T>::Queue(Queue&& otherQueue) noexcept :
 		m_Capacity(otherQueue.m_Capacity),
 		m_Size(otherQueue.m_Size),
 		m_Head(otherQueue.m_Head),
@@ -63,7 +63,7 @@ namespace Soul
 	}
 
 	template <class T>
-	Queue<T>& Queue<T>::operator=(Queue&& otherQueue)
+	Queue<T>& Queue<T>::operator=(Queue&& otherQueue) noexcept
 	{
 		m_Capacity = otherQueue.m_Capacity;
 		m_Size = otherQueue.m_Size;

@@ -11,17 +11,17 @@ namespace Soul
 	public:
 		Stack(u16 capacity = 16);
 		Stack(const Stack&) = delete;
-		Stack(Stack&& otherStack);
+		Stack(Stack&& otherStack) noexcept;
 
 		Stack& operator=(const Stack&) = delete;
-		Stack& operator=(Stack&& otherStack);
+		Stack& operator=(Stack&& otherStack) noexcept;
 
 		const T& operator[](u32 index) const;
 		T& operator[](u32 index);
 
 		void Push(const T& element);
 		void Push(T&& element);
-		T&& Pop();
+		T Pop();
 		T& Peek();
 		const T& Peek() const;
 
@@ -46,7 +46,7 @@ namespace Soul
 	}
 
 	template <class T>
-	Stack<T>::Stack(Stack&& otherStack) :
+	Stack<T>::Stack(Stack&& otherStack) noexcept :
 		m_Capacity(otherStack.m_Capacity),
 		m_Size(otherStack.m_Size),
 		m_Stack(std::move(otherStack.m_Stack))
@@ -56,13 +56,15 @@ namespace Soul
 	}
 
 	template <class T>
-	Stack<T>& Stack<T>::operator=(Stack&& otherStack)
+	Stack<T>& Stack<T>::operator=(Stack&& otherStack) noexcept
 	{
 		m_Capacity = otherStack.m_Capacity;
 		m_Size = otherStack.m_Size;
 		m_Stack = std::move(otherStack.m_Stack);
 		otherStack.m_Capacity = 0;
 		otherStack.m_Size = 0;
+
+		return *this;
 	}
 
 	template <class T>
@@ -80,6 +82,9 @@ namespace Soul
 	template <class T>
 	void Stack<T>::Push(const T& element)
 	{
+		if (m_Size + 1 >= m_Capacity)
+			Resize(m_Capacity * 2);
+
 		new (&m_Stack[m_Size]) T(element);
 		++m_Size;
 	}
@@ -87,12 +92,15 @@ namespace Soul
 	template <class T>
 	void Stack<T>::Push(T&& element)
 	{
+		if (m_Size + 1 >= m_Capacity)
+			Resize(m_Capacity * 2);
+
 		new (&m_Stack[m_Size]) T(std::move(element));
 		++m_Size;
 	}
 
 	template <class T>
-	T&& Stack<T>::Pop()
+	T Stack<T>::Pop()
 	{
 		ASSERT(m_Size > 0);
 		return std::move(m_Stack[--m_Size]);
