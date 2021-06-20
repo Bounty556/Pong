@@ -17,10 +17,10 @@ namespace Soul
 		TextFileReader(const char* fileName);
 
 		TextFileReader(const TextFileReader&) = delete;
-		TextFileReader(TextFileReader&& other);
+		TextFileReader(TextFileReader&& other) noexcept;
 
 		TextFileReader& operator=(const TextFileReader&) = delete;
-		TextFileReader& operator=(TextFileReader&& other);
+		TextFileReader& operator=(TextFileReader&& other) noexcept;
 
 		void ReadFile(const char* fileName);
 		void WriteToCurrentFile();

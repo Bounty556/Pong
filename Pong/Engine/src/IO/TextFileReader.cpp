@@ -19,7 +19,7 @@ namespace Soul
 		ReadFile(fileName);
 	}
 
-	TextFileReader::TextFileReader(TextFileReader&& other) :
+	TextFileReader::TextFileReader(TextFileReader&& other) noexcept :
 		m_FileOpened(other.m_FileOpened),
 		m_FilePath(std::move(other.m_FilePath)),
 		m_FileContents(std::move(other.m_FileContents))
@@ -27,7 +27,7 @@ namespace Soul
 		other.m_FileOpened = false;
 	}
 
-	TextFileReader& TextFileReader::operator=(TextFileReader&& other)
+	TextFileReader& TextFileReader::operator=(TextFileReader&& other) noexcept
 	{
 		m_FileOpened = other.m_FileOpened;
 		m_FilePath = std::move(other.m_FilePath);

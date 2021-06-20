@@ -11,6 +11,7 @@
 #include "Tests/QueueTests.h"
 #include "Tests/StackTests.h"
 #include "Tests/StringTests.h"
+#include "Tests/UniquePointerTests.h"
 
 void RunTestSuite(ITestSuite* suite)
 {
@@ -26,6 +27,7 @@ void RunAllTestSuites()
 	CREATE_TEST_SUITE(QueueTests);
 	CREATE_TEST_SUITE(StackTests);
 	CREATE_TEST_SUITE(StringTests);
+	CREATE_TEST_SUITE(UniquePointerTests);
 }
 
 int main()
