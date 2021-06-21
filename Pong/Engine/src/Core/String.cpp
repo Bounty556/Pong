@@ -4,81 +4,54 @@
 #include <Memory/MemoryManager.h>
 #include <Platform/Platform.h>
 
-// TODO: Maybe replace this with our own
-#include <cstring>
-
 namespace Soul
 {
 	String::String(const char* initialString) :
-		m_StringLength(strlen(initialString))
+		m_Length(StringLength(initialString)),
+		m_Capacity(m_Length + 1)
 	{
-		// We do this so that the string length is always a power of 2, or, if
-		// represented in binary form, something like 00010000 or 00001000...
-		if (m_StringLength + 1 > m_MINIMUM_CAPACITY / 2)
-		{
-			// Determine capacity through doubling highest bit
-			u32 bits = m_StringLength + 1;
-			u32 halfCount = 0;
-			while (bits > 0)
-			{
-				bits /= 2;
-				halfCount++;
-			}
-
-			m_StringCapacity = 1 << halfCount;
-		}
-		else
-			m_StringCapacity = m_MINIMUM_CAPACITY; // The minimum is 64 bytes
-
-		m_CString = (char*)MemoryManager::PartitionMemory(m_StringCapacity);
-		PlatformCopyMemory(m_CString, initialString, m_StringLength);
-		m_CString[m_StringLength] = '\0';
+		m_CString = (char*)PARTITION_ARRAY(char, m_Capacity);
+		PlatformCopyMemory(m_CString, initialString, m_Length);
+		m_CString[m_Length] = '\0';
 	}
 
 	String::String(const char initialChar) :
-		m_StringLength(1),
-		m_StringCapacity(m_MINIMUM_CAPACITY)
+		m_Length(1),
+		m_Capacity(32)
 	{
-		m_CString = (char*)MemoryManager::PartitionMemory(m_StringCapacity);
+		m_CString = (char*)PARTITION_ARRAY(char, m_Capacity);
 		m_CString[0] = initialChar;
 		m_CString[1] = '\0';
 	}
 
 	String::String(u32 capacity) :
-		m_StringLength(0)
+		m_Length(0),
+		m_Capacity(capacity)
 	{
-		if (capacity < m_MINIMUM_CAPACITY)
-			m_StringCapacity = capacity;
-		else
-		{
-			u32 tempCapacity = m_MINIMUM_CAPACITY;
-			while (tempCapacity <= capacity)
-				tempCapacity *= 2;
-			m_StringCapacity = tempCapacity;
-		}
+		ASSERT(capacity > 0);
 
-		m_CString = (char*)MemoryManager::PartitionMemory(m_StringCapacity);
+		m_CString = PARTITION_ARRAY(char, m_Capacity);
 		m_CString[0] = '\0';
 	}
 
 	String::String(const String& otherString) :
-		m_StringLength(otherString.m_StringLength),
-		m_StringCapacity(otherString.m_StringCapacity)
+		m_Length(otherString.m_Length),
+		m_Capacity(otherString.m_Capacity)
 	{
-		m_CString = (char*)MemoryManager::PartitionMemory(m_StringCapacity);
+		m_CString = PARTITION_ARRAY(char, m_Capacity);
 
-		PlatformCopyMemory(m_CString, otherString.GetCString(), m_StringLength);
-		m_CString[m_StringLength] = '\0';
+		PlatformCopyMemory(m_CString, otherString.GetCString(), m_Length);
+		m_CString[m_Length] = '\0';
 	}
 
-	String::String(String&& otherString) :
-		m_StringLength(otherString.m_StringLength),
-		m_StringCapacity(otherString.m_StringCapacity),
+	String::String(String&& otherString) noexcept :
+		m_Length(otherString.m_Length),
+		m_Capacity(otherString.m_Capacity),
 		m_CString(otherString.m_CString)
 	{
 		otherString.m_CString = nullptr;
-		otherString.m_StringCapacity = 0;
-		otherString.m_StringLength = 0;
+		otherString.m_Capacity = 0;
+		otherString.m_Length = 0;
 	}
 
 	String::~String()
@@ -89,55 +62,49 @@ namespace Soul
 
 	String& String::operator=(const String& otherString)
 	{
-		m_StringLength = otherString.m_StringLength;
+		m_Length = otherString.m_Length;
 
-		if (m_StringCapacity < otherString.m_StringCapacity)
+		if (m_Capacity < otherString.m_Capacity)
 		{
-			m_StringCapacity = otherString.m_StringCapacity;
+			m_Capacity = otherString.m_Capacity;
 			MemoryManager::FreeMemory(m_CString);
-			m_CString = (char*)MemoryManager::PartitionMemory(m_StringCapacity);
+			m_CString = PARTITION_ARRAY(char, m_Capacity);
 		}
 
-		PlatformCopyMemory(m_CString, otherString.m_CString, m_StringLength);
-		m_CString[m_StringLength] = '\0';
+		PlatformCopyMemory(m_CString, otherString.m_CString, m_Length);
+		m_CString[m_Length] = '\0';
 
 		return *this;
 	}
 
-	String& String::operator=(String&& otherString)
+	String& String::operator=(String&& otherString) noexcept
 	{
 		// Clear our memory first
 		MemoryManager::FreeMemory(m_CString);
 
 		m_CString = otherString.m_CString;
-		m_StringCapacity = otherString.m_StringCapacity;
-		m_StringLength = otherString.m_StringLength;
+		m_Capacity = otherString.m_Capacity;
+		m_Length = otherString.m_Length;
 		otherString.m_CString = nullptr;
-		otherString.m_StringCapacity = 0;
-		otherString.m_StringLength = 0;
+		otherString.m_Capacity = 0;
+		otherString.m_Length = 0;
 
 		return *this;
 	}
 
 	String& String::operator=(const char* otherString)
 	{
-		m_StringLength = strlen(otherString);
+		m_Length = StringLength(otherString);
 
-		bool didCapacityIncrease = false;
-		while (m_StringCapacity <= m_StringLength)
+		if (m_Capacity < m_Length)
 		{
-			didCapacityIncrease = true;
-			m_StringCapacity *= 2;
-		}
-
-		if (didCapacityIncrease)
-		{
+			m_Capacity = m_Length;
 			MemoryManager::FreeMemory(m_CString);
-			m_CString = (char*)MemoryManager::PartitionMemory(m_StringCapacity);
+			m_CString = PARTITION_ARRAY(char, m_Capacity);
 		}
 
-		PlatformCopyMemory(m_CString, otherString, m_StringLength);
-		m_CString[m_StringLength] = '\0';
+		PlatformCopyMemory(m_CString, otherString, m_Length);
+		m_CString[m_Length] = '\0';
 
 		return *this;
 	}
@@ -146,13 +113,13 @@ namespace Soul
 	{
 		if (otherChar != '\0')
 		{
-			m_StringLength = 1;
+			m_Length = 1;
 			m_CString[1] = '\0';
 			m_CString[0] = otherChar;
 		}
 		else
 		{
-			m_StringLength = 0;
+			m_Length = 0;
 			m_CString[0] = '\0';
 		}
 
@@ -166,51 +133,31 @@ namespace Soul
 
 	String& String::operator+=(const char* otherString)
 	{
-		u32 otherLength = strlen(otherString);
-		u32 tempLength = m_StringLength + otherLength;
+		u32 otherLength = StringLength(otherString);
+		u32 tempLength = m_Length + otherLength;
 
-		// There are 2 scenarios here: one where we don't exceed our current string capacity,
-		// and one where we do. If we exceed our string capacity, we need to repartition memory
-		// for our string and move things over
-		bool isOverCapacity = false;
-
-		while (m_StringCapacity <= tempLength + 1)
+		if (m_Capacity <= tempLength)
 		{
-			m_StringCapacity *= 2;
-			isOverCapacity = true;
-		}
-
-		if (isOverCapacity)
-		{
-			char* tempPointer = (char*)MemoryManager::PartitionMemory(m_StringCapacity);
+			m_Capacity = tempLength + 1;
+			char* tempPointer = PARTITION_ARRAY(char, m_Capacity);
 
 			// Put the values of both the strings at the temp pointer
-			u32 stringIndex = 0;
-			for (u32 i = 0; i < m_StringLength; ++i)
-			{
-				tempPointer[stringIndex] = m_CString[i];
-				++stringIndex;
-			}
-
-			// Add 1 to get the null terminator
-			for (u32 i = 0; i < otherLength + 1; ++i)
-			{
-				tempPointer[stringIndex] = otherString[i];
-				++stringIndex;
-			}
+			PlatformCopyMemory(tempPointer, m_CString, m_Length);
+			PlatformCopyMemory(tempPointer + m_Length, otherString, otherLength);
+			tempPointer[tempLength] = '\0';
 
 			// Clean up and reassign
 			MemoryManager::FreeMemory(m_CString);
-			m_StringLength = tempLength;
+			m_Length = tempLength;
 			m_CString = tempPointer;
 		}
 		else
 		{
 			// Add the other string's characters to the end of our string
-			for (u32 i = 0; i < otherLength + 1; ++i)
-				m_CString[m_StringLength + i] = otherString[i];
+			PlatformCopyMemory(m_CString + m_Length, otherString, otherLength);
+			m_CString[tempLength] = '\0';
 
-			m_StringLength = tempLength;
+			m_Length = tempLength;
 		}
 
 		return *this;
@@ -218,30 +165,16 @@ namespace Soul
 
 	String& String::operator+=(const char otherChar)
 	{
-		// There are 2 scenarios here: one where we don't exceed our current string capacity,
-		// and one where we do. If we exceed our string capacity, we need to repartition memory
-		// for our string and move things over
-		bool isOverCapacity = false;
-		if (m_StringCapacity <= m_StringLength + 2)
+		if (m_Length + 1 >= m_Capacity)
 		{
-			m_StringCapacity *= 2;
-			isOverCapacity = true;
-		}
-
-		if (isOverCapacity)
-		{
-			char* tempPointer = (char*)MemoryManager::PartitionMemory(m_StringCapacity);
+			m_Capacity += 32; // Add another 4 bytes onto the memory
+			char* tempPointer = PARTITION_ARRAY(char, m_Capacity);
 
 			// Put the values of both the strings at the temp pointer
-			u32 stringIndex = 0;
-			for (u32 i = 0; i < m_StringLength; ++i)
-			{
-				tempPointer[stringIndex] = m_CString[i];
-				++stringIndex;
-			}
+			PlatformCopyMemory(tempPointer, m_CString, m_Length);
 
-			tempPointer[stringIndex] = otherChar;
-			tempPointer[stringIndex + 1] = '\0';
+			tempPointer[m_Length] = otherChar;
+			tempPointer[m_Length + 1] = '\0';
 
 			// Clean up and reassign
 			MemoryManager::FreeMemory(m_CString);
@@ -249,12 +182,12 @@ namespace Soul
 		}
 		else
 		{
-			m_CString[m_StringLength] = otherChar;
-			m_CString[m_StringLength + 1] = '\0';
+			m_CString[m_Length] = otherChar;
+			m_CString[m_Length + 1] = '\0';
 		}
 
 		if (otherChar != '\0')
-			m_StringLength += 1;
+			m_Length += 1;
 
 		return *this;
 	}
@@ -302,29 +235,29 @@ namespace Soul
 
 	const char String::operator[](u32 index) const
 	{
-		ASSERT(index >= 0 && index < m_StringLength)
+		ASSERT(index >= 0 && index < m_Length)
 		return m_CString[index];
 	}
 
 	char& String::operator[](u32 index)
 	{
-		ASSERT(index >= 0 && index < m_StringLength);
+		ASSERT(index >= 0 && index < m_Length);
 		return m_CString[index];
 	}
 
 	u32 String::Length() const
 	{
-		return m_StringLength;
+		return m_Length;
 	}
 
 	i32 String::CompareTo(const String& otherString) const
 	{
-		return strcmp(m_CString, otherString.m_CString);
+		return StringCompare(m_CString, otherString.m_CString);
 	}
 
 	i32 String::CompareTo(const char* otherString) const
 	{
-		return strcmp(m_CString, otherString);
+		return StringCompare(m_CString, otherString);
 	}
 
 	const char* String::GetCString() const
@@ -343,7 +276,7 @@ namespace Soul
 		String number;
 		bool encounteredNumber = false;
 		bool isNegative = false;
-		for (u32 i = 0; i < m_StringLength; ++i)
+		for (u32 i = 0; i < m_Length; ++i)
 		{
 			// If this is a numerical character
 			if (m_CString[i] >= 48 && m_CString[i] <= 57)
@@ -385,8 +318,8 @@ namespace Soul
 
 	void String::Reverse()
 	{
-		u32 stringEnd = m_StringLength - 1;
-		for (u32 i = 0; i < m_StringLength / 2; ++i)
+		u32 stringEnd = m_Length - 1;
+		for (u32 i = 0; i < m_Length / 2; ++i)
 		{
 			char tempChar = m_CString[i];
 			m_CString[i] = m_CString[stringEnd - i];
@@ -397,16 +330,16 @@ namespace Soul
 	void String::ReserveCapacity(u32 capacity)
 	{
 		bool isOverCapacity = false;
-		u32 oldStringCapacity = m_StringCapacity;
-		while(m_StringCapacity <= capacity + 1)
+		u32 oldStringCapacity = m_Capacity;
+		while(m_Capacity <= capacity + 1)
 		{
-			m_StringCapacity *= 2;
+			m_Capacity *= 2;
 			isOverCapacity = true;
 		}
 
 		if (isOverCapacity)
 		{
-			char* tempString = (char*)MemoryManager::PartitionMemory(m_StringCapacity);
+			char* tempString = (char*)MemoryManager::PartitionMemory(m_Capacity);
 
 			PlatformCopyMemory(m_CString, tempString, oldStringCapacity);
 
@@ -417,12 +350,12 @@ namespace Soul
 
 	void String::SetLength(u32 stringLength)
 	{
-		m_StringLength = stringLength;
+		m_Length = stringLength;
 	}
 
 	i32 String::FindFirstOf(char character) const
 	{
-		for (u32 i = 0; i < m_StringLength; ++i)
+		for (u32 i = 0; i < m_Length; ++i)
 			if (m_CString[i] == character)
 				return (i32)i;
 
@@ -432,18 +365,22 @@ namespace Soul
 	String String::Substring(u32 start, u32 end) const
 	{
 		ASSERT(end > start);
-		ASSERT(end >= 0 && end <= m_StringLength);
-		ASSERT(start >= 0 && start < m_StringLength);
+		ASSERT(end >= 0 && end <= m_Length);
+		ASSERT(start >= 0 && start < m_Length);
 		String newString(end - start + 1);
-		for (u32 i = start; i < end; ++i)
-			newString += m_CString[i];
+		PlatformCopyMemory(newString.m_CString, m_CString + start, end - start);
+		newString.m_Length = end - start;
+		newString.m_CString[newString.m_Length] = '\0';
 
 		return newString;
 	}
 
 	String String::Substring(u32 start) const
 	{
-		return Substring(start, m_StringLength);
+		ASSERT(start >= 0 && start < m_Length);
+		String newString(m_CString + start);
+
+		return newString;
 	}
 
 	String String::IntToString(i32 value)
@@ -474,5 +411,33 @@ namespace Soul
 		converted.Reverse();
 
 		return converted;
+	}
+
+	// OpenBSD implementation
+	u32 String::StringLength(const char* str)
+	{
+		const char* s;
+		for (s = str; *s; s++);
+		return s - str;
+	}
+
+	i32 String::StringCompare(const char* a, const char* b)
+	{
+		const char* ac;
+		const char* bc;
+		for (ac = a, bc = b; *ac && *bc; ac++, bc++)
+		{
+			if (*ac < *bc)
+				return -1;
+			if (*ac > *bc)
+				return 1;
+		}
+
+		if (*ac)
+			return 1;
+		if (*bc)
+			return -1;
+
+		return 0;
 	}
 }

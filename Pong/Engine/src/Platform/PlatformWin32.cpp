@@ -41,9 +41,9 @@ namespace Soul
 		free(location);
 	}
 
-	void PlatformCopyMemory(void* from, const void* to, u32 size)
+	void PlatformCopyMemory(void* to, const void* from, u32 size)
 	{
-		memcpy(from, to, size);
+		memcpy(to, from, size);
 	}
 
 	void PlatformSetMemory(void* location, i8 value, u32 size)

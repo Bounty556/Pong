@@ -11,7 +11,7 @@ namespace Soul
 	void PlatformWriteErrorToConsole(const char* message, u32 messageLength, i8 color);
 	void* PlatformAllocateMemory(u32 size);
 	void PlatformFreeMemory(void* location);
-	SOULAPI void PlatformCopyMemory(void* from, const void* to, u32 size);
+	SOULAPI void PlatformCopyMemory(void* to, const void* from, u32 size);
 	SOULAPI void PlatformSetMemory(void* location, i8 value, u32 size);
 	SOULAPI void PlatformZeroMemory(void* location, u32 size);
 	void PlatformOverwriteFile(const char* fileName, const char* contents, u64 bytesToWrite);

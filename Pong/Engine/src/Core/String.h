@@ -16,12 +16,12 @@ namespace Soul
 		String(u32 capacity);
 
 		String(const String& otherString); // Copy constructor
-		String(String&& otherString); // Move constructor
+		String(String&& otherString) noexcept; // Move constructor
 
 		~String();
 
 		String& operator=(const String& otherString);
-		String& operator=(String&& otherString);
+		String& operator=(String&& otherString) noexcept;
 		String& operator=(const char* otherString);
 		String& operator=(const char otherChar);
 
@@ -115,10 +115,19 @@ namespace Soul
 		*/
 		static String IntToString(i32 value);
 
+		/*
+		Gets the length of a CString.
+		*/
+		static u32 StringLength(const char* str);
+
+		/*
+		Returns -1 if a comes before b, 0 if the same, 1 if a comes after b.
+		*/
+		static i32 StringCompare(const char* a, const char* b);
+
 	private:
 		char* m_CString;
-		u32 m_StringCapacity;
-		u32 m_StringLength;
-		const u32 m_MINIMUM_CAPACITY = 32;
+		u32 m_Length;
+		u32 m_Capacity;
 	};
 }
