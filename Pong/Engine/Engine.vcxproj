@@ -195,6 +195,7 @@
     <ClInclude Include="src\Memory\ReferenceCounter.h" />
     <ClInclude Include="src\Memory\SharedPointer.h" />
     <ClInclude Include="src\Memory\UniquePointer.h" />
+    <ClInclude Include="src\Physics\CollisionChecks.h" />
     <ClInclude Include="src\Platform\Platform.h" />
     <ClInclude Include="src\Platform\Timer.h" />
     <ClInclude Include="src\Rendering\Renderer.h" />
@@ -232,6 +233,7 @@
     <ClCompile Include="src\Math\Vectors.cpp" />
     <ClCompile Include="src\Memory\MemoryManager.cpp" />
     <ClCompile Include="src\Memory\ReferenceCounter.cpp" />
+    <ClCompile Include="src\Physics\CollisionChecks.cpp" />
     <ClCompile Include="src\Platform\PlatformWin32.cpp" />
     <ClCompile Include="src\Platform\TimerWin32.cpp" />
     <ClCompile Include="src\Rendering\Renderer.cpp" />
