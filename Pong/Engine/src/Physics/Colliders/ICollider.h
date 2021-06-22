@@ -8,6 +8,7 @@ namespace Soul
 {
 	class SOULAPI ICollider : public Node
 	{
+	public:
 		ICollider();
 	};
 }
