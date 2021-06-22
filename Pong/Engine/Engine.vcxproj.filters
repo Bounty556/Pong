@@ -132,7 +132,16 @@
     <ClInclude Include="src\IO\LoggerFile.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\Physics\Colliders\CircleCollider.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Physics\Colliders\ICollider.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="src\Physics\CollisionChecks.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Nodes\Node.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -230,7 +239,13 @@
     <ClCompile Include="src\IO\LoggerFile.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\Physics\Colliders\CircleCollider.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="src\Physics\CollisionChecks.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Nodes\Node.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

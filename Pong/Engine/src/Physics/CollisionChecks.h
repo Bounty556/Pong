@@ -6,9 +6,11 @@
 
 namespace Soul
 {
-	struct SOULAPI Collision
+	struct SOULAPI CollisionInfo
 	{
 		bool collided;
-		sf::Vector2f collisionPoint;
+		sf::Vector2f correctionVector;
 	};
+
+	//CollisionInfo SOULAPI CircleCircleCollision()
 }
