@@ -20,16 +20,16 @@ namespace Soul
 	CollisionInfo SOULAPI CircleCircleCollision(sf::Vector2f posA, f32 radiusA, sf::Vector2f posB, f32 radiusB);
 
 	/*
-	Checks for a collisions between a circle and a rectangle, returning a
+	Checks for a collisions between a circle and a AABB rectangle, returning a
 	CollisionInfo object containing the relevant collision info. Positions refer
 	to the center of the circle and the top left corner of the rectangle.
 	*/
-	CollisionInfo SOULAPI CircleRectangleCollision(sf::Vector2f posA, f32 radiusA, sf::Vector2f posB, sf::Vector2f dimensionsB);
+	CollisionInfo SOULAPI CircleAABBCollision(sf::Vector2f posA, f32 radiusA, sf::Vector2f posB, sf::Vector2f dimensionsB);
 
 	/*
-	Checks for a collisions between rectangles, returning a CollisionInfo object
-	containing the relevant collision info. Positions refer to the top left of
-	the rectangles.
+	Checks for a collisions between AABB rectangles, returning a CollisionInfo
+	object containing the relevant collision info. Positions refer to the top
+	left of the rectangles.
 	*/
-	CollisionInfo SOULAPI RectangleRectangleCollision(sf::Vector2f posA, sf::Vector2f dimensionsA, sf::Vector2f posB, sf::Vector2f dimensionsB);
+	CollisionInfo SOULAPI AABBAABBCollision(sf::Vector2f posA, sf::Vector2f dimensionsA, sf::Vector2f posB, sf::Vector2f dimensionsB);
 }
