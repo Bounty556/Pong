@@ -70,6 +70,36 @@ namespace Soul
 
 	CollisionInfo SOULAPI AABBAABBCollision(sf::Vector2f posA, sf::Vector2f dimensionsA, sf::Vector2f posB, sf::Vector2f dimensionsB)
 	{
-		return CollisionInfo{};
+		CollisionInfo collision = {};
+
+		if (posA.x >= posB.x - dimensionsA.x && posA.x <= posB.x + dimensionsB.x &&
+			posA.y >= posB.y - dimensionsA.y && posA.y <= posB.y + dimensionsB.y)
+		{
+			collision.collided = true;
+
+			// Colliding, find smallest correction vector
+			sf::Vector2f middleA(posA + (dimensionsA * 0.5f));
+			sf::Vector2f middleB(posB + (dimensionsB * 0.5f));
+			sf::Vector2f middleDifference = middleA - middleB;
+
+			// Find the biggest middle difference, as that will point us to the
+			// smallest correction vector
+			if (Math::Abs(middleDifference.x) >= Math::Abs(middleDifference.y))
+			{
+				if (middleDifference.x >= 0)
+					collision.correctionVector = sf::Vector2f(dimensionsA.x - (posA.x - posB.x), 0.0f);
+				else if (middleDifference.x < 0)
+					collision.correctionVector = sf::Vector2f(-dimensionsA.x - (posA.x - posB.x), 0.0f);
+			}
+			else
+			{
+				if (middleDifference.y >= 0)
+					collision.correctionVector = sf::Vector2f(dimensionsA.y - (posA.y - posB.y), 0.0f);
+				else if (middleDifference.y < 0)
+					collision.correctionVector = sf::Vector2f(-dimensionsA.y - (posA.y - posB.y), 0.0f);
+			}
+		}
+
+		return collision;
 	}
 }
