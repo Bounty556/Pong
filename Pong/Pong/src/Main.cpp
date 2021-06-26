@@ -2,13 +2,13 @@
 #include <Memory/MemoryManager.h>
 #include <Core/String.h>
 
-#include "TestScene.h"
+#include "Scenes/FieldScene.h"
 
 int main()
 {
 	if (Soul::InitializeEngine(1280, 720, "Pong!"))
 	{
-		TestScene* scene = PARTITION(TestScene);
+		FieldScene* scene = PARTITION(FieldScene);
 
 		Soul::SetScene(scene);
 	}

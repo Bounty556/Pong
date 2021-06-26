@@ -55,8 +55,23 @@ void CircleAABBCollisions()
 	ASSERT_TRUE(collisionInfo9.collided, "Failed to detect circle AABB collision.");
 }
 
+void AABBAABBCollisions()
+{
+	Soul::CollisionInfo collisionInfo = Soul::AABBAABBCollision(sf::Vector2f(0.0f, 0.0f), sf::Vector2f(10.0f, 10.0f), sf::Vector2f(6.0f, 5.0f), sf::Vector2f(10.0f, 10.0f));
+	ASSERT_TRUE(collisionInfo.collided, "Failed to detect AABB AABB collision.");
+	ASSERT_CLOSE(collisionInfo.correctionVector.x, -4.0f, 0.001f, "Calculated incorrect correction vector.");
+
+	Soul::CollisionInfo collisionInfo2 = Soul::AABBAABBCollision(sf::Vector2f(0.0f, 0.0f), sf::Vector2f(2.0f, 2.0f), sf::Vector2f(5.0f, 5.0f), sf::Vector2f(10.0f, 10.0f));
+	ASSERT_FALSE(collisionInfo2.collided, "Incorrectly detected AABB AABB collision.");
+
+	Soul::CollisionInfo collisionInfo3 = Soul::AABBAABBCollision(sf::Vector2f(10.0f, 10.0f), sf::Vector2f(10.0f, 10.0f), sf::Vector2f(6.0f, 5.0f), sf::Vector2f(10.0f, 10.0f));
+	ASSERT_TRUE(collisionInfo3.collided, "Failed to detect AABB AABB collision.");
+	ASSERT_CLOSE(collisionInfo3.correctionVector.y, 5.0f, 0.001f, "Calculated incorrect correction vector.");
+}
+
 void CollisionTests::RunAllTests()
 {
 	RUN_TEST(CircleCircleCollisions);
 	RUN_TEST(CircleAABBCollisions);
+	RUN_TEST(AABBAABBCollisions);
 }
