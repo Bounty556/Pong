@@ -1,4 +1,4 @@
-#include <EntryPoint.h>
+#include <Engine.h>
 #include <Memory/MemoryManager.h>
 #include <Core/String.h>
 

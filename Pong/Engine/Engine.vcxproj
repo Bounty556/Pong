@@ -178,7 +178,7 @@
     <ClInclude Include="src\Core\SceneManager.h" />
     <ClInclude Include="src\Core\String.h" />
     <ClInclude Include="src\Defines.h" />
-    <ClInclude Include="src\EntryPoint.h" />
+    <ClInclude Include="src\Engine.h" />
     <ClInclude Include="src\IO\Controller.h" />
     <ClInclude Include="src\IO\ControlsMap.h" />
     <ClInclude Include="src\IO\Gamepad.h" />
@@ -219,7 +219,7 @@
     <ClCompile Include="src\Core\Scene.cpp" />
     <ClCompile Include="src\Core\SceneManager.cpp" />
     <ClCompile Include="src\Core\String.cpp" />
-    <ClCompile Include="src\EntryPoint.cpp" />
+    <ClCompile Include="src\Engine.cpp" />
     <ClCompile Include="src\IO\Controller.cpp" />
     <ClCompile Include="src\IO\ControlsMap.cpp" />
     <ClCompile Include="src\IO\Gamepad.cpp" />

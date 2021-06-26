@@ -24,7 +24,7 @@
     <ClInclude Include="src\Platform\Platform.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\EntryPoint.h">
+    <ClInclude Include="src\Engine.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Memory\MemoryManager.h">
@@ -149,7 +149,7 @@
     <ClCompile Include="src\Memory\ReferenceCounter.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\EntryPoint.cpp">
+    <ClCompile Include="src\Engine.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Core\SceneManager.cpp">

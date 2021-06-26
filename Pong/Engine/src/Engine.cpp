@@ -1,6 +1,6 @@
 #pragma once
 
-#include "EntryPoint.h"
+#include "Engine.h"
 
 #include <Core/Logger.h>
 #include <Core/MessageBus.h>
@@ -17,12 +17,17 @@
 
 namespace Soul
 {
+	EngineInfo engineInfo = {};
 	// TODO: Replace with more sophisticated window?
 	sf::RenderWindow* window;
 
 	bool InitializeEngine(u32 windowWidth, u32 windowHeight, const char* windowName)
 	{
 		LOG_INFO("Starting engine");
+
+		engineInfo.windowWidth = windowWidth;
+		engineInfo.windowHeight = windowHeight;
+		engineInfo.hasFocus = true;
 
 		// Startup systems
 		if (!PlatformInitialize())
@@ -112,6 +117,11 @@ namespace Soul
 		MessageBus::Shutdown();
 		ShutdownLogger();
 		MemoryManager::Shutdown();
+	}
+
+	const EngineInfo& GetEngineInfo()
+	{
+		return engineInfo;
 	}
 
 	void ProcessEvents()
