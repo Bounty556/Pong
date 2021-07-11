@@ -105,7 +105,7 @@ namespace Soul
 		CloseHandle((HANDLE)handle);
 	}
 
-	u64 PlatformTime()
+	u64 PlatformGetTime()
 	{
 		LARGE_INTEGER performanceCount;
 		QueryPerformanceCounter(&performanceCount);

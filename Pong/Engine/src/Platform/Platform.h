@@ -20,5 +20,5 @@ namespace Soul
 	u64 PlatformGetOpenFileSize(void* handle);
 	void PlatformReadOpenFile(void* handle, char* buffer, u64 bytesToRead);
 	void PlatformCloseFile(void* handle);
-	u64 PlatformTime();
+	u64 PlatformGetTime();
 }

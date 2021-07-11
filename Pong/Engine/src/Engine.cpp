@@ -6,6 +6,7 @@
 #include <Core/MessageBus.h>
 #include <Core/SceneManager.h>
 #include <IO/InputManager.h>
+#include <Math/Random.h>
 #include <Memory/MemoryManager.h>
 #include <Platform/Platform.h>
 #include <Platform/Timer.h>
@@ -65,6 +66,9 @@ namespace Soul
 			LOG_FATAL("Failed to initial renderer.");
 			return false;
 		}
+
+		// Seed the PRNG
+		Math::SetSeed(PlatformGetTime());
 
 		return true;
 	}

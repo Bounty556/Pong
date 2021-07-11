@@ -190,6 +190,7 @@
     <ClInclude Include="src\Math\Constants.h" />
     <ClInclude Include="src\Math\Hashes.h" />
     <ClInclude Include="src\Math\Functions.h" />
+    <ClInclude Include="src\Math\Random.h" />
     <ClInclude Include="src\Math\Vectors.h" />
     <ClInclude Include="src\Memory\MemoryManager.h" />
     <ClInclude Include="src\Memory\ReferenceCounter.h" />
@@ -231,6 +232,7 @@
     <ClCompile Include="src\IO\TextFileReader.cpp" />
     <ClCompile Include="src\Math\Hashes.cpp" />
     <ClCompile Include="src\Math\Functions.cpp" />
+    <ClCompile Include="src\Math\Random.cpp" />
     <ClCompile Include="src\Math\Vectors.cpp" />
     <ClCompile Include="src\Memory\MemoryManager.cpp" />
     <ClCompile Include="src\Memory\ReferenceCounter.cpp" />
