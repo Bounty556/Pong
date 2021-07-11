@@ -32,15 +32,8 @@ namespace Soul
 
 	void Node::RemoveChild(Node* child)
 	{
-		for (u32 i = 0; i < m_Children.Count(); ++i)
-		{
-			if (m_Children[i] == child)
-			{
-				m_Children.Remove(i);
-				child->m_Parent = nullptr;
-				break;
-			}
-		}
+		m_Children.Remove(child);
+		child->m_Parent = nullptr;
 	}
 
 	sf::Transform Node::GetGlobalTransform() const

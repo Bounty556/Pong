@@ -2,7 +2,7 @@
 
 #include "ITestSuite.h"
 
-class INodeTests : public ITestSuite
+class NodeTests : public ITestSuite
 {
 public:
 	virtual void RunAllTests() override;

@@ -197,7 +197,7 @@ namespace Soul
 	template <class T>
 	T* Vector<T>::Remove(u32 index)
 	{
-		ASSERT(index > 0 && index < m_Size);
+		ASSERT(index >= 0 && index < m_Size);
 
 		if (index == m_Size - 1)
 			return &m_Vector[--m_Size - 1];

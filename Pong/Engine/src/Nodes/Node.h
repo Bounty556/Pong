@@ -7,7 +7,7 @@
 
 namespace Soul
 {
-	class Node : public sf::Transformable
+	class SOULAPI Node : public sf::Transformable
 	{
 	public:
 		Node(const char* type);
