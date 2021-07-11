@@ -1,33 +1,36 @@
-#include "INode.h"
+#include "Node.h"
 
 namespace Soul
 {
-	INode::INode(const char* type) :
+	Node::Node(const char* type) :
 		m_Children(),
 		m_Parent(nullptr),
 		m_Type(type)
 	{
 	}
 
-	INode::~INode()
+	Node::~Node()
 	{
+		for (u32 i = 0; i < m_Children.Count(); ++i)
+			MemoryManager::FreeMemory(m_Children[i]);
+		m_Children.Clear();
 	}
 
-	void INode::Update(f32 dt)
+	void Node::Update(f32 dt)
 	{
 	}
 	
-	void INode::Draw(sf::RenderStates states) const
+	void Node::Draw(sf::RenderStates states) const
 	{
 	}
 
-	void INode::AddChild(INode* child)
+	void Node::AddChild(Node* child)
 	{
 		m_Children.Push(child);
 		child->m_Parent = this;
 	}
 
-	void INode::RemoveChild(INode* child)
+	void Node::RemoveChild(Node* child)
 	{
 		for (u32 i = 0; i < m_Children.Count(); ++i)
 		{
@@ -40,7 +43,7 @@ namespace Soul
 		}
 	}
 
-	sf::Transform INode::GetGlobalTransform() const
+	sf::Transform Node::GetGlobalTransform() const
 	{
 		sf::Transform transform;
 		if (m_Parent)
@@ -49,24 +52,24 @@ namespace Soul
 		return transform;
 	}
 
-	const Vector<INode*>& INode::GetChildren() const
+	const Vector<Node*>& Node::GetChildren() const
 	{
 		return m_Children;
 	}
 
-	const INode* INode::GetParent() const
+	const Node* Node::GetParent() const
 	{
 		return m_Parent;
 	}
 
-	const char* INode::GetType() const
+	const char* Node::GetType() const
 	{
 		return m_Type;
 	}
 
-	Vector<INode*> INode::GetChildrenOfType(const char* type) const
+	Vector<Node*> Node::GetChildrenOfType(const char* type) const
 	{
-		Vector<INode*> children;
+		Vector<Node*> children;
 
 		for (u32 i = 0; i < m_Children.Count(); ++i)
 		{
@@ -77,7 +80,7 @@ namespace Soul
 		return children;
 	}
 
-	bool INode::HasChildOfType(const char* type) const
+	bool Node::HasChildOfType(const char* type) const
 	{
 		for (u32 i = 0; i < m_Children.Count(); ++i)
 		{
