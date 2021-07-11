@@ -13,6 +13,14 @@ namespace Soul
 	{
 	}
 
+	void INode::Update(f32 dt)
+	{
+	}
+	
+	void INode::Draw(sf::RenderStates states) const
+	{
+	}
+
 	void INode::AddChild(INode* child)
 	{
 		m_Children.Push(child);

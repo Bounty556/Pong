@@ -3,6 +3,7 @@
 #include <Structures/Vector.h>
 
 #include <SFML/Graphics/Transformable.hpp>
+#include <SFML/Graphics/RenderStates.hpp>
 
 namespace Soul
 {
@@ -12,6 +13,9 @@ namespace Soul
 		INode(const char* type);
 
 		virtual ~INode();
+
+		virtual void Update(f32 dt);
+		virtual void Draw(sf::RenderStates states) const;
 
 		void AddChild(INode* child);
 		void RemoveChild(INode* child);
