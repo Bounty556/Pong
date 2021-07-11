@@ -7,31 +7,31 @@
 
 namespace Soul
 {
-	class INode : public sf::Transformable
+	class Node : public sf::Transformable
 	{
 	public:
-		INode(const char* type);
+		Node(const char* type);
 
-		virtual ~INode();
+		virtual ~Node();
 
 		virtual void Update(f32 dt);
 		virtual void Draw(sf::RenderStates states) const;
 
-		void AddChild(INode* child);
-		void RemoveChild(INode* child);
+		void AddChild(Node* child);
+		void RemoveChild(Node* child);
 
 		sf::Transform GetGlobalTransform() const;
 		
-		const Vector<INode*>& GetChildren() const;
-		const INode* GetParent() const;
+		const Vector<Node*>& GetChildren() const;
+		const Node* GetParent() const;
 
 		const char* GetType() const;
-		Vector<INode*> GetChildrenOfType(const char* type) const;
+		Vector<Node*> GetChildrenOfType(const char* type) const;
 		bool HasChildOfType(const char* type) const;
 	
 	private:
-		INode* m_Parent;
-		Vector<INode*> m_Children;
+		Node* m_Parent;
+		Vector<Node*> m_Children;
 		const char* m_Type;
 	};
 }
