@@ -104,6 +104,16 @@ namespace Soul
 	{
 		CloseHandle((HANDLE)handle);
 	}
+
+	u64 PlatformTime()
+	{
+		LARGE_INTEGER performanceCount;
+		QueryPerformanceCounter(&performanceCount);
+
+		LARGE_INTEGER performanceFrequency;
+		QueryPerformanceFrequency(&performanceFrequency);
+		return performanceCount.QuadPart / performanceFrequency.QuadPart;
+	}
 }
 
 #endif
