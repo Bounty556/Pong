@@ -2,17 +2,17 @@
 
 #include <Defines.h>
 
-#include <SFML/Graphics/Transformable.hpp>
-#include <SFML/Graphics/RectangleShape.hpp>
-#include <SFML/Graphics/RenderTarget.hpp>
+#include <Nodes/Node.h>
 
-class Paddle : public sf::Transformable
+#include <SFML/Graphics/RectangleShape.hpp>
+
+class Paddle : public Soul::Node
 {
 public:
 	Paddle();
 
-	void Update(f32 dt);
-	void Draw(sf::RenderStates states) const;
+	virtual void Update(f32 dt) override;
+	virtual void Draw(sf::RenderStates states) const override;
 
 private:
 	sf::RectangleShape m_Paddle;

@@ -4,6 +4,7 @@
 #include <IO/InputManager.h>
 
 Paddle::Paddle() :
+	Node("Paddle"),
 	m_Paddle(sf::Vector2f(32.0f, 128.0f)),
 	m_MoveSpeed(1.0f)
 {
