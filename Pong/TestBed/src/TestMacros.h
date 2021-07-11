@@ -52,5 +52,11 @@ if (CURRENT_MEMORY_BYTES_ALLOCATED != Soul::MemoryManager::GetTotalPartitionedMe
 #define ASSERT_CLOSE(x, y, threshold, msg) if ((x) - (y) > threshold) \
 { \
 	LOG_ERROR("Test failed on line " STRINGIFY(__LINE__) ". " msg); \
-	return ; \
+	return; \
+}
+
+#define ASSERT_BETWEEN(x, a, b, msg) if ((x) < (a) || (x) > (b)) \
+{ \
+	LOG_ERROR("Test failed on line " STRINGIFY(__LINE__) ". " msg); \
+	return; \
 }

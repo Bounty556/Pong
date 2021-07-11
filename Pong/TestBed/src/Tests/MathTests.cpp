@@ -3,6 +3,7 @@
 #include <Core/Logger.h>
 #include <Math/Constants.h>
 #include <Math/Functions.h>
+#include <Math/Random.h>
 #include <Math/Vectors.h>
 #include <Memory/MemoryManager.h>
 
@@ -172,6 +173,24 @@ void VectorToAngleTest()
 	ASSERT_CLOSE(Soul::Math::VectorToAngle(sf::Vector2f(0.70710f, -0.70710f)), 315.0f, 0.001f, "Failed to calculate angle from vector (0.70710f, -0.70710f).");
 }
 
+void Random64Test()
+{
+	for (u32 i = 0; i < 500; ++i)
+		ASSERT_BETWEEN(Soul::Math::Rand(100), 0, 100, "Failed to generate number in correct range.");
+
+	for (u32 i = 0; i < 500; ++i)
+		ASSERT_BETWEEN(Soul::Math::Rand(100, 200), 100, 200, "Failed to generate number in correct range.");
+}
+
+void Random32Test()
+{
+	for (u32 i = 0; i < 500; ++i)
+		ASSERT_BETWEEN(Soul::Math::Rand32(100), 0, 100, "Failed to generate number in correct range.");
+
+	for (u32 i = 0; i < 500; ++i)
+		ASSERT_BETWEEN(Soul::Math::Rand32(100, 200), 100, 200, "Failed to generate number in correct range.");
+}
+
 void MathTests::RunAllTests()
 {
 	RUN_TEST(ClampTest);
@@ -191,4 +210,6 @@ void MathTests::RunAllTests()
 	RUN_TEST(NormalTest);
 	RUN_TEST(AngleToVectorTest);
 	RUN_TEST(VectorToAngleTest);
+	RUN_TEST(Random64Test);
+	RUN_TEST(Random32Test);
 }
