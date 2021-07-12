@@ -4,6 +4,7 @@
 #include <Core/Scene.h>
 
 #include "../Entities/Paddle.h"
+#include "../Entities/Ball.h"
 
 class FieldScene : public Soul::Scene
 {
@@ -18,4 +19,5 @@ public:
 private:
 	Paddle m_Player;
 	Paddle m_AI;
+	Ball m_Ball;
 };

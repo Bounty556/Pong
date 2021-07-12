@@ -10,6 +10,7 @@ Ball::Ball(f32 radius, f32 speed) :
 	m_Direction(Soul::Math::AngleToVector((f32)Soul::Math::Rand32(360))),
 	m_Speed(speed)
 {
+	m_Ball.setFillColor(sf::Color::White);
 }
 
 void Ball::UpdateSelf(f32 dt)
