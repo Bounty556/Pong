@@ -245,6 +245,7 @@
     <ClCompile Include="src\Resources\FontManager.cpp" />
     <ClCompile Include="src\Resources\SoundManager.cpp" />
     <ClCompile Include="src\Resources\TextureManager.cpp" />
+    <ClCompile Include="src\Structures\QuadTree.cpp" />
     <ClCompile Include="src\UI\UIButton.cpp" />
     <ClCompile Include="src\UI\UIComponent.cpp" />
     <ClCompile Include="src\UI\UIContainer.cpp" />
