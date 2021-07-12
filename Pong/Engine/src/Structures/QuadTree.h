@@ -94,7 +94,7 @@ namespace Soul
 		// Find smallest tree this will fit in
 		if (m_Children)
 		{
-
+			if ()
 		}
 		else
 		{

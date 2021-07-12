@@ -32,4 +32,10 @@ namespace Soul
 	left of the rectangles.
 	*/
 	CollisionInfo SOULAPI AABBAABBCollision(sf::Vector2f posA, sf::Vector2f dimensionsA, sf::Vector2f posB, sf::Vector2f dimensionsB);
+
+	/*
+	Check to see if rectangle A is completely inside rectangle B. If the rectangles
+	share boundaries, it is considered inside.
+	*/
+	bool SOULAPI AABBIsInAABB(sf::Vector2f posA, sf::Vector2f dimensionsA, sf::Vector2f posB, sf::Vector2f dimensionsB);
 }
