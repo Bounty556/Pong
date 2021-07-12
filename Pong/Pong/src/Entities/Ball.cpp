@@ -7,19 +7,17 @@
 Ball::Ball(f32 radius, f32 speed) :
 	Node("Ball"),
 	m_Ball(radius),
-	m_Direction(Soul::Math::AngleToVector(Soul::Math::Rand32(360))),
+	m_Direction(Soul::Math::AngleToVector((f32)Soul::Math::Rand32(360))),
 	m_Speed(speed)
 {
 }
 
-void Ball::Update(f32 dt)
+void Ball::UpdateSelf(f32 dt)
 {
 	move(m_Direction * m_Speed * dt);
 }
 
-void Ball::Draw(sf::RenderStates states) const
+void Ball::DrawSelf(sf::RenderStates states) const
 {
-	states.transform *= getTransform();
-
 	Soul::Renderer::Render(m_Ball, states);
 }

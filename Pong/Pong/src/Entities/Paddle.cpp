@@ -11,7 +11,7 @@ Paddle::Paddle() :
 	m_Paddle.setFillColor(sf::Color::White);
 }
 
-void Paddle::Update(f32 dt)
+void Paddle::UpdateSelf(f32 dt)
 {
 	Soul::Controller::ButtonState upState = Soul::InputManager::GetControlState(-1, "Up").state;
 	Soul::Controller::ButtonState downState = Soul::InputManager::GetControlState(-1, "Down").state;
@@ -27,8 +27,7 @@ void Paddle::Update(f32 dt)
 		setPosition(getPosition().x, 720 - 15.0f - 128.0f); // TODO: variableize
 }
 
-void Paddle::Draw(sf::RenderStates states) const
+void Paddle::DrawSelf(sf::RenderStates states) const
 {
-	states.transform *= getTransform();
 	Soul::Renderer::Render(m_Paddle, states);
 }

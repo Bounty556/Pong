@@ -18,10 +18,16 @@ namespace Soul
 
 	void Node::Update(f32 dt)
 	{
+		UpdateSelf(dt);
+		UpdateChildren(dt);
 	}
 	
 	void Node::Draw(sf::RenderStates states) const
 	{
+		states.transform *= getTransform();
+
+		DrawSelf(states);
+		DrawChildren(states);
 	}
 
 	void Node::AddChild(Node* child)
@@ -82,5 +88,24 @@ namespace Soul
 		}
 
 		return false;
+	}
+
+	void Node::UpdateSelf(f32 dt)
+	{
+	}
+
+	void Node::DrawSelf(sf::RenderStates states) const
+	{
+	}
+
+	void Node::UpdateChildren(f32 dt)
+	{
+		for (u32 i = 0; i < m_Children.Count(); ++i)
+			m_Children[i]->Update(dt);
+	}
+	void Node::DrawChildren(sf::RenderStates states) const
+	{
+		for (u32 i = 0; i < m_Children.Count(); ++i)
+			m_Children[i]->Draw(states);
 	}
 }

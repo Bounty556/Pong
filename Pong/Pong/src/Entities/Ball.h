@@ -10,8 +10,8 @@ class Ball : public Soul::Node
 public:
 	Ball(f32 radius, f32 speed);
 
-	virtual void Update(f32 dt);
-	virtual void Draw(sf::RenderStates states) const;
+	virtual void UpdateSelf(f32 dt) override;
+	virtual void DrawSelf(sf::RenderStates states) const override;
 
 private:
 	sf::CircleShape m_Ball;
