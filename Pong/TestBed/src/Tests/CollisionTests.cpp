@@ -69,9 +69,19 @@ void AABBAABBCollisions()
 	ASSERT_CLOSE(collisionInfo3.correctionVector.y, 5.0f, 0.001f, "Calculated incorrect correction vector.");
 }
 
+void AABBIsInAABBTest()
+{
+	ASSERT_TRUE(Soul::AABBIsInAABB(sf::Vector2f(0.0f, 0.0f), sf::Vector2f(5.0f, 5.0f), sf::Vector2f(0.0f, 0.0f), sf::Vector2f(5.1f, 5.1f)), "Failed to correctly detect AABB in AABB.");
+	ASSERT_TRUE(Soul::AABBIsInAABB(sf::Vector2f(0.0f, 0.0f), sf::Vector2f(5.0f, 5.0f), sf::Vector2f(0.0f, 0.0f), sf::Vector2f(5.0f, 5.0f)), "Failed to correctly detect AABB in AABB.");
+	ASSERT_FALSE(Soul::AABBIsInAABB(sf::Vector2f(0.0f, 0.0f), sf::Vector2f(5.2f, 5.0f), sf::Vector2f(0.0f, 0.0f), sf::Vector2f(5.1f, 5.1f)), "Incorrectly detected AABB in AABB.");
+	ASSERT_FALSE(Soul::AABBIsInAABB(sf::Vector2f(0.2f, 0.0f), sf::Vector2f(5.0f, 5.0f), sf::Vector2f(0.0f, 0.0f), sf::Vector2f(5.1f, 5.1f)), "Incorrectly detected AABB in AABB.");
+	ASSERT_FALSE(Soul::AABBIsInAABB(sf::Vector2f(0.0f, 0.0f), sf::Vector2f(5.0f, 5.0f), sf::Vector2f(0.0f, 0.0f), sf::Vector2f(4.9f, 5.1f)), "Incorrectly detected AABB in AABB.");
+}
+
 void CollisionTests::RunAllTests()
 {
 	RUN_TEST(CircleCircleCollisions);
 	RUN_TEST(CircleAABBCollisions);
 	RUN_TEST(AABBAABBCollisions);
+	RUN_TEST(AABBIsInAABBTest);
 }
