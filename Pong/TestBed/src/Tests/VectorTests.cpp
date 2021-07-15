@@ -257,6 +257,31 @@ void RemoveElements()
 	ASSERT_EQUAL(oTemp.Pop(), 2, "Incorrect Vector removed.");
 	ASSERT_EQUAL(oTemp.Pop(), 1, "Incorrect Vector removed.");
 	ASSERT_EQUAL(oTemp.Pop(), 0, "Incorrect Vector removed.");
+
+	END_MEMORY_CHECK();
+}
+
+void CombineVectors()
+{
+	START_MEMORY_CHECK();
+
+	Soul::Vector<u32> intVector(5);
+
+	for (u32 i = 0; i < 5; ++i)
+		intVector.Push(i);
+
+	Soul::Vector<u32> intVector2(5);
+	
+	for (u32 i = 0; i < 5; ++i)
+		intVector2.Push(i + 10);
+
+	intVector.Push(intVector2);
+
+	ASSERT_EQUAL(intVector.Pop(), 14, "Failed to combine vectors.");
+	ASSERT_EQUAL(intVector.Pop(), 13, "Failed to combine vectors.");
+	ASSERT_EQUAL(intVector.Pop(), 12, "Failed to combine vectors.");
+	ASSERT_EQUAL(intVector.Pop(), 11, "Failed to combine vectors.");
+
 	END_MEMORY_CHECK();
 }
 
@@ -267,4 +292,5 @@ void VectorTests::RunAllTests()
 	RUN_TEST(VectorOfVectors);
 	RUN_TEST(ResizeVector);
 	RUN_TEST(RemoveElements);
+	RUN_TEST(CombineVectors);
 }
