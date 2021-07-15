@@ -28,6 +28,8 @@ namespace Soul
 
 		void Push(const T& element);
 		void Push(T&& element);
+		void Push(const Vector<T>& elements);
+		void Vector<T>::Push(Vector<T>&& elements);
 		T&& Pop();
 
 		/*
@@ -114,6 +116,28 @@ namespace Soul
 
 		// Put our new element at m_Count, then increase
 		new (&m_Vector[m_Size++]) T(std::move(element));
+	}
+
+	template <class T>
+	void Vector<T>::Push(const Vector<T>& elements)
+	{
+		// Check to see if increasing our count hits our capacity limit.
+		while (m_Size + elements.Count() >= m_Capacity)
+			Resize(m_Capacity * 2);
+
+		for (u32 i = 0; i < elements.Count(); ++i)
+			new (&m_Vector[m_Size++]) T(elements[i]); // Put our new element at m_Count, then increase
+	}
+
+	template <class T>
+	void Vector<T>::Push(Vector<T>&& elements)
+	{
+		// Check to see if increasing our count hits our capacity limit.
+		while (m_Size + elements.Count() >= m_Capacity)
+			Resize(m_Capacity * 2);
+
+		for (u32 i = 0; i < elements.Count(); ++i)
+			new (&m_Vector[m_Size++]) T(std::move(elements[i])); // Put our new element at m_Count, then increase
 	}
 
 	template <class T>

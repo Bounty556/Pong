@@ -91,7 +91,6 @@ namespace Soul
 			if (m_Storage[i].node == node)
 				area = m_Storage[i].area;
 
-		// TODO: Let's check to see if this has passed our boundaries first
 		if (!AABBIsInAABB(node->getPosition(), area, m_Position, m_Area))
 		{
 			QuadTreeItem quadTreeItem = origin->Remove(origin, node);
@@ -110,7 +109,22 @@ namespace Soul
 
 	Vector<Node*> QuadTree::GetNodes(sf::Vector2f position, sf::Vector2f area)
 	{
-		// TODO:
+		/*Vector<Node*> foundNodes;
+
+		for (u32 i = 0; i < 4; ++i)
+		{
+			if (AABBIsInAABB(position, area, m_Children[0].m_Position, m_Children[0].m_Area))
+				m_Children[0].Insert(quadTreeItem);
+		}
+
+		if (AABBIsInAABB(position, area, m_Children[0].m_Position, m_Children[0].m_Area))
+			m_Children[0].Insert(quadTreeItem);
+		else if (AABBIsInAABB(position, area, m_Children[1].m_Position, m_Children[1].m_Area))
+			m_Children[1].Insert(quadTreeItem);
+		else if (AABBIsInAABB(position, area, m_Children[2].m_Position, m_Children[2].m_Area))
+			m_Children[2].Insert(quadTreeItem);
+		else if (AABBIsInAABB(position, area, m_Children[3].m_Position, m_Children[3].m_Area))
+			m_Children[3].Insert(quadTreeItem);*/
 	}
 
 	void QuadTree::AddToStorage(Node* node, sf::Vector2f area)
