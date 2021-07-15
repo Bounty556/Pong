@@ -14,6 +14,7 @@
 #include "Tests/StackTests.h"
 #include "Tests/StringTests.h"
 #include "Tests/UniquePointerTests.h"
+#include "Tests/VectorTests.h"
 
 void RunTestSuite(ITestSuite* suite)
 {
@@ -32,6 +33,7 @@ void RunAllTestSuites()
 	CREATE_TEST_SUITE(StackTests);
 	CREATE_TEST_SUITE(StringTests);
 	CREATE_TEST_SUITE(UniquePointerTests);
+	CREATE_TEST_SUITE(VectorTests);
 }
 
 int main()

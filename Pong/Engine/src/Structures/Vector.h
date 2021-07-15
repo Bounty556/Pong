@@ -19,18 +19,18 @@ namespace Soul
 		Vector(u32 capacity = 8);
 
 		Vector(const Vector<T>&) = delete;
-		Vector(Vector<T>&& otherVector);
+		Vector(Vector<T>&& otherVector) noexcept;
 
 		Vector& operator=(const Vector<T>&) = delete;
-		Vector& operator=(Vector<T>&& otherVector);
+		Vector& operator=(Vector<T>&& otherVector) noexcept;
 
 		T& operator[](u32 index) const;
 
 		void Push(const T& element);
 		void Push(T&& element);
 		void Push(const Vector<T>& elements);
-		void Vector<T>::Push(Vector<T>&& elements);
-		T&& Pop();
+		void Push(Vector<T>&& elements);
+		T Pop();
 
 		/*
 		Inserts an element at the given index.
@@ -44,7 +44,7 @@ namespace Soul
 		Removes the provided element, replacing it with the final element.
 		*/
 		T* Remove(const T& element);
-		T* Remove(u32 index);
+		T* RemoveAt(u32 index);
 		void Clear();
 
 		u32 Count() const;
@@ -69,7 +69,7 @@ namespace Soul
 	}
 
 	template <class T>
-	Vector<T>::Vector(Vector<T>&& otherVector) :
+	Vector<T>::Vector(Vector<T>&& otherVector) noexcept :
 		m_Capacity(otherVector.m_Capacity),
 		m_Size(otherVector.m_Size),
 		m_Vector(std::move(otherVector.m_Vector))
@@ -79,7 +79,7 @@ namespace Soul
 	}
 
 	template <class T>
-	Vector<T>& Vector<T>::operator=(Vector<T>&& otherVector)
+	Vector<T>& Vector<T>::operator=(Vector<T>&& otherVector) noexcept
 	{
 		m_Capacity = otherVector.m_Capacity;
 		m_Size = otherVector.m_Size;
@@ -141,7 +141,7 @@ namespace Soul
 	}
 
 	template <class T>
-	T&& Vector<T>::Pop()
+	T Vector<T>::Pop()
 	{
 		ASSERT(m_Size > 0);
 	
@@ -219,7 +219,7 @@ namespace Soul
 	}
 
 	template <class T>
-	T* Vector<T>::Remove(u32 index)
+	T* Vector<T>::RemoveAt(u32 index)
 	{
 		ASSERT(index >= 0 && index < m_Size);
 

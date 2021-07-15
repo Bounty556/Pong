@@ -103,6 +103,7 @@
     <ClCompile Include="src\Tests\TestClass.cpp" />
     <ClCompile Include="src\Tests\TestNode.cpp" />
     <ClCompile Include="src\Tests\UniquePointerTests.cpp" />
+    <ClCompile Include="src\Tests\VectorTests.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Tests\CollisionTests.h" />
@@ -119,6 +120,7 @@
     <ClInclude Include="src\TestMacros.h" />
     <ClInclude Include="src\Tests\TestNode.h" />
     <ClInclude Include="src\Tests\UniquePointerTests.h" />
+    <ClInclude Include="src\Tests\VectorTests.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
