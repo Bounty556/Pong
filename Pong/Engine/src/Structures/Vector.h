@@ -43,8 +43,8 @@ namespace Soul
 		/*
 		Removes the provided element, replacing it with the final element.
 		*/
-		T* Remove(const T& element);
-		T* RemoveAt(u32 index);
+		T* Remove(const T& element, bool keepOrder = false);
+		T* RemoveAt(u32 index, bool keepOrder = false);
 		void Clear();
 
 		u32 Count() const;
@@ -199,7 +199,7 @@ namespace Soul
 	}
 
 	template <class T>
-	T* Vector<T>::Remove(const T& element)
+	T* Vector<T>::Remove(const T& element, bool keepOrder /*= false*/)
 	{
 		for (u32 i = 0; i < m_Size; ++i)
 		{
@@ -207,6 +207,15 @@ namespace Soul
 			{
 				if (i == m_Size - 1)
 					return &m_Vector[--m_Size - 1];
+				else if (keepOrder)
+				{
+					// Move all contents back by 1 space
+					for (u32 j = i; j < m_Size - 1; ++j)
+						m_Vector[j] = std::move(m_Vector[j + 1]);
+					--m_Size;
+
+					return &m_Vector[i];
+				}
 				else
 				{
 					m_Vector[i] = std::move(m_Vector[--m_Size]);
@@ -219,19 +228,26 @@ namespace Soul
 	}
 
 	template <class T>
-	T* Vector<T>::RemoveAt(u32 index)
+	T* Vector<T>::RemoveAt(u32 index, bool keepOrder /*= false*/)
 	{
 		ASSERT(index >= 0 && index < m_Size);
 
 		if (index == m_Size - 1)
 			return &m_Vector[--m_Size - 1];
+		else if (keepOrder)
+		{
+			// Move all contents back by 1 space
+			for (u32 i = index; i < m_Size - 1; ++i)
+				m_Vector[i] = std::move(m_Vector[i + 1]);
+			--m_Size;
+
+			return &m_Vector[index];
+		}
 		else
 		{
 			m_Vector[index] = std::move(m_Vector[--m_Size]);
 			return &m_Vector[index];
 		}
-
-		return nullptr;
 	}
 
 	template <class T>

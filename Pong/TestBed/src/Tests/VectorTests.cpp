@@ -166,6 +166,7 @@ void RemoveElements()
 
 	Soul::Vector<u32> smallVector(5);
 
+	// Test without keeping order
 	for (u8 i = 0; i < 5; ++i)
 		smallVector.Push(i);
 
@@ -179,7 +180,20 @@ void RemoveElements()
 	ASSERT_EQUAL(smallVector.Pop(), 1, "Incorrect element in Vector.");
 	ASSERT_EQUAL(smallVector.Pop(), 4, "Incorrect element in Vector.");
 
-	// TODO: Test with keeping order
+	// Test with keeping order
+
+	for (u8 i = 0; i < 5; ++i)
+		smallVector.Push(i);
+
+							       // 0 1 2 3 4
+	smallVector.RemoveAt(0, true); // 1 2 3 4
+	smallVector.RemoveAt(3, true); // 1 2 3
+
+	ASSERT_EQUAL(smallVector.Count(), 3, "Incorrect Vector length after removing elements.");
+
+	ASSERT_EQUAL(smallVector.Pop(), 3, "Incorrect element in Vector.");
+	ASSERT_EQUAL(smallVector.Pop(), 2, "Incorrect element in Vector.");
+	ASSERT_EQUAL(smallVector.Pop(), 1, "Incorrect element in Vector.");
 
 	Soul::Vector<TestClass> smallVector2(5);
 
@@ -197,6 +211,8 @@ void RemoveElements()
 
 	Soul::Vector<Soul::Vector<u32>> smallVector3(5);
 
+	// Test without keeping order
+
 	for (u8 i = 0; i < 5; ++i)
 	{
 		Soul::Vector<u32> tempVector(5);
@@ -211,14 +227,36 @@ void RemoveElements()
 	smallVector3.RemoveAt(0); // {0123}{0423}{0143}{0124}
 	smallVector3.RemoveAt(3); // {0123}{0423}{0143}
 
-	// TODO: Test with keeping order
-
 	Soul::Vector<u32> oTemp(smallVector3.Pop());
 	ASSERT_EQUAL(oTemp.Pop(), 3, "Incorrect Vector removed.");
 	ASSERT_EQUAL(oTemp.Pop(), 4, "Incorrect Vector removed.");
 	ASSERT_EQUAL(oTemp.Pop(), 1, "Incorrect Vector removed.");
 	ASSERT_EQUAL(oTemp.Pop(), 0, "Incorrect Vector removed.");
-	
+
+	smallVector3.Clear();
+
+	// Test with keeping order
+
+	for (u8 i = 0; i < 5; ++i)
+	{
+		Soul::Vector<u32> tempVector(5);
+
+		for (u8 i = 0; i < 5; ++i)
+			tempVector.Push(i);
+
+		tempVector.RemoveAt(i, true);
+		smallVector3.Push(std::move(tempVector));
+	}
+	                                // {1234}{0234}{0134}{0124}{0123}
+	smallVector3.RemoveAt(0, true); // {0234}{0134}{0124}{0123}
+	smallVector3.RemoveAt(3, true); // {0234}{0134}{0124}
+
+	oTemp = smallVector3.Pop();
+
+	ASSERT_EQUAL(oTemp.Pop(), 4, "Incorrect Vector removed.");
+	ASSERT_EQUAL(oTemp.Pop(), 2, "Incorrect Vector removed.");
+	ASSERT_EQUAL(oTemp.Pop(), 1, "Incorrect Vector removed.");
+	ASSERT_EQUAL(oTemp.Pop(), 0, "Incorrect Vector removed.");
 	END_MEMORY_CHECK();
 }
 
