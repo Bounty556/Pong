@@ -16,10 +16,11 @@ namespace Soul
 		{
 			Node* node;
 			sf::Vector2f area;
+			QuadTree* container;
 		};
 
 	public:
-		QuadTree(f32 x, f32 y, f32 width, f32 height, u32 maxChildren);
+		QuadTree(f32 x, f32 y, f32 width, f32 height, u32 maxStorage, QuadTree* root);
 
 		QuadTree(const QuadTree&) = delete;
 		QuadTree(QuadTree&& other) noexcept;
@@ -29,24 +30,24 @@ namespace Soul
 		QuadTree& operator=(const QuadTree&) = delete;
 		QuadTree& operator=(QuadTree&& other) noexcept;
 
-		QuadTree* Insert(Node* node, sf::Vector2f area);
-		QuadTree* Insert(QuadTreeItem quadTreeItem);
-		QuadTree* Move(QuadTree* origin, Node* node);
-		QuadTreeItem Remove(QuadTree* origin, Node* node);
+		void Insert(Node* node, sf::Vector2f area);
+		void Move(Node* node);
+		QuadTreeItem Remove(Node* node);
 
-		Vector<Node*> GetNodes(sf::Vector2f position, sf::Vector2f area);
+		Vector<QuadTreeItem*> GetNodes(sf::Vector2f position, sf::Vector2f area);
 
 	private:
+		QuadTreeItem* GetNodeFromStorage(Node* node);
 		void AddToStorage(Node* node, sf::Vector2f area);
-		void AddToStorage(QuadTreeItem quadTreeItem);
 		void FlattenTree();
 		void SplitTree();
 
 	private:
-		u32 m_MaxChildren;
-		Vector<QuadTreeItem> m_Storage;
-		QuadTree* m_Children;
-		sf::Vector2f m_Position;
-		sf::Vector2f m_Area;
+		u32 m_MaxStorage; // The maximum number of nodes that can be stored in this QuadTree before attempting to split
+		Vector<QuadTreeItem> m_Storage; // THe nodes in this QuadTree (not its children)
+		QuadTree* m_Children; // The QuadTree's children QuadTrees
+		sf::Vector2f m_Position; // The position of this QuadTree in 2D space
+		sf::Vector2f m_Area; // The width and height of this QuadTree
+		QuadTree* m_Root;
 	};
 }

@@ -2,21 +2,25 @@
 
 namespace Soul
 {
-	QuadTree::QuadTree(f32 x, f32 y, f32 width, f32 height, u32 maxChildren) :
-		m_MaxChildren(maxChildren),
-		m_Storage(m_MaxChildren + 1),
+	QuadTree::QuadTree(f32 x, f32 y, f32 width, f32 height, u32 maxStorage, QuadTree* root) :
+		m_MaxStorage(maxStorage),
+		m_Storage(m_MaxStorage + 1),
 		m_Children(nullptr),
 		m_Position(x, y),
-		m_Area(width, height)
+		m_Area(width, height),
+		m_Root(root)
 	{
+		if (!m_Root)
+			m_Root = this;
 	}
 
 	QuadTree::QuadTree(QuadTree&& other) noexcept :
-		m_MaxChildren(other.m_MaxChildren),
+		m_MaxStorage(other.m_MaxStorage),
 		m_Storage(std::move(other.m_Storage)),
 		m_Children(other.m_Children),
 		m_Position(other.m_Position),
-		m_Area(other.m_Area)
+		m_Area(other.m_Area),
+		m_Root(other.m_Root)
 	{
 		other.m_Children = nullptr;
 	}
@@ -29,17 +33,18 @@ namespace Soul
 
 	QuadTree& QuadTree::operator=(QuadTree&& other) noexcept
 	{
-		m_MaxChildren = other.m_MaxChildren;
+		m_MaxStorage = other.m_MaxStorage;
 		m_Storage = std::move(other.m_Storage);
 		m_Children = other.m_Children;
 		m_Position = other.m_Position;
 		m_Area = other.m_Area;
+		m_Root = other.m_Root;
 		other.m_Children = nullptr;
 
 		return *this;
 	}
 
-	QuadTree* QuadTree::Insert(Node* node, sf::Vector2f area)
+	void QuadTree::Insert(Node* node, sf::Vector2f area)
 	{
 		// Find smallest tree this will fit in
 		if (m_Children)
@@ -56,110 +61,126 @@ namespace Soul
 				AddToStorage(node, area);
 		}
 		else
-		{
 			AddToStorage(node, area);
-		}
-
-		// TODO: Figure this out
-		return this;
 	}
 
-	QuadTree* QuadTree::Insert(QuadTreeItem quadTreeItem)
+	void QuadTree::Move(Node* node)
 	{
-		sf::Vector2f position = quadTreeItem.node->getPosition();
-		sf::Vector2f area = quadTreeItem.area;
+		QuadTreeItem* found = GetNodeFromStorage(node);
 
-		// Find smallest tree this will fit in
-		if (m_Children)
+		// Only move the node if it's crossed the quadTree's boundaries
+		if (!AABBIsInAABB(node->getPosition(), found->area, found->container->m_Position, found->container->m_Area))
 		{
-			if (AABBIsInAABB(position, area, m_Children[0].m_Position, m_Children[0].m_Area))
-				m_Children[0].Insert(quadTreeItem);
-			else if (AABBIsInAABB(position, area, m_Children[1].m_Position, m_Children[1].m_Area))
-				m_Children[1].Insert(quadTreeItem);
-			else if (AABBIsInAABB(position, area, m_Children[2].m_Position, m_Children[2].m_Area))
-				m_Children[2].Insert(quadTreeItem);
-			else if (AABBIsInAABB(position, area, m_Children[3].m_Position, m_Children[3].m_Area))
-				m_Children[3].Insert(quadTreeItem);
-			else
-				AddToStorage(quadTreeItem);
-		}
-		else
-		{
-			AddToStorage(quadTreeItem);
-		}
+			QuadTreeItem quadTreeItem = found->container->Remove(node);
+			
+			if (quadTreeItem.node)
+				m_Root->Insert(quadTreeItem.node, quadTreeItem.area);
 
-		// TODO: Figure this out
-		return this;
+			m_Root->FlattenTree();
+		}
 	}
 
-	QuadTree* QuadTree::Move(QuadTree* origin, Node* node)
-	{
-		sf::Vector2f area = {};
-		for (u32 i = 0; i < m_Storage.Count(); ++i)
-			if (m_Storage[i].node == node)
-				area = m_Storage[i].area;
-
-		if (!AABBIsInAABB(node->getPosition(), area, m_Position, m_Area))
-		{
-			QuadTreeItem quadTreeItem = origin->Remove(origin, node);
-			Insert(quadTreeItem);
-			FlattenTree();
-		}
-
-		// TODO: Figure this out
-		return this;
-	}
-
-	QuadTree::QuadTreeItem QuadTree::Remove(QuadTree* origin, Node* node)
+	QuadTree::QuadTreeItem QuadTree::Remove(Node* node)
 	{
 		QuadTreeItem found = {};
 		for (u32 i = 0; i < m_Storage.Count(); ++i)
+		{
 			if (m_Storage[i].node == node)
+			{
+				m_Storage[i].container = nullptr;
 				return *m_Storage.RemoveAt(i);
+			}
+		}
 
-		// TODO: Check
 		return found;
 	}
 
-	Vector<Node*> QuadTree::GetNodes(sf::Vector2f position, sf::Vector2f area)
+	Vector<QuadTree::QuadTreeItem*> QuadTree::GetNodes(sf::Vector2f position, sf::Vector2f area)
 	{
-		Vector<Node*> foundNodes;
+		Vector<QuadTree::QuadTreeItem*> foundNodes;
 
-		/*
+		for (u32 i = 0; i < m_Storage.Count(); ++i)
+			foundNodes.Push(&m_Storage[i]);
+
 		for (u32 i = 0; i < 4; ++i)
-		{
-			if (AABBIsInAABB(position, area, m_Children[0].m_Position, m_Children[0].m_Area))
-				m_Children[0].Insert(quadTreeItem);
-		}
+			if (AABBIsInAABB(position, area, m_Children[i].m_Position, m_Children[i].m_Area))
+				foundNodes.Push(m_Children[i].GetNodes(position, area));
 
-		if (AABBIsInAABB(position, area, m_Children[0].m_Position, m_Children[0].m_Area))
-			m_Children[0].Insert(quadTreeItem);
-		else if (AABBIsInAABB(position, area, m_Children[1].m_Position, m_Children[1].m_Area))
-			m_Children[1].Insert(quadTreeItem);
-		else if (AABBIsInAABB(position, area, m_Children[2].m_Position, m_Children[2].m_Area))
-			m_Children[2].Insert(quadTreeItem);
-		else if (AABBIsInAABB(position, area, m_Children[3].m_Position, m_Children[3].m_Area))
-			m_Children[3].Insert(quadTreeItem);*/
 		return foundNodes;
+	}
+
+	QuadTree::QuadTreeItem* QuadTree::GetNodeFromStorage(Node* node)
+	{
+		for (u32 i = 0; i < m_Storage.Count(); ++i)
+			if (m_Storage[i].node == node)
+				return &m_Storage[i];
+
+		if (m_Children)
+			for (u32 i = 0; i < 4; ++i)
+				return m_Children->GetNodeFromStorage(node);
+		else
+			return nullptr;
 	}
 
 	void QuadTree::AddToStorage(Node* node, sf::Vector2f area)
 	{
-		// TODO:
-	}
+		QuadTreeItem newItem = {};
+		newItem.area = area;
+		newItem.node = node;
+		newItem.container = this;
 
-	void QuadTree::AddToStorage(QuadTreeItem quadTreeItem)
-	{
-		// TODO:
+		m_Storage.Push(newItem);
+
+		if (!m_Children && m_Storage.Count() > m_MaxStorage)
+			SplitTree();
 	}
 
 	void QuadTree::FlattenTree()
 	{
-		// TODO:
+		if (m_Children)
+		{
+			if (!m_Children[0].m_Children)
+			{
+				u32 allStorage = m_Storage.Count();
+
+				for (u32 i = 0; i < 4; ++i)
+					allStorage += m_Children[i].m_Storage.Count();
+
+				if (allStorage <= u32(m_MaxStorage * 0.8f))
+				{
+					// Reabsorb grandchildren
+					for (u32 i = 0; i < 4; ++i)
+						m_Storage.Push(m_Children[i].m_Storage);
+
+					MemoryManager::FreeMemory(m_Children);
+					m_Children = nullptr;
+				}
+			}
+			else
+			{
+				for (u32 i = 0; i < 4; ++i)
+					m_Children[i].FlattenTree();
+			}
+		}
 	}
 
 	void QuadTree::SplitTree()
 	{
-		// TODO:
+		// Create children
+		m_Children = PARTITION_ARRAY(QuadTree, 4);
+
+		f32 halfWidth = m_Area.x * 0.5f;
+		f32 halfHeight = m_Area.y * 0.5f;
+		new (&m_Children[0]) QuadTree(m_Position.x,             m_Position.y,              halfWidth, halfHeight, m_MaxStorage, m_Root);
+		new (&m_Children[1]) QuadTree(m_Position.x + halfWidth, m_Position.y,              halfWidth, halfHeight, m_MaxStorage, m_Root);
+		new (&m_Children[2]) QuadTree(m_Position.x,             m_Position.y + halfHeight, halfWidth, halfHeight, m_MaxStorage, m_Root);
+		new (&m_Children[3]) QuadTree(m_Position.x + halfWidth, m_Position.y + halfHeight, halfWidth, halfHeight, m_MaxStorage, m_Root);
+
+		// Place children where they belong in tree
+		for (i32 i = m_Storage.Count() - 1; i >= 0; --i)
+		{
+			QuadTreeItem toMove = Remove(m_Storage[i].node);
+			Insert(toMove.node, toMove.area);
+		}
 	}
 }
