@@ -103,6 +103,13 @@ namespace Soul
 		return collision;
 	}
 
+	CollisionInfo PolygonPolygonCollision(sf::Vector2f posA, const Vector<sf::Vector2f>& polygons, sf::Vector2f posB, const Vector<sf::Vector2f>& polygonB)
+	{
+		// TODO: Actually implement
+		CollisionInfo info = {};
+		return info;
+	}
+
 	bool AABBIsInAABB(sf::Vector2f posA, sf::Vector2f dimensionsA, sf::Vector2f posB, sf::Vector2f dimensionsB)
 	{
 		f32 xCalc = posA.x - posB.x + dimensionsA.x;
