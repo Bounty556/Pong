@@ -21,7 +21,12 @@ namespace Soul
 		// TODO: Unregister
 	}
 
-	Vector<CollisionInfo> ColliderNode::CheckCollisions()
+	sf::Vector2f ColliderNode::GetBoundingBox() const
+	{
+		return m_BoundingBox;
+	}
+
+	Vector<CollisionInfo> ColliderNode::CheckCollisions() const
 	{
 		// TODO: Get all collisions here
 	}

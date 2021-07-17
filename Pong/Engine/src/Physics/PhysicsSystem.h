@@ -2,6 +2,9 @@
 
 #include <Defines.h>
 #include <Structures/QuadTree.h>
+#include <Structures/Vector.h>
+
+#include "ColliderNode.h"
 
 namespace Soul
 {
@@ -15,9 +18,9 @@ namespace Soul
 
 		static void Update(f32 dt);
 
-		/*static void RegisterCollider();
-		static void UnregisterCollider();
-		static void CheckCollision();*/
+		static void RegisterCollider(ColliderNode* node);
+		static void UnregisterCollider(ColliderNode* node);
+		static Vector<QuadTree::QuadTreeItem*> GetPotentialCollisions(sf::Vector2f position, sf::Vector2f area);
 
 	private:
 		static QuadTree* m_QuadTree;

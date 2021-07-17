@@ -17,7 +17,9 @@ namespace Soul
 
 		virtual ~ColliderNode();
 
-		virtual Vector<CollisionInfo> CheckCollisions();
+		sf::Vector2f GetBoundingBox() const;
+
+		virtual Vector<CollisionInfo> CheckCollisions() const;
 
 	private:
 		sf::Vector2f m_BoundingBox;

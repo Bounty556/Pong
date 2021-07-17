@@ -18,6 +18,21 @@ namespace Soul
 
 	void PhysicsSystem::Update(f32 dt)
 	{
+		m_QuadTree->Move();
+	}
 
+	void PhysicsSystem::RegisterCollider(ColliderNode* node)
+	{
+		m_QuadTree->Insert(node, node->GetBoundingBox());
+	}
+
+	void PhysicsSystem::UnregisterCollider(ColliderNode* node)
+	{
+		m_QuadTree->Remove(node);
+	}
+
+	Vector<QuadTree::QuadTreeItem*> PhysicsSystem::GetPotentialCollisions(sf::Vector2f position, sf::Vector2f area)
+	{
+		return m_QuadTree->GetNodes(position, area);
 	}
 }
