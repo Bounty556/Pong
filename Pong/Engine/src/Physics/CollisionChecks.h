@@ -2,6 +2,7 @@
 
 #include <Defines.h>
 #include <Structures/Vector.h>
+#include <Nodes/Node.h>
 
 #include <SFML/System/Vector2.hpp>
 
@@ -45,4 +46,10 @@ namespace Soul
 	share boundaries, it is considered inside.
 	*/
 	bool SOULAPI AABBIsInAABB(sf::Vector2f posA, sf::Vector2f dimensionsA, sf::Vector2f posB, sf::Vector2f dimensionsB);
+
+	/*
+	Gets the specific node type of the provided nodes, and calculates their
+	collision info using correct algorithm.
+	*/
+	CollisionInfo SOULAPI CalculateCollisionType(Node* a, Node* b);
 }

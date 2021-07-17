@@ -1,7 +1,9 @@
 #include "CollisionChecks.h"
 
+#include <Core/String.h>
 #include <Math/Functions.h>
 #include <Math/Vectors.h>
+#include <Physics/RectColliderNode.h>
 
 namespace Soul
 {
@@ -117,5 +119,20 @@ namespace Soul
 
 		return (xCalc <= dimensionsB.x && xCalc >= dimensionsA.x) &&
 			(yCalc <= dimensionsB.y && yCalc >= dimensionsA.y);
+	}
+
+	CollisionInfo SOULAPI CalculateCollisionType(Node* a, Node* b)
+	{
+		String aType = a->GetType();
+		String bType = b->GetType();
+
+		if (aType == "RectColliderNode" && bType == "RectColliderNode")
+		{
+			RectColliderNode* specificTypeA = (RectColliderNode*)a;
+			RectColliderNode* specificTypeB = (RectColliderNode*)b;
+			return AABBAABBCollision(specificTypeA->getPosition(), specificTypeA->GetBoundingBox(),
+				specificTypeB->getPosition(), specificTypeB->GetBoundingBox());
+		}
+		// TODO: Add other types
 	}
 }

@@ -19,8 +19,6 @@ namespace Soul
 		virtual Vector<sf::Vector2f> GetPolygonList() const = 0;
 
 		sf::Vector2f GetBoundingBox() const;
-	protected:
-		virtual CollisionInfo SpecificCollisionInfo(Node* node) const = 0;
 
 	private:
 		sf::Vector2f m_BoundingBox;

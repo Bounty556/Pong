@@ -23,7 +23,7 @@ namespace Soul
 
 		for (u32 i = 0; i < potentialCollisions.Count(); ++i)
 		{
-			CollisionInfo col = SpecificCollisionInfo(potentialCollisions[i]->node);
+			CollisionInfo col = CalculateCollisionType((Node*)this, potentialCollisions[i]->node);
 
 			if (col.collided)
 				actualCollisions.Push(col);
