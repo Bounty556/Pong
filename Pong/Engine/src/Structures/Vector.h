@@ -198,16 +198,18 @@ namespace Soul
 				else if (keepOrder)
 				{
 					// Move all contents back by 1 space
+					T temp = std::move(m_Vector[i]);
 					for (u32 j = i; j < m_Size - 1; ++j)
 						m_Vector[j] = std::move(m_Vector[j + 1]);
-					--m_Size;
-
-					return &m_Vector[i];
+					m_Vector[--m_Size] = std::move(temp);
+					return &m_Vector[m_Size];
 				}
 				else
 				{
+					T temp = std::move(m_Vector[i]);
 					m_Vector[i] = std::move(m_Vector[--m_Size]);
-					return &m_Vector[i];
+					m_Vector[m_Size] = std::move(temp);
+					return &m_Vector[m_Size];
 				}
 			}
 		}
@@ -225,16 +227,18 @@ namespace Soul
 		else if (keepOrder)
 		{
 			// Move all contents back by 1 space
+			T temp = std::move(m_Vector[index]);
 			for (u32 i = index; i < m_Size - 1; ++i)
 				m_Vector[i] = std::move(m_Vector[i + 1]);
-			--m_Size;
-
-			return &m_Vector[index];
+			m_Vector[--m_Size] = std::move(temp);
+			return &m_Vector[m_Size];
 		}
 		else
 		{
+			T temp = std::move(m_Vector[index]);
 			m_Vector[index] = std::move(m_Vector[--m_Size]);
-			return &m_Vector[index];
+			m_Vector[m_Size] = std::move(temp);
+			return &m_Vector[m_Size];
 		}
 	}
 

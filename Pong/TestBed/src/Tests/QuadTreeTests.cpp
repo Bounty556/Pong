@@ -89,6 +89,7 @@ void QueryMultipleQuadsTest()
 	quadTree.Insert(&node2, nodesArea);
 	quadTree.Insert(&node3, nodesArea);
 
+	ASSERT_EQUAL(quadTree.GetNodes(sf::Vector2f(0.0f, 0.0f), nodesArea).Count(), 2, "Failed to detect colliding nodes.");
 	ASSERT_EQUAL(quadTree.GetNodes(sf::Vector2f(45.0f, 45.0f), nodesArea).Count(), 5, "Failed to detect colliding nodes.");
 	ASSERT_EQUAL(quadTree.GetNodes(sf::Vector2f(110.0f, 110.0f), nodesArea).Count(), 0, "Incorrectly detected colliding nodes.");
 
@@ -161,13 +162,40 @@ void MoveQuadNodeTest()
 	node2.setPosition(60.0f, 60.0f);
 	node3.setPosition(60.0f, 60.0f);
 
-	quadTree.Move(&node);
-	quadTree.Move(&node0);
-	quadTree.Move(&node1);
-	quadTree.Move(&node2);
-	quadTree.Move(&node3);
+	quadTree.Move();
 
 	ASSERT_EQUAL(quadTree.GetNodes(sf::Vector2f(60.0f, 60.0f), nodesArea).Count(), 5, "Failed to move nodes.");
+
+	END_MEMORY_CHECK();
+}
+
+void FlattenTreeTest()
+{
+	START_MEMORY_CHECK();
+
+	Soul::QuadTree quadTree(0.0f, 0.0f, 100.0f, 100.0f, 4, nullptr);
+
+	sf::Vector2f nodesArea(49.0f, 49.0f);
+	Soul::Node node("Node");
+	Soul::Node node0("Node");
+	Soul::Node node1("Node");
+	Soul::Node node2("Node");
+	Soul::Node node3("Node");
+
+	quadTree.Insert(&node, nodesArea);
+	quadTree.Insert(&node0, nodesArea);
+	quadTree.Insert(&node1, nodesArea);
+	quadTree.Insert(&node2, nodesArea);
+	quadTree.Insert(&node3, nodesArea);
+
+	ASSERT_EQUAL(quadTree.GetNodes(sf::Vector2f(60.0f, 60.0f), nodesArea).Count(), 0, "Incorrectly found nodes.");
+
+	quadTree.Remove(&node);
+	quadTree.Remove(&node0);
+	
+	ASSERT_EQUAL(quadTree.GetNodes(sf::Vector2f(0.0f, 0.0f), nodesArea).Count(), 3, "Failed to remove nodes.");
+
+	ASSERT_EQUAL(quadTree.GetNodes(sf::Vector2f(60.0f, 60.0f), nodesArea).Count(), 3, "Failed to flatten tree.");
 
 	END_MEMORY_CHECK();
 }
@@ -179,4 +207,5 @@ void QuadTreeTests::RunAllTests()
 	RUN_TEST(QueryMultipleQuadsTest);
 	RUN_TEST(RemoveQuadNodeTest);
 	RUN_TEST(MoveQuadNodeTest);
+	RUN_TEST(FlattenTreeTest);
 }

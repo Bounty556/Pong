@@ -1,5 +1,7 @@
 #include "QuadTree.h"
 
+#include <Core/Logger.h>
+
 namespace Soul
 {
 	QuadTree::QuadTree(f32 x, f32 y, f32 width, f32 height, u32 maxStorage, QuadTree* root) :
@@ -64,21 +66,25 @@ namespace Soul
 			AddToStorage(node, area);
 	}
 
-	void QuadTree::Move(Node* node)
+	void QuadTree::Move()
 	{
-		// TODO: Find an alternative, this is super slow
-		QuadTreeItem* found = GetNodeFromStorage(node);
-
-		// Only move the node if it's crossed the quadTree's boundaries
-		if (!AABBIsInAABB(node->getPosition(), found->area, found->container->m_Position, found->container->m_Area))
+		for (i32 i = m_Storage.Count() - 1; i >= 0; --i)
 		{
-			QuadTreeItem quadTreeItem = found->container->Remove(node);
+			QuadTreeItem& item = m_Storage[i];
+			if (!AABBIsInAABB(item.node->getPosition(), item.area, m_Position, m_Area))
+			{
+				QuadTreeItem removed = Remove(item.node);
 			
-			if (quadTreeItem.node)
-				m_Root->Insert(quadTreeItem.node, quadTreeItem.area);
-
-			m_Root->FlattenTree();
+				if (removed.node)
+					m_Root->Insert(removed.node, removed.area);
+			}
 		}
+
+		if (m_Children)
+			for (u32 i = 0; i < 4; ++i)
+				m_Children[i].Move();
+
+		FlattenTree();
 	}
 
 	QuadTree::QuadTreeItem QuadTree::Remove(Node* node)
@@ -86,10 +92,13 @@ namespace Soul
 		QuadTreeItem found = {};
 		for (u32 i = 0; i < m_Storage.Count(); ++i)
 		{
-			if (m_Storage[i].node == node)
+			Node* currentNode = m_Storage[i].node;
+			if (currentNode == node)
 			{
 				m_Storage[i].container = nullptr;
-				return *m_Storage.RemoveAt(i);
+				found = *m_Storage.RemoveAt(i);
+				FlattenTree();
+				return found;
 			}
 		}
 
@@ -99,11 +108,14 @@ namespace Soul
 			{
 				found = m_Children[i].Remove(node);
 				if (found.node)
+				{
+					FlattenTree();
 					return found;
+				}
 			}
 		}
 
-		return found;
+		return QuadTreeItem{};
 	}
 
 	Vector<QuadTree::QuadTreeItem*> QuadTree::GetNodes(sf::Vector2f position, sf::Vector2f area)
@@ -140,7 +152,10 @@ namespace Soul
 	{
 		if (m_Children)
 		{
-			if (!m_Children[0].m_Children)
+			if (!m_Children[0].m_Children && 
+				!m_Children[1].m_Children &&
+				!m_Children[2].m_Children &&
+				!m_Children[3].m_Children)
 			{
 				u32 allStorage = m_Storage.Count();
 
