@@ -105,8 +105,8 @@ namespace Soul
 
 	bool AABBIsInAABB(sf::Vector2f posA, sf::Vector2f dimensionsA, sf::Vector2f posB, sf::Vector2f dimensionsB)
 	{
-		f32 xCalc = posB.x - posA.x + dimensionsA.x;
-		f32 yCalc = posB.y - posA.y + dimensionsA.y;
+		f32 xCalc = posA.x - posB.x + dimensionsA.x;
+		f32 yCalc = posA.y - posB.y + dimensionsA.y;
 
 		return (xCalc <= dimensionsB.x && xCalc >= dimensionsA.x) &&
 			(yCalc <= dimensionsB.y && yCalc >= dimensionsA.y);

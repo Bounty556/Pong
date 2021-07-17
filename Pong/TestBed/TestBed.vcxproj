@@ -97,6 +97,7 @@
     <ClCompile Include="src\Tests\MathTests.cpp" />
     <ClCompile Include="src\TestScene.cpp" />
     <ClCompile Include="src\Tests\MessageBusTests.cpp" />
+    <ClCompile Include="src\Tests\QuadTreeTests.cpp" />
     <ClCompile Include="src\Tests\QueueTests.cpp" />
     <ClCompile Include="src\Tests\StackTests.cpp" />
     <ClCompile Include="src\Tests\StringTests.cpp" />
@@ -113,6 +114,7 @@
     <ClInclude Include="src\Tests\ITestSuite.h" />
     <ClInclude Include="src\Tests\MessageBusTests.h" />
     <ClInclude Include="src\Tests\NodeTests.h" />
+    <ClInclude Include="src\Tests\QuadTreeTests.h" />
     <ClInclude Include="src\Tests\QueueTests.h" />
     <ClInclude Include="src\Tests\StackTests.h" />
     <ClInclude Include="src\Tests\StringTests.h" />

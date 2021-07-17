@@ -66,6 +66,7 @@ namespace Soul
 
 	void QuadTree::Move(Node* node)
 	{
+		// TODO: Find an alternative, this is super slow
 		QuadTreeItem* found = GetNodeFromStorage(node);
 
 		// Only move the node if it's crossed the quadTree's boundaries
@@ -92,6 +93,16 @@ namespace Soul
 			}
 		}
 
+		if (m_Children)
+		{
+			for (u32 i = 0; i < 4; ++i)
+			{
+				found = m_Children[i].Remove(node);
+				if (found.node)
+					return found;
+			}
+		}
+
 		return found;
 	}
 
@@ -102,24 +113,14 @@ namespace Soul
 		for (u32 i = 0; i < m_Storage.Count(); ++i)
 			foundNodes.Push(&m_Storage[i]);
 
-		for (u32 i = 0; i < 4; ++i)
-			if (AABBIsInAABB(position, area, m_Children[i].m_Position, m_Children[i].m_Area))
-				foundNodes.Push(m_Children[i].GetNodes(position, area));
+		if (m_Children)
+		{
+			for (u32 i = 0; i < 4; ++i)
+				if (AABBAABBCollision(position, area, m_Children[i].m_Position, m_Children[i].m_Area).collided)
+					foundNodes.Push(m_Children[i].GetNodes(position, area));
+		}
 
 		return foundNodes;
-	}
-
-	QuadTree::QuadTreeItem* QuadTree::GetNodeFromStorage(Node* node)
-	{
-		for (u32 i = 0; i < m_Storage.Count(); ++i)
-			if (m_Storage[i].node == node)
-				return &m_Storage[i];
-
-		if (m_Children)
-			for (u32 i = 0; i < 4; ++i)
-				return m_Children->GetNodeFromStorage(node);
-		else
-			return nullptr;
 	}
 
 	void QuadTree::AddToStorage(Node* node, sf::Vector2f area)

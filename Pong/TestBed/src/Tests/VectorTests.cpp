@@ -285,6 +285,24 @@ void CombineVectors()
 	END_MEMORY_CHECK();
 }
 
+// There was a bug where removing one element from a vector of only one element segfaulted
+void RemoveOneElement()
+{
+	START_MEMORY_CHECK();
+
+	Soul::Vector<u32> intVector;
+
+	intVector.Push(1);
+
+	ASSERT_EQUAL(*intVector.RemoveAt(0), 1, "Failed to remove first element.");
+
+	intVector.Push(2);
+
+	ASSERT_EQUAL(*intVector.Remove(2), 2, "Failed to remove first element.");
+
+	END_MEMORY_CHECK();
+}
+
 void VectorTests::RunAllTests()
 {
 	RUN_TEST(VectorOfPrimitives);
@@ -293,4 +311,5 @@ void VectorTests::RunAllTests()
 	RUN_TEST(ResizeVector);
 	RUN_TEST(RemoveElements);
 	RUN_TEST(CombineVectors);
+	RUN_TEST(RemoveOneElement);
 }

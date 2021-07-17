@@ -7,11 +7,13 @@
 
 #include <SFML/System/Vector2.hpp>
 
+class QuadTreeTests;
+
 namespace Soul
 {
-	class QuadTree
+	class SOULAPI QuadTree
 	{
-	private:
+	public:
 		struct QuadTreeItem
 		{
 			Node* node;
@@ -37,7 +39,6 @@ namespace Soul
 		Vector<QuadTreeItem*> GetNodes(sf::Vector2f position, sf::Vector2f area);
 
 	private:
-		QuadTreeItem* GetNodeFromStorage(Node* node);
 		void AddToStorage(Node* node, sf::Vector2f area);
 		void FlattenTree();
 		void SplitTree();

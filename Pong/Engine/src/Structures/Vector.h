@@ -194,7 +194,7 @@ namespace Soul
 			if (m_Vector[i] == element)
 			{
 				if (i == m_Size - 1)
-					return &m_Vector[--m_Size - 1];
+					return &m_Vector[--m_Size];
 				else if (keepOrder)
 				{
 					// Move all contents back by 1 space
@@ -221,7 +221,7 @@ namespace Soul
 		ASSERT(index >= 0 && index < m_Size);
 
 		if (index == m_Size - 1)
-			return &m_Vector[--m_Size - 1];
+			return &m_Vector[--m_Size];
 		else if (keepOrder)
 		{
 			// Move all contents back by 1 space
