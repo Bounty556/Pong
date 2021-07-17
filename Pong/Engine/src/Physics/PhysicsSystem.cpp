@@ -21,12 +21,12 @@ namespace Soul
 		m_QuadTree->Move();
 	}
 
-	void PhysicsSystem::RegisterCollider(ColliderNode* node)
+	void PhysicsSystem::RegisterCollider(IColliderNode* node)
 	{
 		m_QuadTree->Insert(node, node->GetBoundingBox());
 	}
 
-	void PhysicsSystem::UnregisterCollider(ColliderNode* node)
+	void PhysicsSystem::UnregisterCollider(IColliderNode* node)
 	{
 		m_QuadTree->Remove(node);
 	}

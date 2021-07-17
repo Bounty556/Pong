@@ -4,7 +4,7 @@
 #include <Structures/QuadTree.h>
 #include <Structures/Vector.h>
 
-#include "ColliderNode.h"
+#include "IColliderNode.h"
 
 namespace Soul
 {
@@ -18,8 +18,8 @@ namespace Soul
 
 		static void Update(f32 dt);
 
-		static void RegisterCollider(ColliderNode* node);
-		static void UnregisterCollider(ColliderNode* node);
+		static void RegisterCollider(IColliderNode* node);
+		static void UnregisterCollider(IColliderNode* node);
 		static Vector<QuadTree::QuadTreeItem*> GetPotentialCollisions(sf::Vector2f position, sf::Vector2f area);
 
 	private:

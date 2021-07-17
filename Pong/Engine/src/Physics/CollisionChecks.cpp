@@ -4,12 +4,16 @@
 #include <Math/Functions.h>
 #include <Math/Vectors.h>
 #include <Physics/RectColliderNode.h>
+#include <Physics/CircleColliderNode.h>
 
 namespace Soul
 {
 
 	CollisionInfo SOULAPI CircleCircleCollision(sf::Vector2f posA, f32 radiusA, sf::Vector2f posB, f32 radiusB)
 	{
+		posA += sf::Vector2f(radiusA, radiusA);
+		posB += sf::Vector2f(radiusB, radiusB);
+
 		CollisionInfo collision = {};
 		f32 distance = Math::Distance(posA, posB);
 
@@ -26,6 +30,8 @@ namespace Soul
 
 	CollisionInfo SOULAPI CircleAABBCollision(sf::Vector2f posA, f32 radiusA, sf::Vector2f posB, sf::Vector2f dimensionsB)
 	{
+		posA += sf::Vector2f(radiusA, radiusA);
+
 		CollisionInfo collision = {};
 
 		sf::Vector2f closestEdge(posB.x - posA.x, posB.y - posA.y);
@@ -133,6 +139,22 @@ namespace Soul
 			return AABBAABBCollision(specificTypeA->getPosition(), specificTypeA->GetBoundingBox(),
 				specificTypeB->getPosition(), specificTypeB->GetBoundingBox());
 		}
+		else if (aType == "CircleColliderNode" && bType == "RectColliderNode")
+		{
+			CircleColliderNode* specificTypeA = (CircleColliderNode*)a;
+			RectColliderNode* specificTypeB = (RectColliderNode*)b;
+			return CircleAABBCollision(specificTypeA->getPosition(), specificTypeA->GetRadius(),
+				specificTypeB->getPosition(), specificTypeB->GetBoundingBox());
+		}
+		else if (bType == "RectColliderNode" && aType == "CircleColliderNode")
+		{
+			RectColliderNode* specificTypeA = (RectColliderNode*)a;
+			CircleColliderNode* specificTypeB = (CircleColliderNode*)b;
+			return CircleAABBCollision(specificTypeB->getPosition(), specificTypeB->GetRadius(),
+				specificTypeA->getPosition(), specificTypeA->GetBoundingBox());
+		}
 		// TODO: Add other types
+
+		return CollisionInfo{};
 	}
 }
