@@ -18,7 +18,6 @@ namespace Soul
 		{
 			Node* node;
 			sf::Vector2f area;
-			QuadTree* container;
 		};
 
 	public:

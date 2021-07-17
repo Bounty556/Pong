@@ -95,7 +95,6 @@ namespace Soul
 			Node* currentNode = m_Storage[i].node;
 			if (currentNode == node)
 			{
-				m_Storage[i].container = nullptr;
 				found = *m_Storage.RemoveAt(i);
 				FlattenTree();
 				return found;
@@ -140,7 +139,6 @@ namespace Soul
 		QuadTreeItem newItem = {};
 		newItem.area = area;
 		newItem.node = node;
-		newItem.container = this;
 
 		m_Storage.Push(newItem);
 
