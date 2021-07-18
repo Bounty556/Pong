@@ -48,7 +48,7 @@ namespace Soul
 		bool isError = logLevel >= LogLevel::Error;
 		const i32 MAX_LENGTH = 1024;
 		char tempMessage[MAX_LENGTH];
-		memset(tempMessage, 0, sizeof(tempMessage));
+		PlatformSetMemory(tempMessage, 0, sizeof(tempMessage));
 
 		va_list args;
 		va_start(args, message);
@@ -57,7 +57,7 @@ namespace Soul
 
 		char finalMessage[MAX_LENGTH];
 
-		// TODO: Use our own strings
+		// TODO: Use our own string library
 		sprintf_s(finalMessage, "%s %s\n", LOG_LEVEL_PREFIXES[logLevel], tempMessage);
 
 		if (isError)
