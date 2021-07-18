@@ -18,7 +18,7 @@ namespace Soul
 	{
 		logFileInitialized = true;
 		loggerFile = PARTITION(LoggerFile, logFile, 3000);
-		loggerFile->LogInfo("-----------------------------");
+		loggerFile->LogInfo("-----------------------------\n");
 
 		return true;
 	}
