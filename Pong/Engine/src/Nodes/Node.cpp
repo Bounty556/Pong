@@ -9,11 +9,30 @@ namespace Soul
 	{
 	}
 
+	Node::Node(Node&& other) noexcept :
+		m_Children(std::move(other.m_Children)),
+		m_Parent(other.m_Parent),
+		m_Type(other.m_Type)
+	{
+		// TODO: Maybe we can call the transformable constructor here
+		setPosition(other.getPosition());
+	}
+
 	Node::~Node()
 	{
 		for (u32 i = 0; i < m_Children.Count(); ++i)
 			MemoryManager::FreeMemory(m_Children[i]);
 		m_Children.Clear();
+	}
+
+	Node& Node::operator=(Node&& other) noexcept
+	{
+		m_Children = std::move(other.m_Children);
+		m_Parent = other.m_Parent;
+		m_Type = other.m_Type;
+		setPosition(other.getPosition());
+
+		return *this;
 	}
 
 	void Node::Update(f32 dt)

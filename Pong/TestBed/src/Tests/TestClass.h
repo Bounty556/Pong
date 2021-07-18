@@ -8,6 +8,8 @@ public:
 	TestClass(u32 x, u32 y, u32 z);
 	TestClass(const TestClass& other);
 
+	~TestClass();
+
 	bool operator==(const TestClass& other) const;
 	bool operator!=(const TestClass& other) const;
 

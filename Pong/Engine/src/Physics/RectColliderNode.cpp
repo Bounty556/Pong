@@ -9,6 +9,18 @@ namespace Soul
 	{
 	}
 
+	RectColliderNode::RectColliderNode(RectColliderNode&& other) noexcept :
+		IColliderNode(std::move(other))
+	{
+	}
+
+	RectColliderNode& RectColliderNode::operator=(RectColliderNode&& other) noexcept
+	{
+		IColliderNode::operator=(std::move(other));
+
+		return *this;
+	}
+
 	Vector<sf::Vector2f> RectColliderNode::GetPolygonList() const
 	{
 		Vector<sf::Vector2f> polygons(4);

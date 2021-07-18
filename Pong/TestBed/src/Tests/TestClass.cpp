@@ -14,6 +14,10 @@ TestClass::TestClass(const TestClass& other) :
 {
 }
 
+TestClass::~TestClass()
+{
+}
+
 bool TestClass::operator==(const TestClass& other) const
 {
 	return other.m_X == m_X && other.m_Y == m_Y && other.m_Z == m_Z;

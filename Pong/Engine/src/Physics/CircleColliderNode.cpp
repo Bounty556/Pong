@@ -10,6 +10,20 @@ namespace Soul
 	{
 	}
 
+	CircleColliderNode::CircleColliderNode(CircleColliderNode&& other) noexcept :
+		IColliderNode(std::move(other)),
+		m_Radius(other.m_Radius)
+	{
+	}
+
+	CircleColliderNode& CircleColliderNode::operator=(CircleColliderNode&& other) noexcept
+	{
+		IColliderNode::operator=(std::move(other));
+		m_Radius = other.m_Radius;
+
+		return *this;
+	}
+
 	Vector<sf::Vector2f> CircleColliderNode::GetPolygonList() const
 	{
 		Vector<sf::Vector2f> polygons(16);

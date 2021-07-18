@@ -12,7 +12,13 @@ namespace Soul
 	public:
 		Node(const char* type);
 
+		Node(const Node&) = delete;
+		Node(Node&& other) noexcept;
+
 		virtual ~Node();
+
+		Node& operator=(const Node&) = delete;
+		Node& operator=(Node&& other) noexcept;
 
 		void Update(f32 dt);
 		void Draw(sf::RenderStates states) const;

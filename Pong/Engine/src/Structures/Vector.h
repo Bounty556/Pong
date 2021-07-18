@@ -3,7 +3,6 @@
 #include <Defines.h>
 #include <Memory/MemoryManager.h>
 #include <Memory/UniquePointer.h>
-#include <Math/Functions.h>
 #include <Platform/Platform.h>
 
 namespace Soul
@@ -60,8 +59,8 @@ namespace Soul
 	};
 
 	template <class T>
-	Vector<T>::Vector(u32 capacity) :
-		m_Capacity(Math::Max((i32)capacity, (i32)m_MINIMUM_CAPACITY)),
+	Vector<T>::Vector(u32 capacity /* = 8 */) :
+		m_Capacity(capacity),
 		m_Size(0),
 		m_Vector(PARTITION_ARRAY(T, m_Capacity))
 	{

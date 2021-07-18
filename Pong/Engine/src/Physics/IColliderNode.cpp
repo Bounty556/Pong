@@ -11,9 +11,23 @@ namespace Soul
 		PhysicsSystem::RegisterCollider(this);
 	}
 
+	IColliderNode::IColliderNode(IColliderNode&& other) noexcept :
+		Node(std::move(other)),
+		m_BoundingBox(other.m_BoundingBox)
+	{
+	}
+
 	IColliderNode::~IColliderNode()
 	{
 		PhysicsSystem::UnregisterCollider(this);
+	}
+
+	IColliderNode& IColliderNode::operator=(IColliderNode&& other) noexcept
+	{
+		Node::operator=(std::move(other));
+		m_BoundingBox = other.m_BoundingBox;
+
+		return *this;
 	}
 
 	Vector<CollisionInfo> IColliderNode::CheckCollisions() const

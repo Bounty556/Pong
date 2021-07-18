@@ -14,7 +14,14 @@ namespace Soul
 	public:
 		IColliderNode(sf::Vector2f boundingBox, const char* type);
 
+		IColliderNode(const IColliderNode&) = delete;
+		IColliderNode(IColliderNode&& other) noexcept;
+
 		virtual ~IColliderNode();
+		
+		IColliderNode& operator=(const IColliderNode&) = delete;
+		IColliderNode& operator=(IColliderNode&& other) noexcept;
+		
 		virtual Vector<CollisionInfo> CheckCollisions() const;
 		virtual Vector<sf::Vector2f> GetPolygonList() const = 0;
 
