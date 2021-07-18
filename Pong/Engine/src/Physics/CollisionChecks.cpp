@@ -45,8 +45,7 @@ namespace Soul
 		if (posA.x > posB.x && posA.x < posB.x + dimensionsB.x &&
 			posA.y > posB.y && posA.y < posB.y + dimensionsB.y)
 			collision.collided = true;
-		else if (Math::Abs(closestEdge.x) < radiusA &&
-			Math::Abs(closestEdge.y) < radiusA)
+		else if (Math::Distance(closestEdge, posA) < radiusA)
 		{
 			collision.collided = true;
 			radiusA = -radiusA;

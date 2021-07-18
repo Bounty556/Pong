@@ -9,7 +9,7 @@ namespace Soul
 	class SOULAPI CircleColliderNode : public IColliderNode
 	{
 	public:
-		CircleColliderNode(sf::Vector2f boundingBox, f32 radius);
+		CircleColliderNode(f32 radius);
 
 		CircleColliderNode(const CircleColliderNode&) = delete;
 		CircleColliderNode(CircleColliderNode&& other) noexcept;

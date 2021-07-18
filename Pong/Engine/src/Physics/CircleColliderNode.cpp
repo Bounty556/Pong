@@ -4,8 +4,8 @@
 
 namespace Soul
 {
-	CircleColliderNode::CircleColliderNode(sf::Vector2f boundingBox, f32 radius) :
-		IColliderNode(boundingBox, "CircleColliderNode"),
+	CircleColliderNode::CircleColliderNode(f32 radius) :
+		IColliderNode(sf::Vector2f(radius * 2, radius * 2), "CircleColliderNode"),
 		m_Radius(radius)
 	{
 	}
