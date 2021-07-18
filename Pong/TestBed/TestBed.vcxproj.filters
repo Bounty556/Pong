@@ -60,6 +60,9 @@
     <ClCompile Include="src\Tests\QuadTreeTests.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\Tests\PhysicsSystemsTests.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Tests\ITestSuite.h">
@@ -108,6 +111,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Tests\QuadTreeTests.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Tests\PhysicsSystemsTests.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

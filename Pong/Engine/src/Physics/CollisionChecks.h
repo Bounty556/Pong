@@ -12,6 +12,7 @@ namespace Soul
 	{
 		bool collided;
 		sf::Vector2f correctionVector;
+		Node* node;
 	};
 
 	/*

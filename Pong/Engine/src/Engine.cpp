@@ -101,6 +101,8 @@ namespace Soul
 				// Updates
 				SceneManager::ConsumeCommands();
 				SceneManager::Update(TARGET_FRAMERATE);
+				
+				PhysicsSystem::Update(TARGET_FRAMERATE);
 
 				// Rendering
 				window->clear();
