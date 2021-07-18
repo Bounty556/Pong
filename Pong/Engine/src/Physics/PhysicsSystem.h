@@ -13,7 +13,7 @@ namespace Soul
 	public:
 		PhysicsSystem() = delete;
 
-		static void Initialize(f32 width, f32 height);
+		static bool Initialize(f32 width, f32 height);
 		static void Shutdown();
 
 		static void Update(f32 dt);
@@ -24,5 +24,6 @@ namespace Soul
 
 	private:
 		static QuadTree* m_QuadTree;
+		static bool m_IsInitialized;
 	};
 }

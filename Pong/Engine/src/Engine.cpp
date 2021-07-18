@@ -8,13 +8,14 @@
 #include <IO/InputManager.h>
 #include <Math/Random.h>
 #include <Memory/MemoryManager.h>
+#include <Physics/PhysicsSystem.h>
 #include <Platform/Platform.h>
 #include <Platform/Timer.h>
 #include <Rendering/Renderer.h>
 
 #include <SFML/Graphics.hpp>
 
-#define TARGET_FRAMERATE 6.94f // 144 FPS
+#define TARGET_FRAMERATE 6.94f // 144 FPS // TODO: Make configurable
 
 namespace Soul
 {
@@ -36,7 +37,7 @@ namespace Soul
 			LOG_FATAL("Failed to initialize platform layer.");
 			return false;
 		}
-		if (!MemoryManager::Initialize(MEGABYTES(4)))
+		if (!MemoryManager::Initialize(MEGABYTES(4))) // TODO: Make configurable
 		{
 			LOG_FATAL("Failed to initialize memory.");
 			return false;
@@ -54,6 +55,11 @@ namespace Soul
 		if (!InputManager::Initialize())
 		{
 			LOG_FATAL("Failed to initialize InputManager.");
+			return false;
+		}
+		if (!PhysicsSystem::Initialize(5000, 5000)) // TODO: Make configurable
+		{
+			LOG_FATAL("Failed to initialize PhysicsSystem.");
 			return false;
 		}
 
@@ -117,6 +123,7 @@ namespace Soul
 
 		MemoryManager::FreeMemory(window);
 		
+		PhysicsSystem::Shutdown();
 		InputManager::Shutdown();
 		MessageBus::Shutdown();
 		ShutdownLogger();
