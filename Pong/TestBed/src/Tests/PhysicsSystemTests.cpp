@@ -1,4 +1,4 @@
-#include "PhysicsSystemsTests.h"
+#include "PhysicsSystemTests.h"
 
 #include <Memory/MemoryManager.h>
 #include <Physics/PhysicsSystem.h>
@@ -118,7 +118,7 @@ void RectRectTest()
 	END_MEMORY_CHECK();
 }
 
-void PhysicsSystemsTests::RunAllTests()
+void PhysicsSystemTests::RunAllTests()
 {
 	RUN_TEST(AddRemoveNodesTest);
 	RUN_TEST(QuadTreeSplitTest);

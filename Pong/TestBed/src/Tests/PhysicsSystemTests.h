@@ -2,7 +2,7 @@
 
 #include "ITestSuite.h"
 
-class PhysicsSystemsTests : public ITestSuite
+class PhysicsSystemTests : public ITestSuite
 {
 public:
 	virtual void RunAllTests() override;

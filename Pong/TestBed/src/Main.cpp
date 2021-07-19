@@ -10,7 +10,7 @@
 #include "Tests/MapTests.h"
 #include "Tests/MessageBusTests.h"
 #include "Tests/NodeTests.h"
-#include "Tests/PhysicsSystemsTests.h"
+#include "Tests/PhysicsSystemTests.h"
 #include "Tests/QuadTreeTests.h"
 #include "Tests/QueueTests.h"
 #include "Tests/StackTests.h"
@@ -31,7 +31,7 @@ void RunAllTestSuites()
 	CREATE_TEST_SUITE(MapTests);
 	CREATE_TEST_SUITE(MessageBusTests);
 	CREATE_TEST_SUITE(NodeTests);
-	CREATE_TEST_SUITE(PhysicsSystemsTests);
+	CREATE_TEST_SUITE(PhysicsSystemTests);
 	CREATE_TEST_SUITE(QuadTreeTests);
 	CREATE_TEST_SUITE(QueueTests);
 	CREATE_TEST_SUITE(StackTests);
