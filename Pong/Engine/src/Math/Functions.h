@@ -10,7 +10,7 @@ namespace Soul
 		/*
 		Sets the provided value to be between min and max if outside range.
 		*/
-		SOULAPI void Clamp(f32& outVal, f32 min, f32 max);
+		SOULAPI f32 Clamp(f32 value, f32 min, f32 max);
 
 		/*
 		Computes the value of value^power.

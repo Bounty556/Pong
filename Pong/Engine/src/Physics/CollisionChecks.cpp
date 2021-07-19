@@ -3,6 +3,7 @@
 #include <Core/String.h>
 #include <Math/Functions.h>
 #include <Math/Vectors.h>
+#include <Physics/IColliderNode.h>
 #include <Physics/RectColliderNode.h>
 #include <Physics/CircleColliderNode.h>
 
@@ -21,6 +22,7 @@ namespace Soul
 		{
 			collision.collided = true;
 			sf::Vector2f direction = Math::Normalize(posA - posB);
+			collision.fromCenterOfMass = direction;
 			direction *= (radiusA + radiusB) - distance;
 			collision.correctionVector = direction;
 		}
@@ -34,43 +36,17 @@ namespace Soul
 
 		CollisionInfo collision = {};
 
-		sf::Vector2f closestEdge(posB.x - posA.x, posB.y - posA.y);
+		sf::Vector2f closest(Math::Clamp(posA.x, posB.x, posB.x + dimensionsB.x),
+			Math::Clamp(posA.y, posB.y, posB.y + dimensionsB.y));
+		f32 distance = Math::Distance(posA, closest);
 
-		if (Math::Abs(posB.x + dimensionsB.x - posA.x) < Math::Abs(closestEdge.x))
-			closestEdge.x = posB.x + dimensionsB.x - posA.x;
-		if (Math::Abs(posB.y + dimensionsB.y - posA.y) < Math::Abs(closestEdge.y))
-			closestEdge.y = posB.y + dimensionsB.y - posA.y;
-
-		// Check if we're inside the rectangle, calculate accordingly
-		if (posA.x > posB.x && posA.x < posB.x + dimensionsB.x &&
-			posA.y > posB.y && posA.y < posB.y + dimensionsB.y)
-			collision.collided = true;
-		else if (Math::Distance(closestEdge, posA) < radiusA)
+		if (distance < radiusA)
 		{
 			collision.collided = true;
-			radiusA = -radiusA;
+			sf::Vector2f direction = Math::Normalize(posA - closest);
+			collision.correctionVector = direction * distance;
+			collision.fromCenterOfMass = Math::Normalize(posA - (posB + dimensionsB * 0.5f));
 		}
-
-		// TODO: This seems really hacky...
-		if (collision.collided)
-		{
-			if (Math::Abs(closestEdge.x) < Math::Abs(closestEdge.y))
-			{
-				if (closestEdge.x < 0)
-					closestEdge = sf::Vector2f(closestEdge.x - radiusA, 0.0f);
-				else
-					closestEdge = sf::Vector2f(closestEdge.x + radiusA, 0.0f);
-			}
-			else
-			{
-				if (closestEdge.y < 0)
-					closestEdge = sf::Vector2f(0.0f, closestEdge.y - radiusA);
-				else
-					closestEdge = sf::Vector2f(0.0f, closestEdge.y + radiusA);
-			}
-		}
-
-		collision.correctionVector = closestEdge;
 
 		return collision;
 	}
@@ -83,6 +59,7 @@ namespace Soul
 			posA.y >= posB.y - dimensionsA.y && posA.y <= posB.y + dimensionsB.y)
 		{
 			collision.collided = true;
+			collision.fromCenterOfMass = Math::Normalize((posA + dimensionsA * 0.5f) - (posB + dimensionsB * 0.5f));
 
 			// Colliding, find smallest correction vector
 			sf::Vector2f middleA(posA + (dimensionsA * 0.5f));
@@ -126,7 +103,13 @@ namespace Soul
 			(yCalc <= dimensionsB.y && yCalc >= dimensionsA.y);
 	}
 
-	CollisionInfo SOULAPI CalculateCollisionType(Node* a, Node* b)
+	bool SOULAPI PointIsInAABB(sf::Vector2f point, sf::Vector2f posB, sf::Vector2f dimensionsB)
+	{
+		return point.x > posB.x && point.x < posB.x + dimensionsB.x &&
+			point.y > posB.y && point.y < posB.y + dimensionsB.y;
+	}
+
+	CollisionInfo SOULAPI CalculateCollisionType(const IColliderNode* a, const IColliderNode* b)
 	{
 		String aType = a->GetType();
 		String bType = b->GetType();
@@ -151,6 +134,10 @@ namespace Soul
 			CircleColliderNode* specificTypeB = (CircleColliderNode*)b;
 			return CircleAABBCollision(specificTypeB->getPosition(), specificTypeB->GetRadius(),
 				specificTypeA->getPosition(), specificTypeA->GetBoundingBox());
+		}
+		else
+		{
+			return PolygonPolygonCollision(a->getPosition(), a->GetPolygonList(), b->getPosition(), b->GetPolygonList());
 		}
 		// TODO: Add other types
 

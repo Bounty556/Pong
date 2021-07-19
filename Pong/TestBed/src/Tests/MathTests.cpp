@@ -16,12 +16,12 @@
 void ClampTest()
 {
 	f32 testFloat = 1269.4578f;
-	Soul::Math::Clamp(testFloat, 1280.0f, 1281.0f);
+	testFloat = Soul::Math::Clamp(testFloat, 1280.0f, 1281.0f);
 
 	ASSERT_CLOSE(testFloat, 1280.0f, 0.00001f, "Failed to clamp lower bound.");
 
 	f32 testFloat2 = 1300.547f;
-	Soul::Math::Clamp(testFloat2, 1280.0f, 1281.0f);
+	testFloat2 = Soul::Math::Clamp(testFloat2, 1280.0f, 1281.0f);
 
 	ASSERT_CLOSE(testFloat2, 1281.0f, 0.00001f, "Failed to clamp upper bound.");
 }

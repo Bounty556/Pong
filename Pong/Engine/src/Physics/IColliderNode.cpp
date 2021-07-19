@@ -32,17 +32,17 @@ namespace Soul
 
 	Vector<CollisionInfo> IColliderNode::CheckCollisions() const
 	{
-		Vector<QuadTree::QuadTreeItem*> potentialCollisions = PhysicsSystem::GetPotentialCollisions(getPosition(), m_BoundingBox);
+		Vector<IColliderNode*> potentialCollisions = PhysicsSystem::GetPotentialCollisions(getPosition(), m_BoundingBox);
 		Vector<CollisionInfo> actualCollisions;
 
 		for (u32 i = 0; i < potentialCollisions.Count(); ++i)
 		{
-			if (potentialCollisions[i]->node != this)
+			if (potentialCollisions[i] != this)
 			{
-				CollisionInfo col = CalculateCollisionType((Node*)this, potentialCollisions[i]->node);
+				CollisionInfo col = CalculateCollisionType(this, potentialCollisions[i]);
 				if (col.collided)
 				{
-					col.node = potentialCollisions[i]->node;
+					col.node = potentialCollisions[i];
 					actualCollisions.Push(col);
 				}
 			}

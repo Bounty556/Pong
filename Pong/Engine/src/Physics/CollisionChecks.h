@@ -2,17 +2,19 @@
 
 #include <Defines.h>
 #include <Structures/Vector.h>
-#include <Nodes/Node.h>
 
 #include <SFML/System/Vector2.hpp>
 
 namespace Soul
 {
+	class IColliderNode;
+
 	struct SOULAPI CollisionInfo
 	{
 		bool collided;
 		sf::Vector2f correctionVector;
-		Node* node;
+		sf::Vector2f fromCenterOfMass;
+		IColliderNode* node;
 	};
 
 	/*
@@ -50,8 +52,13 @@ namespace Soul
 	bool SOULAPI AABBIsInAABB(sf::Vector2f posA, sf::Vector2f dimensionsA, sf::Vector2f posB, sf::Vector2f dimensionsB);
 
 	/*
+	Check to see if the provided point is completely in the provided AABB.
+	*/
+	bool SOULAPI PointIsInAABB(sf::Vector2f point, sf::Vector2f posB, sf::Vector2f dimensionsB);
+
+	/*
 	Gets the specific node type of the provided nodes, and calculates their
 	collision info using correct algorithm.
 	*/
-	CollisionInfo SOULAPI CalculateCollisionType(Node* a, Node* b);
+	CollisionInfo SOULAPI CalculateCollisionType(const IColliderNode* a, const IColliderNode* b);
 }

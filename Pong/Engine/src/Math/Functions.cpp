@@ -8,9 +8,9 @@ namespace Soul
 {
 	namespace Math
 	{
-		void Clamp(f32& value, f32 min, f32 max)
+		f32 Clamp(f32 value, f32 min, f32 max)
 		{
-			value = Max(Min(value, max), min);
+			return Max(Min(value, max), min);
 		}
 
 		i32 PowInt(i32 value, u32 power)

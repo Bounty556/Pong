@@ -29,7 +29,7 @@ namespace Soul
 	void PhysicsSystem::RegisterCollider(IColliderNode* node)
 	{
 		ASSERT(m_IsInitialized);
-		m_QuadTree->Insert(node, node->GetBoundingBox());
+		m_QuadTree->Insert(node);
 	}
 
 	void PhysicsSystem::UnregisterCollider(IColliderNode* node)
@@ -38,7 +38,7 @@ namespace Soul
 		m_QuadTree->Remove(node);
 	}
 
-	Vector<QuadTree::QuadTreeItem*> PhysicsSystem::GetPotentialCollisions(sf::Vector2f position, sf::Vector2f area)
+	Vector<IColliderNode*> PhysicsSystem::GetPotentialCollisions(sf::Vector2f position, sf::Vector2f area)
 	{
 		ASSERT(m_IsInitialized);
 		return m_QuadTree->GetNodes(position, area);

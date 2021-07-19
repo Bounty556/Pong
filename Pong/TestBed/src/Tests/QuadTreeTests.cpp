@@ -2,7 +2,7 @@
 
 #include <Structures/QuadTree.h>
 #include <Structures/Vector.h>
-#include <Nodes/Node.h>
+#include <Physics/RectColliderNode.h>
 
 #include "../TestMacros.h"
 
@@ -13,17 +13,17 @@ void BasicInsertionTest()
 	Soul::QuadTree quadTree(0.0f, 0.0f, 100.0f, 100.0f, 4, nullptr);
 
 	sf::Vector2f nodesArea(10.0f, 10.0f);
-	Soul::Node node("Node");
-	Soul::Node node0("Node");
-	Soul::Node node1("Node");
+	Soul::RectColliderNode node(nodesArea);
+	Soul::RectColliderNode node0(nodesArea);
+	Soul::RectColliderNode node1(nodesArea);
 
 	node.setPosition(0.0f, 0.0f);
 	node0.setPosition(0.0f, 0.0f);
 	node1.setPosition(0.0f, 0.0f);
 
-	quadTree.Insert(&node, nodesArea);
-	quadTree.Insert(&node0, nodesArea);
-	quadTree.Insert(&node1, nodesArea);
+	quadTree.Insert(&node);
+	quadTree.Insert(&node0);
+	quadTree.Insert(&node1);
 
 	ASSERT_EQUAL(quadTree.GetNodes(sf::Vector2f(0.0f, 0.0f), nodesArea).Count(), 3, "Failed to detect colliding nodes.");
 	ASSERT_EQUAL(quadTree.GetNodes(sf::Vector2f(11.0f, 11.0f), nodesArea).Count(), 3, "Failed to detect colliding nodes.");
@@ -38,11 +38,11 @@ void QuadSplitTest()
 	Soul::QuadTree quadTree(0.0f, 0.0f, 100.0f, 100.0f, 4, nullptr);
 
 	sf::Vector2f nodesArea(10.0f, 10.0f);
-	Soul::Node node("Node");
-	Soul::Node node0("Node");
-	Soul::Node node1("Node");
-	Soul::Node node2("Node");
-	Soul::Node node3("Node");
+	Soul::RectColliderNode node (nodesArea);
+	Soul::RectColliderNode node0(nodesArea);
+	Soul::RectColliderNode node1(nodesArea);
+	Soul::RectColliderNode node2(nodesArea);
+	Soul::RectColliderNode node3(nodesArea);
 
 	node.setPosition(0.0f, 0.0f);
 	node0.setPosition(60.0f, 0.0f);
@@ -50,11 +50,11 @@ void QuadSplitTest()
 	node2.setPosition(0.0f, 0.0f);
 	node3.setPosition(60.0f, 0.0f);
 
-	quadTree.Insert(&node, nodesArea);
-	quadTree.Insert(&node0, nodesArea);
-	quadTree.Insert(&node1, nodesArea);
-	quadTree.Insert(&node2, nodesArea);
-	quadTree.Insert(&node3, nodesArea);
+	quadTree.Insert(&node);
+	quadTree.Insert(&node0);
+	quadTree.Insert(&node1);
+	quadTree.Insert(&node2);
+	quadTree.Insert(&node3);
 
 	ASSERT_EQUAL(quadTree.GetNodes(sf::Vector2f(0.0f, 0.0f), nodesArea).Count(), 2, "Failed to detect colliding nodes.");
 	ASSERT_EQUAL(quadTree.GetNodes(sf::Vector2f(60.0f, 0.0f), nodesArea).Count(), 2, "Failed to detect colliding nodes.");
@@ -71,11 +71,11 @@ void QueryMultipleQuadsTest()
 	Soul::QuadTree quadTree(0.0f, 0.0f, 100.0f, 100.0f, 4, nullptr);
 
 	sf::Vector2f nodesArea(10.0f, 10.0f);
-	Soul::Node node("Node");
-	Soul::Node node0("Node");
-	Soul::Node node1("Node");
-	Soul::Node node2("Node");
-	Soul::Node node3("Node");
+	Soul::RectColliderNode node(nodesArea);
+	Soul::RectColliderNode node0(nodesArea);
+	Soul::RectColliderNode node1(nodesArea);
+	Soul::RectColliderNode node2(nodesArea);
+	Soul::RectColliderNode node3(nodesArea);
 
 	node.setPosition(0.0f, 0.0f);
 	node0.setPosition(60.0f, 0.0f);
@@ -83,11 +83,11 @@ void QueryMultipleQuadsTest()
 	node2.setPosition(0.0f, 0.0f);
 	node3.setPosition(60.0f, 0.0f);
 
-	quadTree.Insert(&node, nodesArea);
-	quadTree.Insert(&node0, nodesArea);
-	quadTree.Insert(&node1, nodesArea);
-	quadTree.Insert(&node2, nodesArea);
-	quadTree.Insert(&node3, nodesArea);
+	quadTree.Insert(&node);
+	quadTree.Insert(&node0);
+	quadTree.Insert(&node1);
+	quadTree.Insert(&node2);
+	quadTree.Insert(&node3);
 
 	ASSERT_EQUAL(quadTree.GetNodes(sf::Vector2f(0.0f, 0.0f), nodesArea).Count(), 2, "Failed to detect colliding nodes.");
 	ASSERT_EQUAL(quadTree.GetNodes(sf::Vector2f(45.0f, 45.0f), nodesArea).Count(), 5, "Failed to detect colliding nodes.");
@@ -103,11 +103,11 @@ void RemoveQuadNodeTest()
 	Soul::QuadTree quadTree(0.0f, 0.0f, 100.0f, 100.0f, 4, nullptr);
 
 	sf::Vector2f nodesArea(10.0f, 10.0f);
-	Soul::Node node("Node");
-	Soul::Node node0("Node");
-	Soul::Node node1("Node");
-	Soul::Node node2("Node");
-	Soul::Node node3("Node");
+	Soul::RectColliderNode node(nodesArea);
+	Soul::RectColliderNode node0(nodesArea);
+	Soul::RectColliderNode node1(nodesArea);
+	Soul::RectColliderNode node2(nodesArea);
+	Soul::RectColliderNode node3(nodesArea);
 
 	node.setPosition(0.0f, 0.0f);
 	node0.setPosition(60.0f, 0.0f);
@@ -115,11 +115,11 @@ void RemoveQuadNodeTest()
 	node2.setPosition(0.0f, 0.0f);
 	node3.setPosition(60.0f, 0.0f);
 
-	quadTree.Insert(&node, nodesArea);
-	quadTree.Insert(&node0, nodesArea);
-	quadTree.Insert(&node1, nodesArea);
-	quadTree.Insert(&node2, nodesArea);
-	quadTree.Insert(&node3, nodesArea);
+	quadTree.Insert(&node);
+	quadTree.Insert(&node0);
+	quadTree.Insert(&node1);
+	quadTree.Insert(&node2);
+	quadTree.Insert(&node3);
 
 	quadTree.Remove(&node);
 	quadTree.Remove(&node0);
@@ -139,11 +139,11 @@ void MoveQuadNodeTest()
 	Soul::QuadTree quadTree(0.0f, 0.0f, 100.0f, 100.0f, 4, nullptr);
 
 	sf::Vector2f nodesArea(10.0f, 10.0f);
-	Soul::Node node("Node");
-	Soul::Node node0("Node");
-	Soul::Node node1("Node");
-	Soul::Node node2("Node");
-	Soul::Node node3("Node");
+	Soul::RectColliderNode node(nodesArea);
+	Soul::RectColliderNode node0(nodesArea);
+	Soul::RectColliderNode node1(nodesArea);
+	Soul::RectColliderNode node2(nodesArea);
+	Soul::RectColliderNode node3(nodesArea);
 
 	node.setPosition(0.0f, 0.0f);
 	node0.setPosition(60.0f, 0.0f);
@@ -151,11 +151,11 @@ void MoveQuadNodeTest()
 	node2.setPosition(0.0f, 0.0f);
 	node3.setPosition(60.0f, 0.0f);
 
-	quadTree.Insert(&node, nodesArea);
-	quadTree.Insert(&node0, nodesArea);
-	quadTree.Insert(&node1, nodesArea);
-	quadTree.Insert(&node2, nodesArea);
-	quadTree.Insert(&node3, nodesArea);
+	quadTree.Insert(&node);
+	quadTree.Insert(&node0);
+	quadTree.Insert(&node1);
+	quadTree.Insert(&node2);
+	quadTree.Insert(&node3);
 
 	node.setPosition(60.0f, 60.0f);
 	node0.setPosition(60.0f, 60.0f);
@@ -176,17 +176,17 @@ void FlattenTreeTest()
 	Soul::QuadTree quadTree(0.0f, 0.0f, 100.0f, 100.0f, 4, nullptr);
 
 	sf::Vector2f nodesArea(49.0f, 49.0f);
-	Soul::Node node("Node");
-	Soul::Node node0("Node");
-	Soul::Node node1("Node");
-	Soul::Node node2("Node");
-	Soul::Node node3("Node");
+	Soul::RectColliderNode node(nodesArea);
+	Soul::RectColliderNode node0(nodesArea);
+	Soul::RectColliderNode node1(nodesArea);
+	Soul::RectColliderNode node2(nodesArea);
+	Soul::RectColliderNode node3(nodesArea);
 
-	quadTree.Insert(&node, nodesArea);
-	quadTree.Insert(&node0, nodesArea);
-	quadTree.Insert(&node1, nodesArea);
-	quadTree.Insert(&node2, nodesArea);
-	quadTree.Insert(&node3, nodesArea);
+	quadTree.Insert(&node);
+	quadTree.Insert(&node0);
+	quadTree.Insert(&node1);
+	quadTree.Insert(&node2);
+	quadTree.Insert(&node3);
 
 	ASSERT_EQUAL(quadTree.GetNodes(sf::Vector2f(60.0f, 60.0f), nodesArea).Count(), 0, "Incorrectly found nodes.");
 

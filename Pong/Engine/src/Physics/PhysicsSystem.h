@@ -20,7 +20,7 @@ namespace Soul
 
 		static void RegisterCollider(IColliderNode* node);
 		static void UnregisterCollider(IColliderNode* node);
-		static Vector<QuadTree::QuadTreeItem*> GetPotentialCollisions(sf::Vector2f position, sf::Vector2f area);
+		static Vector<IColliderNode*> GetPotentialCollisions(sf::Vector2f position, sf::Vector2f area);
 
 	private:
 		static QuadTree* m_QuadTree;
