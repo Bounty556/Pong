@@ -91,10 +91,38 @@ void CircleRectTest()
 	END_MEMORY_CHECK();
 }
 
+void RectRectTest()
+{
+	START_MEMORY_CHECK();
+
+	Soul::RectColliderNode node0(sf::Vector2f(5.0f, 5.0f));
+	Soul::RectColliderNode node1(sf::Vector2f(15.0f, 15.0f));
+	Soul::RectColliderNode node2(sf::Vector2f(100.0f, 100.0f));
+
+	node1.setPosition(95.0f, 95.0f);
+
+	Soul::Vector<Soul::CollisionInfo> collisions0 = node0.CheckCollisions();
+
+	ASSERT_EQUAL(collisions0.Count(), 1, "Failed to detect rectangle collisions.");
+	ASSERT_EQUAL(collisions0[0].node, &node2, "Wrong node collided.");
+
+	Soul::Vector<Soul::CollisionInfo> collisions1 = node1.CheckCollisions();
+
+	ASSERT_EQUAL(collisions1.Count(), 1, "Failed to detect rectangle collisions.");
+	ASSERT_EQUAL(collisions1[0].node, &node2, "Wrong node collided.");
+
+	Soul::Vector<Soul::CollisionInfo> collisions2 = node2.CheckCollisions();
+
+	ASSERT_EQUAL(collisions2.Count(), 2, "Failed to detect rectangle collisions.");
+
+	END_MEMORY_CHECK();
+}
+
 void PhysicsSystemsTests::RunAllTests()
 {
 	RUN_TEST(AddRemoveNodesTest);
 	RUN_TEST(QuadTreeSplitTest);
 	RUN_TEST(CircleCircleTest);
 	RUN_TEST(CircleRectTest);
+	RUN_TEST(RectRectTest);
 }
