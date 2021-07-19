@@ -18,41 +18,23 @@ void CircleCircleCollisions()
 
 void CircleAABBCollisions()
 {
-	// Collided with center outside on upper left
 	Soul::CollisionInfo collisionInfo = Soul::CircleAABBCollision(sf::Vector2f(15.0f, 15.0f), 10.0f, sf::Vector2f(20.0f, 20.0f), sf::Vector2f(5.0f, 5.0f));
 	ASSERT_TRUE(collisionInfo.collided, "Failed to detect circle AABB collision.");
 
-	// No collision
 	Soul::CollisionInfo collisionInfo2 = Soul::CircleAABBCollision(sf::Vector2f(15.0f, 15.0f), 5.0f, sf::Vector2f(25.0f, 25.0f), sf::Vector2f(5.0f, 5.0f));
 	ASSERT_FALSE(collisionInfo2.collided, "Incorrectly detected circle AABB collision.");
 
-	// Collided with center outside on upper right
 	Soul::CollisionInfo collisionInfo3 = Soul::CircleAABBCollision(sf::Vector2f(25.0f, 15.0f), 10.0f, sf::Vector2f(20.0f, 20.0f), sf::Vector2f(10.0f, 5.0f));
 	ASSERT_TRUE(collisionInfo3.collided, "Failed to detect circle AABB collision.");
 
-	// Collided with center outside on lower left
 	Soul::CollisionInfo collisionInfo4 = Soul::CircleAABBCollision(sf::Vector2f(15.0f, 20.0f), 10.0f, sf::Vector2f(20.0f, 20.0f), sf::Vector2f(5.0f, 5.0f));
 	ASSERT_TRUE(collisionInfo4.collided, "Failed to detect circle AABB collision.");
 
-	// Collided with center outside on lower right
-	Soul::CollisionInfo collisionInfo5 = Soul::CircleAABBCollision(sf::Vector2f(22.5f, 22.5f), 10.0f, sf::Vector2f(20.0f, 20.0f), sf::Vector2f(5.0f, 5.0f));
+	Soul::CollisionInfo collisionInfo5 = Soul::CircleAABBCollision(sf::Vector2f(22.5f, 22.5f), 10.0f, sf::Vector2f(21.0f, 21.0f), sf::Vector2f(5.0f, 5.0f));
 	ASSERT_TRUE(collisionInfo5.collided, "Failed to detect circle AABB collision.");
 
-	// Collided with center inside on upper left
 	Soul::CollisionInfo collisionInfo6 = Soul::CircleAABBCollision(sf::Vector2f(21.0f, 21.0f), 10.0f, sf::Vector2f(20.0f, 20.0f), sf::Vector2f(5.0f, 5.0f));
 	ASSERT_TRUE(collisionInfo6.collided, "Failed to detect circle AABB collision.");
-
-	// Collided with center inside on upper right
-	Soul::CollisionInfo collisionInfo7 = Soul::CircleAABBCollision(sf::Vector2f(24.0f, 21.0f), 10.0f, sf::Vector2f(20.0f, 20.0f), sf::Vector2f(5.0f, 5.0f));
-	ASSERT_TRUE(collisionInfo7.collided, "Failed to detect circle AABB collision.");
-
-	// Collided with center inside on lower left
-	Soul::CollisionInfo collisionInfo8 = Soul::CircleAABBCollision(sf::Vector2f(21.0f, 24.0f), 10.0f, sf::Vector2f(20.0f, 20.0f), sf::Vector2f(5.0f, 5.0f));
-	ASSERT_TRUE(collisionInfo8.collided, "Failed to detect circle AABB collision.");
-
-	// Collided with center inside on lower right
-	Soul::CollisionInfo collisionInfo9 = Soul::CircleAABBCollision(sf::Vector2f(24.0f, 24.0f), 10.0f, sf::Vector2f(20.0f, 20.0f), sf::Vector2f(5.0f, 5.0f));
-	ASSERT_TRUE(collisionInfo9.collided, "Failed to detect circle AABB collision.");
 }
 
 void AABBAABBCollisions()
