@@ -2,6 +2,7 @@
 
 #include <Memory/MemoryManager.h>
 #include <Memory/UniquePointer.h>
+#include <Nodes/Node.h>
 
 #include "../TestMacros.h"
 #include "TestNode.h"
@@ -72,10 +73,39 @@ void NodeParent()
 	END_MEMORY_CHECK();
 }
 
+void ChildrenOfTypeTest()
+{
+	START_MEMORY_CHECK();
+
+	Soul::Node node0("Node");
+	Soul::UniquePointer<TestNode> node1 = PARTITION(TestNode);
+
+	node0.AddChild(node1.Raw());
+
+	ASSERT_TRUE(node0.HasChildOfType("TestNode"), "Failed to detect child type.");
+	ASSERT_TRUE(node1->HasParentOfType("Node"), "Failed to detect parent type.");
+
+	END_MEMORY_CHECK();
+}
+
+void VectorOfNodesTest()
+{
+	START_MEMORY_CHECK();
+
+	Soul::UniquePointer<TestNode> nodeArray = PARTITION_ARRAY(TestNode, 10);
+
+	for (u32 i = 0; i < 10; ++i)
+		new (&nodeArray[i]) TestNode();
+
+	END_MEMORY_CHECK();
+}
+
 void NodeTests::RunAllTests()
 {
 	RUN_TEST(BasicNodes);
 	RUN_TEST(NodeTypes);
 	RUN_TEST(RemoveNode);
 	RUN_TEST(NodeParent);
+	RUN_TEST(ChildrenOfTypeTest);
+	RUN_TEST(VectorOfNodesTest);
 }

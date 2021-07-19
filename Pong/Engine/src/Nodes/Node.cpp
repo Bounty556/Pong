@@ -90,10 +90,8 @@ namespace Soul
 		Vector<Node*> children;
 
 		for (u32 i = 0; i < m_Children.Count(); ++i)
-		{
 			if (m_Children[i]->GetType() == type)
 				children.Push(m_Children[i]);
-		}
 
 		return children;
 	}
@@ -101,12 +99,15 @@ namespace Soul
 	bool Node::HasChildOfType(const char* type) const
 	{
 		for (u32 i = 0; i < m_Children.Count(); ++i)
-		{
-			if (m_Children[i]->GetType() == type)
+			if (m_Children[i]->GetType() == type || m_Children[i]->HasChildOfType(type))
 				return true;
-		}
 
 		return false;
+	}
+
+	bool Node::HasParentOfType(const char* type) const
+	{
+		return m_Parent && (m_Parent->GetType() == type || m_Parent->HasParentOfType(type));
 	}
 
 	void Node::UpdateSelf(f32 dt)

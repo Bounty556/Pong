@@ -34,6 +34,7 @@ namespace Soul
 		const char* GetType() const;
 		Vector<Node*> GetChildrenOfType(const char* type) const;
 		bool HasChildOfType(const char* type) const;
+		bool HasParentOfType(const char* type) const;
 	
 	protected:
 		virtual void UpdateSelf(f32 dt);

@@ -53,7 +53,7 @@ namespace Soul
 		*/
 		struct MemoryNode
 		{
-			unsigned int BlockSize; // The size of the free memory block, including this node
+			u32 BlockSize; // The size of the free memory block, including this node
 			MemoryNode* NextNode; // Location of the following node in memory
 		};
 
@@ -62,8 +62,8 @@ namespace Soul
 		*/
 		struct PartitionHeader
 		{
-			unsigned int Bytes; // The number of bytes stored in this partition, including header
-			unsigned int Count; // The number of objects store in this partition
+			u32 Bytes; // The number of bytes stored in this partition, including header
+			u32 Count; // The number of objects store in this partition
 		};
 
 	public:
@@ -155,14 +155,16 @@ namespace Soul
 			return;
 		}
 
-		// Check to see if this is an array we're freeing
-		PartitionHeader* header = (PartitionHeader*)((unsigned char*)location - sizeof(PartitionHeader));
+		u8 testblock[fixedElementSize];
+		memset(testblock, 0, sizeof testblock);
 
-		int timesToLoop = header->Count;
-		for (int i = 0; i < timesToLoop; ++i)
-		{
+		if (!memcmp(testblock, memoryBlock + elementNr * fixedElementSize, fixedElementSize)
+
+		// Check to see if this is an array we're freeing
+		PartitionHeader* header = (PartitionHeader*)((u8*)location - sizeof(PartitionHeader));
+
+		for (u32 i = 0; i < header->Count; ++i)
 			location[i].~T();
-		}
 
 		AddNode(location);
 	}
