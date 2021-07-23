@@ -59,16 +59,18 @@ namespace Soul
 			posA.y >= posB.y - dimensionsA.y && posA.y <= posB.y + dimensionsB.y)
 		{
 			collision.collided = true;
+			collision.fromCenterOfMass = Math::Normalize(posA + (dimensionsA * 0.5f) - posB + (dimensionsB * 0.5f));
 
 			// Colliding, find smallest correction vector
-			sf::Vector2f middleA(posA + (dimensionsA * 0.5f));
-			sf::Vector2f middleB(posB + (dimensionsB * 0.5f));
+			sf::Vector2f middleA = posA + (dimensionsA * 0.5f);
+			sf::Vector2f middleB = posB + (dimensionsB * 0.5f);
 			sf::Vector2f middleDifference = middleA - middleB;
-			collision.fromCenterOfMass = Math::Normalize(middleDifference);
 
-			// Find the biggest middle difference, as that will point us to the
+			sf::Vector2f effort = dimensionsA + dimensionsB + middleDifference;
+
+			// Find the smallest effort, as that will point us to the
 			// smallest correction vector
-			if (Math::Abs(middleDifference.x) < Math::Abs(middleDifference.y))
+			if (Math::Abs(effort.x) < Math::Abs(effort.y))
 			{
 				if (middleDifference.x >= 0)
 					collision.correctionVector = sf::Vector2f(dimensionsB.x - (posB.x - posA.x), 0.0f);
