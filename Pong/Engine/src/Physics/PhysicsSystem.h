@@ -21,9 +21,11 @@ namespace Soul
 		static void RegisterCollider(IColliderNode* node);
 		static void UnregisterCollider(IColliderNode* node);
 		static Vector<IColliderNode*> GetPotentialCollisions(sf::Vector2f position, sf::Vector2f area);
+		static void TogglePhysics();
 
 	private:
 		static QuadTree* m_QuadTree;
 		static bool m_IsInitialized;
+		static bool m_IsActive;
 	};
 }

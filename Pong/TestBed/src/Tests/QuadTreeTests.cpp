@@ -3,6 +3,7 @@
 #include <Structures/QuadTree.h>
 #include <Structures/Vector.h>
 #include <Physics/RectColliderNode.h>
+#include <Physics/PhysicsSystem.h>
 
 #include "../TestMacros.h"
 
@@ -202,10 +203,12 @@ void FlattenTreeTest()
 
 void QuadTreeTests::RunAllTests()
 {
+	Soul::PhysicsSystem::TogglePhysics();
 	RUN_TEST(BasicInsertionTest);
 	RUN_TEST(QuadSplitTest);
 	RUN_TEST(QueryMultipleQuadsTest);
 	RUN_TEST(RemoveQuadNodeTest);
 	RUN_TEST(MoveQuadNodeTest);
 	RUN_TEST(FlattenTreeTest);
+	Soul::PhysicsSystem::TogglePhysics();
 }

@@ -6,6 +6,7 @@ namespace Soul
 {
 	QuadTree* PhysicsSystem::m_QuadTree;
 	bool PhysicsSystem::m_IsInitialized = false;
+	bool PhysicsSystem::m_IsActive = true;
 
 	bool PhysicsSystem::Initialize(f32 width, f32 height)
 	{
@@ -29,18 +30,25 @@ namespace Soul
 	void PhysicsSystem::RegisterCollider(IColliderNode* node)
 	{
 		ASSERT(m_IsInitialized);
-		m_QuadTree->Insert(node);
+		if (m_IsActive)
+			m_QuadTree->Insert(node);
 	}
 
 	void PhysicsSystem::UnregisterCollider(IColliderNode* node)
 	{
 		ASSERT(m_IsInitialized);
-		m_QuadTree->Remove(node);
+		if (m_IsActive)
+			m_QuadTree->Remove(node);
 	}
 
 	Vector<IColliderNode*> PhysicsSystem::GetPotentialCollisions(sf::Vector2f position, sf::Vector2f area)
 	{
 		ASSERT(m_IsInitialized);
 		return m_QuadTree->GetNodes(position, area);
+	}
+
+	void PhysicsSystem::TogglePhysics()
+	{
+		m_IsActive = !m_IsActive;
 	}
 }

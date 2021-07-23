@@ -118,6 +118,24 @@ void RectRectTest()
 	END_MEMORY_CHECK();
 }
 
+void PhysicsToggleTest()
+{
+	START_MEMORY_CHECK();
+
+	Soul::PhysicsSystem::TogglePhysics();
+
+	Soul::RectColliderNode node0(sf::Vector2f(5.0f, 5.0f));
+	Soul::RectColliderNode node1(sf::Vector2f(5.0f, 5.0f));
+
+	Soul::Vector<Soul::CollisionInfo> collisions0 = node0.CheckCollisions();
+
+	ASSERT_EQUAL(collisions0.Count(), 0, "Failed to turn physics off.");
+
+	Soul::PhysicsSystem::TogglePhysics();
+
+	END_MEMORY_CHECK();
+}
+
 void PhysicsSystemTests::RunAllTests()
 {
 	RUN_TEST(AddRemoveNodesTest);
@@ -125,4 +143,5 @@ void PhysicsSystemTests::RunAllTests()
 	RUN_TEST(CircleCircleTest);
 	RUN_TEST(CircleRectTest);
 	RUN_TEST(RectRectTest);
+	RUN_TEST(PhysicsToggleTest);
 }
