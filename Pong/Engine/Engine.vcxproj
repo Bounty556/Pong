@@ -197,6 +197,7 @@
     <ClInclude Include="src\Memory\SharedPointer.h" />
     <ClInclude Include="src\Memory\UniquePointer.h" />
     <ClInclude Include="src\Nodes\Node.h" />
+    <ClInclude Include="src\Nodes\RectSpriteNode.h" />
     <ClInclude Include="src\Physics\CircleColliderNode.h" />
     <ClInclude Include="src\Physics\IColliderNode.h" />
     <ClInclude Include="src\Physics\CollisionChecks.h" />
@@ -242,6 +243,7 @@
     <ClCompile Include="src\Memory\MemoryManager.cpp" />
     <ClCompile Include="src\Memory\ReferenceCounter.cpp" />
     <ClCompile Include="src\Nodes\Node.cpp" />
+    <ClCompile Include="src\Nodes\RectSpriteNode.cpp" />
     <ClCompile Include="src\Physics\CircleColliderNode.cpp" />
     <ClCompile Include="src\Physics\IColliderNode.cpp" />
     <ClCompile Include="src\Physics\CollisionChecks.cpp" />

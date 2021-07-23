@@ -1,16 +1,16 @@
 #include "Paddle.h"
 
-#include <Rendering/Renderer.h>
 #include <IO/InputManager.h>
+#include <Nodes/RectSpriteNode.h>
+#include <Rendering/Renderer.h>
 
 Paddle::Paddle() :
 	Node("Paddle"),
 	m_Collider(NEW(Soul::RectColliderNode, sf::Vector2f(32.0f, 128.0f))),
-	m_Paddle(sf::Vector2f(32.0f, 128.0f)),
 	m_MoveSpeed(1.0f)
 {
 	AddChild(m_Collider);
-	m_Paddle.setFillColor(sf::Color::White);
+	AddChild(NEW(Soul::RectSpriteNode, 32.0f, 128.0f, sf::Color::White));
 }
 
 void Paddle::UpdateSelf(f32 dt)
@@ -27,9 +27,4 @@ void Paddle::UpdateSelf(f32 dt)
 		setPosition(getPosition().x, 15.0f);
 	else if (getPosition().y > 720 - 15.0f - 128.0f)
 		setPosition(getPosition().x, 720 - 15.0f - 128.0f); // TODO: variableize
-}
-
-void Paddle::DrawSelf(sf::RenderStates states) const
-{
-	Soul::Renderer::Render(m_Paddle, states);
 }
