@@ -76,7 +76,7 @@ void VectorOfVectors()
 	START_MEMORY_CHECK();
 
 	Soul::Vector<Soul::Vector<u32>> intVectorVector(255);
-
+	
 	for (u8 i = 0; i < 255; ++i)
 	{
 		Soul::Vector<u32> tempIntVector(255);

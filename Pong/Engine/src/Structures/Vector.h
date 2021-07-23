@@ -69,10 +69,14 @@ namespace Soul
 
 	template <class T>
 	Vector<T>::Vector(Vector<T>&& otherVector) noexcept :
-		m_Capacity(otherVector.m_Capacity),
-		m_Size(otherVector.m_Size),
-		m_Vector(std::move(otherVector.m_Vector))
+		m_Capacity(0),
+		m_Size(0),
+		m_Vector(nullptr)
 	{
+		Clear();
+		m_Capacity = otherVector.m_Capacity;
+		m_Size = otherVector.m_Size;
+		m_Vector = std::move(otherVector.m_Vector);
 		otherVector.m_Capacity = 0;
 		otherVector.m_Size = 0;
 	}
@@ -86,6 +90,7 @@ namespace Soul
 	template <class T>
 	Vector<T>& Vector<T>::operator=(Vector<T>&& otherVector) noexcept
 	{
+		Clear();
 		m_Capacity = otherVector.m_Capacity;
 		m_Size = otherVector.m_Size;
 		m_Vector = std::move(otherVector.m_Vector);
