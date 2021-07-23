@@ -21,7 +21,7 @@ namespace Soul
 	Node::~Node()
 	{
 		for (u32 i = 0; i < m_Children.Count(); ++i)
-			MemoryManager::FreeMemory(m_Children[i]);
+			DELETE(m_Children[i]);
 		m_Children.Clear();
 	}
 
