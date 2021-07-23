@@ -167,7 +167,10 @@ namespace Soul
 					for (u32 i = 0; i < 4; ++i)
 						m_Storage.Push(m_Children[i].m_Storage);
 
-					// TODO: Delete children
+					m_Children[0].~QuadTree();
+					m_Children[1].~QuadTree();
+					m_Children[2].~QuadTree();
+					m_Children[3].~QuadTree();
 					m_Children = nullptr;
 				}
 			}
