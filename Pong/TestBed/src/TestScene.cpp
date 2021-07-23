@@ -9,6 +9,10 @@ void TestScene::Update(f32 dt)
 {
 }
 
+void TestScene::LateUpdate(f32 dt)
+{
+}
+
 void TestScene::Draw(sf::RenderStates states) const
 {
 }

@@ -32,7 +32,7 @@ namespace Soul
 
 	Vector<CollisionInfo> IColliderNode::CheckCollisions() const
 	{
-		Vector<IColliderNode*> potentialCollisions = PhysicsSystem::GetPotentialCollisions(getPosition(), m_BoundingBox);
+		Vector<IColliderNode*> potentialCollisions = PhysicsSystem::GetPotentialCollisions(GetWorldPosition(), m_BoundingBox);
 		Vector<CollisionInfo> actualCollisions;
 
 		for (u32 i = 0; i < potentialCollisions.Count(); ++i)

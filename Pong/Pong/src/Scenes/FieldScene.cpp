@@ -18,6 +18,13 @@ void FieldScene::Update(f32 dt)
 	m_Ball.Update(dt);
 }
 
+void FieldScene::LateUpdate(f32 dt)
+{
+	m_Player.LateUpdate(dt);
+	m_AI.LateUpdate(dt);
+	m_Ball.LateUpdate(dt);
+}
+
 void FieldScene::Draw(sf::RenderStates states) const
 {
 	m_Player.Draw(states);

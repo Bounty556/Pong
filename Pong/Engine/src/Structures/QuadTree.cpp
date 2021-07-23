@@ -53,16 +53,18 @@ namespace Soul
 
 	void QuadTree::Insert(IColliderNode* node)
 	{
+		sf::Vector2f worldPos = node->GetWorldPosition();
+
 		// Find smallest tree this will fit in
 		if (m_Children.Raw())
 		{
-			if (AABBIsInAABB(node->getPosition(), node->GetBoundingBox(), m_Children[0].m_Position, m_Children[0].m_Area))
+			if (AABBIsInAABB(worldPos, node->GetBoundingBox(), m_Children[0].m_Position, m_Children[0].m_Area))
 				m_Children[0].Insert(node);
-			else if (AABBIsInAABB(node->getPosition(), node->GetBoundingBox(), m_Children[1].m_Position, m_Children[1].m_Area))
+			else if (AABBIsInAABB(worldPos, node->GetBoundingBox(), m_Children[1].m_Position, m_Children[1].m_Area))
 				m_Children[1].Insert(node);
-			else if (AABBIsInAABB(node->getPosition(), node->GetBoundingBox(), m_Children[2].m_Position, m_Children[2].m_Area))
+			else if (AABBIsInAABB(worldPos, node->GetBoundingBox(), m_Children[2].m_Position, m_Children[2].m_Area))
 				m_Children[2].Insert(node);
-			else if (AABBIsInAABB(node->getPosition(), node->GetBoundingBox(), m_Children[3].m_Position, m_Children[3].m_Area))
+			else if (AABBIsInAABB(worldPos, node->GetBoundingBox(), m_Children[3].m_Position, m_Children[3].m_Area))
 				m_Children[3].Insert(node);
 			else
 				AddToStorage(node);
@@ -76,7 +78,7 @@ namespace Soul
 		for (i32 i = m_Storage.Count() - 1; i >= 0; --i)
 		{
 			IColliderNode* node = m_Storage[i];
-			if (!AABBIsInAABB(node->getPosition(), node->GetBoundingBox(), m_Position, m_Area))
+			if (!AABBIsInAABB(node->GetWorldPosition(), node->GetBoundingBox(), m_Position, m_Area))
 			{
 				IColliderNode* removed = Remove(node);
 			

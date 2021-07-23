@@ -20,6 +20,7 @@ namespace Soul
 		Updating and drawing the scene and the objects within
 		*/
 		virtual void Update(f32 dt) = 0;
+		virtual void LateUpdate(f32 dt) = 0;
 		virtual void Draw(sf::RenderStates states) const = 0;
 
 		/*

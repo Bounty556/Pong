@@ -8,5 +8,6 @@ public:
 	TestScene();
 
 	virtual void Update(f32 dt) override;
+	virtual void LateUpdate(f32 dt) override;
 	virtual void Draw(sf::RenderStates states) const override;
 };

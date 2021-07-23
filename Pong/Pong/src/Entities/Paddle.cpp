@@ -5,9 +5,11 @@
 
 Paddle::Paddle() :
 	Node("Paddle"),
+	m_Collider(NEW(Soul::RectColliderNode, sf::Vector2f(32.0f, 128.0f))),
 	m_Paddle(sf::Vector2f(32.0f, 128.0f)),
 	m_MoveSpeed(1.0f)
 {
+	AddChild(m_Collider);
 	m_Paddle.setFillColor(sf::Color::White);
 }
 

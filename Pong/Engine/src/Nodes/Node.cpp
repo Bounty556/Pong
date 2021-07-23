@@ -40,6 +40,12 @@ namespace Soul
 		UpdateSelf(dt);
 		UpdateChildren(dt);
 	}
+
+	void Node::LateUpdate(f32 dt)
+	{
+		LateUpdateSelf(dt);
+		LateUpdateChildren(dt);
+	}
 	
 	void Node::Draw(sf::RenderStates states) const
 	{
@@ -61,13 +67,19 @@ namespace Soul
 		child->m_Parent = nullptr;
 	}
 
-	sf::Transform Node::GetGlobalTransform() const
+	sf::Vector2f Node::GetWorldPosition() const
 	{
-		sf::Transform transform;
-		if (m_Parent)
-			transform = m_Parent->GetGlobalTransform();
-		transform *= getTransform();
-		return transform;
+		sf::Transform transform = getTransform();
+		
+		const Node* current = this;
+
+		while (current->m_Parent)
+		{
+			transform *= m_Parent->getTransform();
+			current = current->m_Parent;
+		}
+
+		return transform * sf::Vector2f();
 	}
 
 	const Vector<Node*>& Node::GetChildren() const
@@ -114,6 +126,10 @@ namespace Soul
 	{
 	}
 
+	void Node::LateUpdateSelf(f32 dt)
+	{
+	}
+
 	void Node::DrawSelf(sf::RenderStates states) const
 	{
 	}
@@ -123,6 +139,13 @@ namespace Soul
 		for (u32 i = 0; i < m_Children.Count(); ++i)
 			m_Children[i]->Update(dt);
 	}
+
+	void Node::LateUpdateChildren(f32 dt)
+	{
+		for (u32 i = 0; i < m_Children.Count(); ++i)
+			m_Children[i]->LateUpdate(dt);
+	}
+
 	void Node::DrawChildren(sf::RenderStates states) const
 	{
 		for (u32 i = 0; i < m_Children.Count(); ++i)

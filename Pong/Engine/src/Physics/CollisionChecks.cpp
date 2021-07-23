@@ -118,26 +118,26 @@ namespace Soul
 		{
 			RectColliderNode* specificTypeA = (RectColliderNode*)a;
 			RectColliderNode* specificTypeB = (RectColliderNode*)b;
-			return AABBAABBCollision(specificTypeA->getPosition(), specificTypeA->GetBoundingBox(),
-				specificTypeB->getPosition(), specificTypeB->GetBoundingBox());
+			return AABBAABBCollision(specificTypeA->GetWorldPosition(), specificTypeA->GetBoundingBox(),
+				specificTypeB->GetWorldPosition(), specificTypeB->GetBoundingBox());
 		}
 		else if (aType == "CircleColliderNode" && bType == "RectColliderNode")
 		{
 			CircleColliderNode* specificTypeA = (CircleColliderNode*)a;
 			RectColliderNode* specificTypeB = (RectColliderNode*)b;
-			return CircleAABBCollision(specificTypeA->getPosition(), specificTypeA->GetRadius(),
-				specificTypeB->getPosition(), specificTypeB->GetBoundingBox());
+			return CircleAABBCollision(specificTypeA->GetWorldPosition(), specificTypeA->GetRadius(),
+				specificTypeB->GetWorldPosition(), specificTypeB->GetBoundingBox());
 		}
 		else if (bType == "RectColliderNode" && aType == "CircleColliderNode")
 		{
 			RectColliderNode* specificTypeA = (RectColliderNode*)a;
 			CircleColliderNode* specificTypeB = (CircleColliderNode*)b;
-			return CircleAABBCollision(specificTypeB->getPosition(), specificTypeB->GetRadius(),
-				specificTypeA->getPosition(), specificTypeA->GetBoundingBox());
+			return CircleAABBCollision(specificTypeB->GetWorldPosition(), specificTypeB->GetRadius(),
+				specificTypeA->GetWorldPosition(), specificTypeA->GetBoundingBox());
 		}
 		else
 		{
-			return PolygonPolygonCollision(a->getPosition(), a->GetPolygonList(), b->getPosition(), b->GetPolygonList());
+			return PolygonPolygonCollision(a->GetWorldPosition(), a->GetPolygonList(), b->GetWorldPosition(), b->GetPolygonList());
 		}
 		// TODO: Add other types
 

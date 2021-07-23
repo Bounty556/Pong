@@ -21,12 +21,13 @@ namespace Soul
 		Node& operator=(Node&& other) noexcept;
 
 		void Update(f32 dt);
+		void LateUpdate(f32 dt);
 		void Draw(sf::RenderStates states) const;
 
 		void AddChild(Node* child);
 		void RemoveChild(Node* child);
 
-		sf::Transform GetGlobalTransform() const;
+		sf::Vector2f GetWorldPosition() const;
 		
 		const Vector<Node*>& GetChildren() const;
 		const Node* GetParent() const;
@@ -38,10 +39,12 @@ namespace Soul
 	
 	protected:
 		virtual void UpdateSelf(f32 dt);
+		virtual void LateUpdateSelf(f32 dt);
 		virtual void DrawSelf(sf::RenderStates states) const;
 
 	private:
 		void UpdateChildren(f32 dt);
+		void LateUpdateChildren(f32 dt);
 		void DrawChildren(sf::RenderStates states) const;
 
 	private:

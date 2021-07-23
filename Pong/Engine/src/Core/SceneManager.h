@@ -52,6 +52,7 @@ namespace Soul
 		For keeping the scenes in the stack drawn and updated.
 		*/
 		static void Update(f32 dt);
+		static void LateUpdate(f32 dt); // LateUpdate is called after objects have been moved. For Physics Collisions.
 		static void Draw(sf::RenderStates states);
 
 		/*

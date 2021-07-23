@@ -42,6 +42,19 @@ namespace Soul
 		}
 	}
 
+	void SceneManager::LateUpdate(f32 dt)
+	{
+		ASSERT(m_Initialized);
+
+		for (i32 i = (i32)m_SceneStack->Count() - 1; i >= 0; --i)
+		{
+			(*m_SceneStack)[i]->LateUpdate(dt);
+
+			if (!(*m_SceneStack)[i]->UpdatePass())
+				break;
+		}
+	}
+
 	void SceneManager::Draw(sf::RenderStates states)
 	{
 		ASSERT(m_Initialized);
