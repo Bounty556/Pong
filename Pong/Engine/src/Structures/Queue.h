@@ -9,9 +9,12 @@ namespace Soul
 	class Queue
 	{
 	public:
-		Queue(u16 capacity = 8);
+		Queue(u32 capacity = 8);
+
 		Queue(const Queue&) = delete;
 		Queue(Queue&& otherQueue) noexcept;
+
+		~Queue();
 
 		Queue& operator=(const Queue&) = delete;
 		Queue& operator=(Queue&& otherQueue) noexcept;
@@ -28,25 +31,27 @@ namespace Soul
 		u16 Count() const;
 		bool IsEmpty() const;
 
+		void Clear();
+
 	private:
 		void Resize(u32 newCapacity);
 
 	private:
-		u16 m_Capacity;
-		u16 m_Size;
-		u16 m_Head;
-		u16 m_Tail;
+		u32 m_Capacity;
+		u32 m_Size;
+		u32 m_Head;
+		u32 m_Tail;
 
 		UniquePointer<T> m_Queue;
 	};
 
 	template <class T>
-	Queue<T>::Queue(u16 capacity /* = 32 */) :
+	Queue<T>::Queue(u32 capacity /* = 32 */) :
 		m_Capacity(capacity),
 		m_Size(0),
 		m_Head(0),
 		m_Tail(0),
-		m_Queue(PARTITION_ARRAY(T, capacity))
+		m_Queue(NEW_ARRAY(T, capacity))
 	{
 	}
 
@@ -60,6 +65,13 @@ namespace Soul
 	{
 		otherQueue.m_Capacity = 0;
 		otherQueue.m_Size = 0;
+		otherQueue.m_Tail = otherQueue.m_Head;
+	}
+
+	template <class T>
+	Queue<T>::~Queue()
+	{
+		Clear();
 	}
 
 	template <class T>
@@ -72,6 +84,7 @@ namespace Soul
 		m_Queue = std::move(otherQueue.m_Queue);
 		otherQueue.m_Capacity = 0;
 		otherQueue.m_Size = 0;
+		otherQueue.m_Tail = otherQueue.m_Head;
 
 		return *this;
 	}
@@ -139,9 +152,21 @@ namespace Soul
 	}
 
 	template <class T>
+	void Queue<T>::Clear()
+	{
+		while (m_Tail != m_Head)
+		{
+			m_Queue[m_Tail].~T();
+
+			m_Tail = (m_Tail + 1) % m_Capacity;
+		}
+		m_Size = 0;
+	}
+
+	template <class T>
 	void Queue<T>::Resize(u32 newCapacity)
 	{
-		UniquePointer<T> newQueue = PARTITION_ARRAY(T, newCapacity);
+		UniquePointer<T> newQueue = NEW_ARRAY(T, newCapacity);
 
 		for (u32 i = 0; i < m_Size; i++)
 		{

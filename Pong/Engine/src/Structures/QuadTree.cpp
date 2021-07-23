@@ -19,7 +19,7 @@ namespace Soul
 	QuadTree::QuadTree(QuadTree&& other) noexcept :
 		m_MaxStorage(other.m_MaxStorage),
 		m_Storage(std::move(other.m_Storage)),
-		m_Children(other.m_Children),
+		m_Children(std::move(other.m_Children)),
 		m_Position(other.m_Position),
 		m_Area(other.m_Area),
 		m_Root(other.m_Root)
@@ -29,15 +29,20 @@ namespace Soul
 
 	QuadTree::~QuadTree()
 	{
-		if (m_Children)
-			MemoryManager::FreeMemory(m_Children);
+		if (m_Children.Raw())
+		{
+			m_Children[0].~QuadTree();
+			m_Children[1].~QuadTree();
+			m_Children[2].~QuadTree();
+			m_Children[3].~QuadTree();
+		}
 	}
 
 	QuadTree& QuadTree::operator=(QuadTree&& other) noexcept
 	{
 		m_MaxStorage = other.m_MaxStorage;
 		m_Storage = std::move(other.m_Storage);
-		m_Children = other.m_Children;
+		m_Children = std::move(other.m_Children);
 		m_Position = other.m_Position;
 		m_Area = other.m_Area;
 		m_Root = other.m_Root;
@@ -49,7 +54,7 @@ namespace Soul
 	void QuadTree::Insert(IColliderNode* node)
 	{
 		// Find smallest tree this will fit in
-		if (m_Children)
+		if (m_Children.Raw())
 		{
 			if (AABBIsInAABB(node->getPosition(), node->GetBoundingBox(), m_Children[0].m_Position, m_Children[0].m_Area))
 				m_Children[0].Insert(node);
@@ -80,7 +85,7 @@ namespace Soul
 			}
 		}
 
-		if (m_Children)
+		if (m_Children.Raw())
 			for (u32 i = 0; i < 4; ++i)
 				m_Children[i].Move();
 
@@ -101,7 +106,7 @@ namespace Soul
 			}
 		}
 
-		if (m_Children)
+		if (m_Children.Raw())
 		{
 			for (u32 i = 0; i < 4; ++i)
 			{
@@ -124,7 +129,7 @@ namespace Soul
 		for (u32 i = 0; i < m_Storage.Count(); ++i)
 			foundNodes.Push(m_Storage[i]);
 
-		if (m_Children)
+		if (m_Children.Raw())
 		{
 			for (u32 i = 0; i < 4; ++i)
 				if (AABBAABBCollision(position, area, m_Children[i].m_Position, m_Children[i].m_Area).collided)
@@ -138,18 +143,18 @@ namespace Soul
 	{
 		m_Storage.Push(node);
 
-		if (!m_Children && m_Storage.Count() > m_MaxStorage)
+		if (!(m_Children.Raw()) && m_Storage.Count() > m_MaxStorage)
 			SplitTree();
 	}
 
 	void QuadTree::FlattenTree()
 	{
-		if (m_Children)
+		if (m_Children.Raw())
 		{
-			if (!m_Children[0].m_Children && 
-				!m_Children[1].m_Children &&
-				!m_Children[2].m_Children &&
-				!m_Children[3].m_Children)
+			if (!(m_Children[0].m_Children.Raw()) && 
+				!(m_Children[1].m_Children.Raw()) &&
+				!(m_Children[2].m_Children.Raw()) &&
+				!(m_Children[3].m_Children.Raw()))
 			{
 				u32 allStorage = m_Storage.Count();
 
@@ -162,7 +167,7 @@ namespace Soul
 					for (u32 i = 0; i < 4; ++i)
 						m_Storage.Push(m_Children[i].m_Storage);
 
-					MemoryManager::FreeMemory(m_Children);
+					// TODO: Delete children
 					m_Children = nullptr;
 				}
 			}
@@ -177,7 +182,7 @@ namespace Soul
 	void QuadTree::SplitTree()
 	{
 		// Create children
-		m_Children = PARTITION_ARRAY(QuadTree, 4);
+		m_Children = NEW_ARRAY(QuadTree, 4);
 
 		f32 halfWidth = m_Area.x * 0.5f;
 		f32 halfHeight = m_Area.y * 0.5f;

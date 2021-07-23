@@ -47,7 +47,7 @@ int main()
 		RunAllTestSuites();
 		LOG_INFO("All tests finished.");
 
-		TestScene* scene = PARTITION(TestScene);
+		TestScene* scene = NEW(TestScene);
 		Soul::SetScene(scene);
 	}
 	Soul::ShutdownEngine();

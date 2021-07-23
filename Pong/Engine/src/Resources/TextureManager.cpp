@@ -33,7 +33,7 @@ namespace Soul
 			return *result;
 		else
 		{
-			sf::Texture* texture = PARTITION(sf::Texture);
+			sf::Texture* texture = NEW(sf::Texture);
 			// If not, allocate a new one and return
 			if (texture->loadFromFile(textureName))
 			{
@@ -42,7 +42,7 @@ namespace Soul
 				return texture;
 			}
 			else
-				MemoryManager::FreeMemory(texture);
+				DELETE(texture);
 		}
 
 		return nullptr;
@@ -52,7 +52,7 @@ namespace Soul
 	{
 		Vector<sf::Texture**> textures = m_TextureMap.GetValues();
 		for (u32 i = 0; i < textures.Count(); ++i)
-			MemoryManager::FreeMemory(*(textures[i]));
+			DELETE(*(textures[i]));
 
 		m_TextureMap.Clear();
 	}

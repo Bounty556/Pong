@@ -10,8 +10,8 @@ namespace Soul
 	{
 		ASSERT(!m_Initialized);
 
-		m_SceneStack = PARTITION(Stack<Scene*>);
-		m_CommandQueue = PARTITION(Queue<SceneManager::SceneCommand>);
+		m_SceneStack = NEW(Stack<Scene*>);
+		m_CommandQueue = NEW(Queue<SceneManager::SceneCommand>);
 
 		m_Initialized = true;
 
@@ -23,10 +23,10 @@ namespace Soul
 		ASSERT(m_Initialized);
 
 		for (u32 i = 0 ; i < m_SceneStack->Count(); ++i)
-			MemoryManager::FreeMemory((*m_SceneStack)[i]);
+			DELETE((*m_SceneStack)[i]);
 
-		MemoryManager::FreeMemory(m_SceneStack);
-		MemoryManager::FreeMemory(m_CommandQueue);
+		DELETE(m_SceneStack);
+		DELETE(m_CommandQueue);
 	}
 
 	void SceneManager::Update(f32 dt)

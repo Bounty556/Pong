@@ -9,9 +9,12 @@ namespace Soul
 	class Stack
 	{
 	public:
-		Stack(u16 capacity = 16);
+		Stack(u32 capacity = 16);
+		
 		Stack(const Stack&) = delete;
 		Stack(Stack&& otherStack) noexcept;
+
+		~Stack();
 
 		Stack& operator=(const Stack&) = delete;
 		Stack& operator=(Stack&& otherStack) noexcept;
@@ -25,23 +28,25 @@ namespace Soul
 		T& Peek();
 		const T& Peek() const;
 
-		u16 Count() const;
+		void Clear();
+
+		u32 Count() const;
 		bool IsEmpty() const;
 
 	private:
 		void Resize(u32 newCapacity);
 
 	private:
-		u16 m_Capacity;
-		u16 m_Size;
+		u32 m_Capacity;
+		u32 m_Size;
 		UniquePointer<T> m_Stack;
 	};
 
 	template <class T>
-	Stack<T>::Stack(u16 capacity /* = 16 */) :
+	Stack<T>::Stack(u32 capacity /* = 16 */) :
 		m_Capacity(capacity),
 		m_Size(0),
-		m_Stack(PARTITION_ARRAY(T, capacity))
+		m_Stack(NEW_ARRAY(T, capacity))
 	{
 	}
 
@@ -53,6 +58,12 @@ namespace Soul
 	{
 		otherStack.m_Capacity = 0;
 		otherStack.m_Size = 0;
+	}
+
+	template <class T>
+	Stack<T>::~Stack()
+	{
+		Clear();
 	}
 
 	template <class T>
@@ -119,7 +130,14 @@ namespace Soul
 	}
 
 	template <class T>
-	u16 Stack<T>::Count() const
+	void Stack<T>::Clear()
+	{
+		while (m_Size > 0)
+			m_Stack[--m_Size].~T();
+	}
+
+	template <class T>
+	u32 Stack<T>::Count() const
 	{
 		return m_Size;
 	}
@@ -133,7 +151,7 @@ namespace Soul
 	template <class T>
 	void Stack<T>::Resize(u32 newCapacity)
 	{
-		UniquePointer<T> newStack = PARTITION_ARRAY(T, newCapacity);
+		UniquePointer<T> newStack = NEW_ARRAY(T, newCapacity);
 
 		for (u32 i = 0; i < m_Size; i++)
 			new(&newStack[i]) T(std::move(m_Stack[i]));

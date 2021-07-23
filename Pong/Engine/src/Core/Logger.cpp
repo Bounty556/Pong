@@ -17,7 +17,7 @@ namespace Soul
 	bool InitializeLogger(const char* logFile)
 	{
 		logFileInitialized = true;
-		loggerFile = PARTITION(LoggerFile, logFile, 3000);
+		loggerFile = NEW(LoggerFile, logFile, 3000);
 		loggerFile->LogInfo("-----------------------------\n");
 
 		return true;

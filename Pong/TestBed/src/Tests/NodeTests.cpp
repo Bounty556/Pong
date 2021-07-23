@@ -3,6 +3,7 @@
 #include <Memory/MemoryManager.h>
 #include <Memory/UniquePointer.h>
 #include <Nodes/Node.h>
+#include <Structures/Vector.h>
 
 #include "../TestMacros.h"
 #include "TestNode.h"
@@ -14,7 +15,7 @@ void BasicNodes()
 	TestNode node;
 
 	for (u32 i = 0; i < 10; ++i)
-		node.AddChild(PARTITION(TestNode));
+		node.AddChild(NEW(TestNode));
 
 	ASSERT_EQUAL(node.GetChildren().Count(), 10, "Failed to add children to Node.");
 
@@ -28,7 +29,7 @@ void NodeTypes()
 	TestNode node;
 
 	for (u32 i = 0; i < 10; ++i)
-		node.AddChild(PARTITION(TestNode));
+		node.AddChild(NEW(TestNode));
 
 	ASSERT_TRUE(node.HasChildOfType("TestNode"), "Failed to detect child types.");
 	ASSERT_EQUAL(node.GetChildrenOfType("TestNode").Count(), 10, "Failed to detect child types.");
@@ -40,7 +41,7 @@ void RemoveNode()
 	START_MEMORY_CHECK();
 
 	TestNode node;
-	Soul::UniquePointer<TestNode> childNode = PARTITION(TestNode);
+	Soul::UniquePointer<TestNode> childNode = NEW(TestNode);
 	node.AddChild(childNode.Raw());
 
 	ASSERT_EQUAL(node.GetChildren().Count(), 1, "Failed to detect child.");
@@ -61,7 +62,7 @@ void NodeParent()
 	START_MEMORY_CHECK();
 
 	TestNode node;
-	Soul::UniquePointer<TestNode> childNode = PARTITION(TestNode);
+	Soul::UniquePointer<TestNode> childNode = NEW(TestNode);
 	node.AddChild(childNode.Raw());
 
 	ASSERT_EQUAL(childNode->GetParent(), &node, "Failed to add parent to child.");
@@ -78,9 +79,9 @@ void ChildrenOfTypeTest()
 	START_MEMORY_CHECK();
 
 	Soul::Node node0("Node");
-	Soul::UniquePointer<TestNode> node1 = PARTITION(TestNode);
+	TestNode* node1 = NEW(TestNode);
 
-	node0.AddChild(node1.Raw());
+	node0.AddChild(node1);
 
 	ASSERT_TRUE(node0.HasChildOfType("TestNode"), "Failed to detect child type.");
 	ASSERT_TRUE(node1->HasParentOfType("Node"), "Failed to detect parent type.");
@@ -92,10 +93,10 @@ void VectorOfNodesTest()
 {
 	START_MEMORY_CHECK();
 
-	Soul::UniquePointer<TestNode> nodeArray = PARTITION_ARRAY(TestNode, 10);
+	Soul::Vector<TestNode> nodeVector(10);
 
 	for (u32 i = 0; i < 10; ++i)
-		new (&nodeArray[i]) TestNode();
+		nodeVector.Push(TestNode());
 
 	END_MEMORY_CHECK();
 }

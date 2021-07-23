@@ -20,6 +20,8 @@ namespace Soul
 		Vector(const Vector<T>&) = delete;
 		Vector(Vector<T>&& otherVector) noexcept;
 
+		~Vector();
+
 		Vector& operator=(const Vector<T>&) = delete;
 		Vector& operator=(Vector<T>&& otherVector) noexcept;
 
@@ -55,14 +57,13 @@ namespace Soul
 		u32 m_Capacity;
 		u32 m_Size;
 		UniquePointer<T> m_Vector;
-		const u32 m_MINIMUM_CAPACITY = 8;
 	};
 
 	template <class T>
-	Vector<T>::Vector(u32 capacity /* = 8 */) :
+	Vector<T>::Vector(u32 capacity) :
 		m_Capacity(capacity),
 		m_Size(0),
-		m_Vector(PARTITION_ARRAY(T, m_Capacity))
+		m_Vector(NEW_ARRAY(T, m_Capacity))
 	{
 	}
 
@@ -74,6 +75,12 @@ namespace Soul
 	{
 		otherVector.m_Capacity = 0;
 		otherVector.m_Size = 0;
+	}
+
+	template <class T>
+	Vector<T>::~Vector()
+	{
+		Clear();
 	}
 
 	template <class T>
@@ -256,19 +263,18 @@ namespace Soul
 	template <class T>
 	void Vector<T>::Clear()
 	{
-		m_Vector = PARTITION_ARRAY(T, m_Capacity);
+		for (u32 i = 0; i < m_Size; ++i)
+			m_Vector[i].~T();
 		m_Size = 0;
 	}
 
 	template <class T>
 	void Vector<T>::Resize(u32 newCapacity)
 	{
-		T* newMemory = PARTITION_ARRAY(T, newCapacity);
+		T* newMemory = NEW_ARRAY(T, newCapacity);
 
 		for (u32 i = 0; i < m_Capacity; ++i)
-		{
 			new (&newMemory[i]) T(std::move(m_Vector[i]));
-		}
 
 		m_Vector = newMemory;
 		m_Capacity = newCapacity;

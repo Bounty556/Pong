@@ -1,6 +1,7 @@
 #pragma once
 
 #include <Defines.h>
+#include <Memory/UniquePointer.h>
 #include <Structures/Vector.h>
 #include <Physics/CollisionChecks.h>
 #include <Physics/IColliderNode.h>
@@ -38,7 +39,7 @@ namespace Soul
 	private:
 		u32 m_MaxStorage; // The maximum number of nodes that can be stored in this QuadTree before attempting to split
 		Vector<IColliderNode*> m_Storage; // The nodes in this QuadTree (not its children)
-		QuadTree* m_Children; // The QuadTree's children QuadTrees
+		UniquePointer<QuadTree> m_Children; // The QuadTree's children QuadTrees
 		sf::Vector2f m_Position; // The position of this QuadTree in 2D space
 		sf::Vector2f m_Area; // The width and height of this QuadTree
 		QuadTree* m_Root;

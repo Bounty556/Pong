@@ -25,9 +25,9 @@ namespace Soul
 		template <class K, class V>
 		struct Set
 		{
-			bool IsInitialized;
-			K Key;
-			V Value;
+			bool isInitialized;
+			K key;
+			V value;
 		};
 
 	public:
@@ -35,6 +35,8 @@ namespace Soul
 
 		Map(const Map&) = delete;
 		Map(Map&& otherMap) noexcept;
+
+		~Map();
 		
 		Map& operator=(const Map&) = delete;
 		Map& operator=(Map&& otherMap) noexcept;
@@ -85,7 +87,7 @@ namespace Soul
 	Map<K, V>::Map(u32 capacity) :
 		m_Capacity(Math::FindNextPrime(capacity)),
 		m_Size(0),
-		m_Map(PARTITION_ARRAY(MapType::SetType, m_Capacity))
+		m_Map(NEW_ARRAY(MapType::SetType, m_Capacity))
 	{
 	}
 
@@ -97,6 +99,20 @@ namespace Soul
 	{
 		otherMap.m_Capacity = 0;
 		otherMap.m_Size = 0;
+	}
+
+	template <class K, class V>
+	Map<K, V>::~Map()
+	{
+		// Call all destructors
+		for (u32 i = 0; i < m_Capacity; ++i)
+		{
+			if (m_Map[i].isInitialized)
+			{
+				m_Map[i].key.~K();
+				m_Map[i].value.~V();
+			}
+		}
 	}
 
 	template <class K, class V>
@@ -132,9 +148,9 @@ namespace Soul
 
 		u32 location = (u32)openLocation;
 
-		m_Map[location].IsInitialized = true;
-		new (&m_Map[location].Key) K(key);
-		new (&m_Map[location].Value) V(value);
+		m_Map[location].isInitialized = true;
+		new (&m_Map[location].key) K(key);
+		new (&m_Map[location].value) V(value);
 		
 		m_Size++;
 
@@ -155,9 +171,9 @@ namespace Soul
 
 		u32 location = (u32)openLocation;
 
-		m_Map[location].IsInitialized = true;
-		new (&m_Map[location].Key) K(std::move(key));
-		new (&m_Map[location].Value) V(std::move(value));
+		m_Map[location].isInitialized = true;
+		new (&m_Map[location].key) K(std::move(key));
+		new (&m_Map[location].value) V(std::move(value));
 
 		m_Size++;
 
@@ -178,9 +194,9 @@ namespace Soul
 
 		u32 location = (u32)openLocation;
 
-		m_Map[location].IsInitialized = true;
-		new (&m_Map[location].Key) K(key);
-		new (&m_Map[location].Value) V(std::move(value));
+		m_Map[location].isInitialized = true;
+		new (&m_Map[location].key) K(key);
+		new (&m_Map[location].value) V(std::move(value));
 
 		m_Size++;
 
@@ -201,9 +217,9 @@ namespace Soul
 
 		u32 location = (u32)openLocation;
 
-		m_Map[location].IsInitialized = true;
-		new (&(m_Map[location].Key)) K(std::move(key));
-		new (&m_Map[location].Value) V(value);
+		m_Map[location].isInitialized = true;
+		new (&(m_Map[location].key)) K(std::move(key));
+		new (&m_Map[location].value) V(value);
 
 		m_Size++;
 
@@ -216,10 +232,10 @@ namespace Soul
 		// Call all destructors
 		for (u32 i = 0; i < m_Capacity; ++i)
 		{
-			if (m_Map[i].IsInitialized)
+			if (m_Map[i].isInitialized)
 			{
-				m_Map[i].Key.~K();
-				m_Map[i].Value.~V();
+				m_Map[i].key.~K();
+				m_Map[i].value.~V();
 			}
 		}
 
@@ -238,10 +254,10 @@ namespace Soul
 
 		u32 location = (u32)existingLocation;
 
-		if (!m_Map[location].IsInitialized)
+		if (!m_Map[location].isInitialized)
 			return nullptr;
 		else
-			return &m_Map[location].Value;
+			return &m_Map[location].value;
 	}
 
 	template <class K, class V>
@@ -255,8 +271,8 @@ namespace Soul
 	{
 		Vector<K*> keys(m_Size);
 		for (u32 i = 0; i < m_Capacity; ++i)
-			if (m_Map[i].IsInitialized)
-				keys.Push(&m_Map[i].Key);
+			if (m_Map[i].isInitialized)
+				keys.Push(&m_Map[i].key);
 
 		return keys;
 	}
@@ -266,8 +282,8 @@ namespace Soul
 	{
 		Vector<V*> values(m_Size);
 		for (u32 i = 0; i < m_Capacity; ++i)
-			if (m_Map[i].IsInitialized)
-				values.Push(&m_Map[i].Value);
+			if (m_Map[i].isInitialized)
+				values.Push(&m_Map[i].value);
 
 		return values;
 	}
@@ -283,8 +299,8 @@ namespace Soul
 		u32 location = (u32)existingLocation;
 
 		// Assume we found the location where the pair resides
-		m_Map[location].Key.~K();
-		m_Map[location].Value.~V();
+		m_Map[location].key.~K();
+		m_Map[location].value.~V();
 		PlatformSetMemory(&m_Map[location], 0, sizeof(Set<K, V>));
 		m_Size--;
 	}
@@ -300,7 +316,7 @@ namespace Soul
 		u32 maxAttempts = m_Capacity / 2 + 1;
 		// Check to see if there is an object at that location
 		// TODO: store hash?
-		while (m_Map[location].IsInitialized && Math::Hash(m_Map[location].Key) != hash)
+		while (m_Map[location].isInitialized && Math::Hash(m_Map[location].key) != hash)
 		{
 			// We couldn't find a spot
 			if (attempts++ >= maxAttempts)
@@ -327,7 +343,7 @@ namespace Soul
 		u32 maxAttempts = m_Capacity / 2 + 1;
 
 		// Check to see if there is an object at that location
-		while (m_Map[location].IsInitialized && m_Map[location].Key != key)
+		while (m_Map[location].isInitialized && m_Map[location].key != key)
 		{
 			// We couldn't find a spot
 			if (attempts++ >= maxAttempts)
@@ -346,31 +362,31 @@ namespace Soul
 	void Map<K, V>::Resize(u32 newCapacity)
 	{
 		// Create a new memory block with the necessary size, move all previous elements into it
-		UniquePointer<Set<K, V>> newMemory(PARTITION_ARRAY(SetType, newCapacity));
+		UniquePointer<Set<K, V>> newMemory(NEW_ARRAY(SetType, newCapacity));
 
 		for (u32 i = 0; i < m_Capacity; ++i)
 		{
-			if (!m_Map[i].IsInitialized)
+			if (!m_Map[i].isInitialized)
 				continue;
 
 			// Find the location to place this pair
-			auto key = m_Map[i].Key;
-			u64 hash = Math::Hash(m_Map[i].Key);
+			auto key = m_Map[i].key;
+			u64 hash = Math::Hash(m_Map[i].key);
 			u32 location = hash % newCapacity;
 
 			u32 attempts = 0;
 			u32 maxAttempts = newCapacity / 2;
 			// Check to see if there is an object at that location
-			while (newMemory[location].IsInitialized)
+			while (newMemory[location].isInitialized)
 			{
 				ASSERT(attempts++ < maxAttempts);
 
 				location = (location + (attempts * attempts)) % newCapacity;
 			}
 
-			newMemory[location].IsInitialized = true;
-			new (&newMemory[location].Key) K(std::move(m_Map[i].Key));
-			new (&newMemory[location].Value) V(std::move(m_Map[i].Value));
+			newMemory[location].isInitialized = true;
+			new (&newMemory[location].key) K(std::move(m_Map[i].key));
+			new (&newMemory[location].value) V(std::move(m_Map[i].value));
 		}
 
 		// Free the old memory and reassign

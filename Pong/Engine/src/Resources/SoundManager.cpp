@@ -16,7 +16,7 @@ namespace Soul
 	{
 		Vector<sf::SoundBuffer**> buffers = m_SoundMap.GetValues();
 		for (u32 i = 0; i < buffers.Count(); ++i)
-			MemoryManager::FreeMemory(*(buffers[i]));
+			DELETE(*(buffers[i]));
 	}
 
 	SoundManager& SoundManager::operator=(SoundManager&& other) noexcept
@@ -35,7 +35,7 @@ namespace Soul
 			return *result;
 		else
 		{
-			sf::SoundBuffer* soundBuffer = PARTITION(sf::SoundBuffer);
+			sf::SoundBuffer* soundBuffer = NEW(sf::SoundBuffer);
 			// If not, allocate a new one and return
 			if (soundBuffer->loadFromFile(soundName))
 			{
@@ -43,7 +43,7 @@ namespace Soul
 				return soundBuffer;
 			}
 			else
-				MemoryManager::FreeMemory(soundBuffer);
+				DELETE(soundBuffer);
 		}
 
 		return nullptr;
@@ -53,7 +53,7 @@ namespace Soul
 	{
 		Vector<sf::SoundBuffer**> buffers = m_SoundMap.GetValues();
 		for (u32 i = 0; i < buffers.Count(); ++i)
-			MemoryManager::FreeMemory(*(buffers[i]));
+			DELETE(*(buffers[i]));
 
 		m_SoundMap.Clear();
 	}

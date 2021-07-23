@@ -16,7 +16,7 @@ namespace Soul
 	{
 		Vector<sf::Font**> fonts = m_FontMap.GetValues();
 		for (u32 i = 0; i < fonts.Count(); ++i)
-			MemoryManager::FreeMemory(*(fonts[i]));
+			DELETE(*(fonts[i]));
 	}
 
 	FontManager& FontManager::operator=(FontManager&& other) noexcept
@@ -35,14 +35,14 @@ namespace Soul
 			return *result;
 		else
 		{
-			sf::Font* font = PARTITION(sf::Font);
+			sf::Font* font = NEW(sf::Font);
 			if (font->loadFromFile(fontName))
 			{
 				m_FontMap.AddPair(fontName, font);
 				return font;
 			}
 			else
-				MemoryManager::FreeMemory(font);
+				DELETE(font);
 		}
 
 		return nullptr;
@@ -52,7 +52,7 @@ namespace Soul
 	{
 		Vector<sf::Font**> fonts = m_FontMap.GetValues();
 		for (u32 i = 0; i < fonts.Count(); ++i)
-			MemoryManager::FreeMemory(*(fonts[i]));
+			DELETE(*(fonts[i]));
 
 		m_FontMap.Clear();
 	}

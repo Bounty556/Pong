@@ -10,14 +10,14 @@ namespace Soul
 	bool PhysicsSystem::Initialize(f32 width, f32 height)
 	{
 		m_IsInitialized = true;
-		m_QuadTree = PARTITION(QuadTree, 0.0f, 0.0f, width, height, 8, nullptr);
+		m_QuadTree = NEW(QuadTree, 0.0f, 0.0f, width, height, 8, nullptr);
 		return true;
 	}
 
 	void PhysicsSystem::Shutdown()
 	{
 		ASSERT(m_IsInitialized);
-		MemoryManager::FreeMemory(m_QuadTree);
+		DELETE(m_QuadTree);
 	}
 
 	void PhysicsSystem::Update(f32 dt)

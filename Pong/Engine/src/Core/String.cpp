@@ -10,7 +10,7 @@ namespace Soul
 		m_Length(StringLength(initialString)),
 		m_Capacity(m_Length + 1)
 	{
-		m_CString = (char*)PARTITION_ARRAY(char, m_Capacity);
+		m_CString = NEW_ARRAY(char, m_Capacity);
 		PlatformCopyMemory(m_CString, initialString, m_Length);
 		m_CString[m_Length] = '\0';
 	}
@@ -19,7 +19,7 @@ namespace Soul
 		m_Length(1),
 		m_Capacity(32)
 	{
-		m_CString = (char*)PARTITION_ARRAY(char, m_Capacity);
+		m_CString = NEW_ARRAY(char, m_Capacity);
 		m_CString[0] = initialChar;
 		m_CString[1] = '\0';
 	}
@@ -30,7 +30,7 @@ namespace Soul
 	{
 		ASSERT(capacity > 0);
 
-		m_CString = PARTITION_ARRAY(char, m_Capacity);
+		m_CString = NEW_ARRAY(char, m_Capacity);
 		m_CString[0] = '\0';
 	}
 
@@ -38,7 +38,7 @@ namespace Soul
 		m_Length(otherString.m_Length),
 		m_Capacity(otherString.m_Capacity)
 	{
-		m_CString = PARTITION_ARRAY(char, m_Capacity);
+		m_CString = NEW_ARRAY(char, m_Capacity);
 
 		PlatformCopyMemory(m_CString, otherString.GetCString(), m_Length);
 		m_CString[m_Length] = '\0';
@@ -57,7 +57,7 @@ namespace Soul
 	String::~String()
 	{
 		if (m_CString)
-			MemoryManager::FreeMemory(m_CString);
+			DELETE(m_CString);
 	}
 
 	String& String::operator=(const String& otherString)
@@ -67,8 +67,8 @@ namespace Soul
 		if (m_Capacity < otherString.m_Capacity)
 		{
 			m_Capacity = otherString.m_Capacity;
-			MemoryManager::FreeMemory(m_CString);
-			m_CString = PARTITION_ARRAY(char, m_Capacity);
+			DELETE(m_CString);
+			m_CString = NEW_ARRAY(char, m_Capacity);
 		}
 
 		PlatformCopyMemory(m_CString, otherString.m_CString, m_Length);
@@ -80,7 +80,7 @@ namespace Soul
 	String& String::operator=(String&& otherString) noexcept
 	{
 		// Clear our memory first
-		MemoryManager::FreeMemory(m_CString);
+		DELETE(m_CString);
 
 		m_CString = otherString.m_CString;
 		m_Capacity = otherString.m_Capacity;
@@ -99,8 +99,8 @@ namespace Soul
 		if (m_Capacity < m_Length)
 		{
 			m_Capacity = m_Length;
-			MemoryManager::FreeMemory(m_CString);
-			m_CString = PARTITION_ARRAY(char, m_Capacity);
+			DELETE(m_CString);
+			m_CString = NEW_ARRAY(char, m_Capacity);
 		}
 
 		PlatformCopyMemory(m_CString, otherString, m_Length);
@@ -139,7 +139,7 @@ namespace Soul
 		if (m_Capacity <= tempLength)
 		{
 			m_Capacity = tempLength + 1;
-			char* tempPointer = PARTITION_ARRAY(char, m_Capacity);
+			char* tempPointer = NEW_ARRAY(char, m_Capacity);
 
 			// Put the values of both the strings at the temp pointer
 			PlatformCopyMemory(tempPointer, m_CString, m_Length);
@@ -147,7 +147,7 @@ namespace Soul
 			tempPointer[tempLength] = '\0';
 
 			// Clean up and reassign
-			MemoryManager::FreeMemory(m_CString);
+			DELETE(m_CString);
 			m_Length = tempLength;
 			m_CString = tempPointer;
 		}
@@ -168,7 +168,7 @@ namespace Soul
 		if (m_Length + 1 >= m_Capacity)
 		{
 			m_Capacity += 32; // Add another 4 bytes onto the memory
-			char* tempPointer = PARTITION_ARRAY(char, m_Capacity);
+			char* tempPointer = NEW_ARRAY(char, m_Capacity);
 
 			// Put the values of both the strings at the temp pointer
 			PlatformCopyMemory(tempPointer, m_CString, m_Length);
@@ -177,7 +177,7 @@ namespace Soul
 			tempPointer[m_Length + 1] = '\0';
 
 			// Clean up and reassign
-			MemoryManager::FreeMemory(m_CString);
+			DELETE(m_CString);
 			m_CString = tempPointer;
 		}
 		else
@@ -339,11 +339,11 @@ namespace Soul
 
 		if (isOverCapacity)
 		{
-			char* tempString = (char*)MemoryManager::PartitionMemory(m_Capacity);
+			char* tempString = NEW_ARRAY(char, m_Capacity);
 
 			PlatformCopyMemory(m_CString, tempString, oldStringCapacity);
 
-			MemoryManager::FreeMemory(m_CString);
+			DELETE(m_CString);
 			m_CString = tempString;
 		}
 	}

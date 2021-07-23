@@ -10,17 +10,17 @@ namespace Soul
 	bool InputManager::Initialize()
 	{
 		typedef Map<ControllerId, Gamepad> GamepadMap;
-		m_Gamepads = PARTITION(GamepadMap, 8);
+		m_Gamepads = NEW(GamepadMap, 8);
 
-		m_Keyboard = PARTITION(Keyboard, "res/Controls/defaultControls.controls");
+		m_Keyboard = NEW(Keyboard, "res/Controls/defaultControls.controls");
 
 		return true;
 	}
 
 	void InputManager::Shutdown()
 	{
-		MemoryManager::FreeMemory(m_Keyboard);
-		MemoryManager::FreeMemory(m_Gamepads);
+		DELETE(m_Keyboard);
+		DELETE(m_Gamepads);
 	}
 
 	void InputManager::UpdateControllerControls(ControllerId id, const char* controlsFile)

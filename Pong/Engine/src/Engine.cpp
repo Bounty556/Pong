@@ -63,7 +63,7 @@ namespace Soul
 			return false;
 		}
 
-		window = PARTITION(sf::RenderWindow, sf::VideoMode(windowWidth, windowHeight), windowName, sf::Style::Close | sf::Style::Titlebar);
+		window = NEW(sf::RenderWindow, sf::VideoMode(windowWidth, windowHeight), windowName, sf::Style::Close | sf::Style::Titlebar);
 		window->setVerticalSyncEnabled(false);
 		window->setFramerateLimit(0);
 
@@ -123,7 +123,7 @@ namespace Soul
 		SceneManager::Shutdown();
 		Renderer::Shutdown();
 
-		MemoryManager::FreeMemory(window);
+		DELETE(window);
 		
 		PhysicsSystem::Shutdown();
 		InputManager::Shutdown();

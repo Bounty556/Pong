@@ -10,11 +10,11 @@ void PrimitiveUniquePointer()
 {
 	START_MEMORY_CHECK();
 
-	Soul::UniquePointer<u32> uniqueInt = PARTITION(u32, 0);
+	Soul::UniquePointer<u32> uniqueInt = NEW(u32, 0);
 
 	ASSERT_EQUAL(*uniqueInt, 0, "UniquePointer dereferencing failed.");
 
-	Soul::UniquePointer<u32> uniqueInt2 = PARTITION(u32, 1);
+	Soul::UniquePointer<u32> uniqueInt2 = NEW(u32, 1);
 			
 	uniqueInt = std::move(uniqueInt2);
 
@@ -30,11 +30,11 @@ void ObjectUniquePointer()
 	TestClass fakeClass(1, 39, 43);
 	TestClass fakeClass2(0, 121, 96);
 
-	Soul::UniquePointer<TestClass> uniqueClass = PARTITION(TestClass, fakeClass);
+	Soul::UniquePointer<TestClass> uniqueClass = NEW(TestClass, fakeClass);
 
 	ASSERT_EQUAL(*uniqueClass, fakeClass, "UniquePointer dereferencing failed.");
 
-	Soul::UniquePointer<TestClass> uniqueClass2 = PARTITION(TestClass, fakeClass2);
+	Soul::UniquePointer<TestClass> uniqueClass2 = NEW(TestClass, fakeClass2);
 
 	uniqueClass = std::move(uniqueClass2);
 
@@ -48,12 +48,12 @@ void UniquePointerUniquePointer()
 	START_MEMORY_CHECK();
 
 	Soul::UniquePointer<Soul::UniquePointer<u32>> handleToUniqueInt =
-		PARTITION(Soul::UniquePointer<u32>, PARTITION(u32, 0));
+		NEW(Soul::UniquePointer<u32>, NEW(u32, 0));
 
 	ASSERT_EQUAL(**handleToUniqueInt, 0, "Handle dereferencing failed.");
 
 	Soul::UniquePointer<Soul::UniquePointer<u32>> handleToUniqueInt2 =
-		PARTITION(Soul::UniquePointer<u32>, PARTITION(u32, 1));
+		NEW(Soul::UniquePointer<u32>, NEW(u32, 1));
 
 	handleToUniqueInt = std::move(handleToUniqueInt2);
 
@@ -66,14 +66,14 @@ void PrimitiveArrayUniquePointer()
 {
 	START_MEMORY_CHECK();
 
-	Soul::UniquePointer<u32> uniqueArray = PARTITION_ARRAY(u32, 100);
+	Soul::UniquePointer<u32> uniqueArray = NEW_ARRAY(u32, 100);
 
 	for (u8 i = 0; i < 100; ++i)
 		uniqueArray[i] = i;
 
 	ASSERT_EQUAL(uniqueArray[0], 0, "Primitive array indexing failed.");
 
-	Soul::UniquePointer<u32> uniqueArray2 = PARTITION_ARRAY(u32, 100);
+	Soul::UniquePointer<u32> uniqueArray2 = NEW_ARRAY(u32, 100);
 
 	for (u8 i = 0; i < 100; ++i)
 		uniqueArray2[i] = i + 1;
@@ -92,14 +92,14 @@ void ObjectArrayUniquePointer()
 	TestClass fakeClass(1, 39, 43);
 	TestClass fakeClass2(0, 121, 96);
 
-	Soul::UniquePointer<TestClass> uniqueArray = PARTITION_ARRAY(TestClass, 100);
+	Soul::UniquePointer<TestClass> uniqueArray = NEW_ARRAY(TestClass, 100);
 
 	for (u8 i = 0; i < 100; ++i)
 		uniqueArray[i] = fakeClass;
 
 	ASSERT_EQUAL(uniqueArray[0], fakeClass, "Object array indexing failed.");
 
-	Soul::UniquePointer<TestClass> uniqueArray2 = PARTITION_ARRAY(TestClass, 100);
+	Soul::UniquePointer<TestClass> uniqueArray2 = NEW_ARRAY(TestClass, 100);
 
 	for (u8 i = 0; i < 100; ++i)
 		uniqueArray2[i] = fakeClass2;
@@ -115,17 +115,17 @@ void UniquePointerArrayUniquePointer()
 {
 	START_MEMORY_CHECK();
 
-	Soul::UniquePointer<Soul::UniquePointer<u32>> handleToUniqueArray = PARTITION_ARRAY(Soul::UniquePointer<u32>, 100);
+	Soul::UniquePointer<Soul::UniquePointer<u32>> handleToUniqueArray = NEW_ARRAY(Soul::UniquePointer<u32>, 100);
 
 	for (u8 i = 0; i < 100; ++i)
-		handleToUniqueArray[i] = PARTITION(u32, 0);
+		handleToUniqueArray[i] = NEW(u32, 0);
 
 	ASSERT_EQUAL(*(handleToUniqueArray[0]), 0, "Handle array indexing failed.");
 
-	Soul::UniquePointer<Soul::UniquePointer<u32>> handleToUniqueArray2 = PARTITION_ARRAY(Soul::UniquePointer<u32>, 100);
+	Soul::UniquePointer<Soul::UniquePointer<u32>> handleToUniqueArray2 = NEW_ARRAY(Soul::UniquePointer<u32>, 100);
 
 	for (u8 i = 0; i < 100; ++i)
-		handleToUniqueArray2[i] = PARTITION(u32, 1);
+		handleToUniqueArray2[i] = NEW(u32, 1);
 
 	handleToUniqueArray = std::move(handleToUniqueArray2);
 
@@ -138,7 +138,7 @@ void Move()
 {
 	START_MEMORY_CHECK();
 
-	Soul::UniquePointer<u32> uniqueInt = PARTITION(u32, 1);
+	Soul::UniquePointer<u32> uniqueInt = NEW(u32, 1);
 	Soul::UniquePointer<u32> uniqueInt2 = std::move(uniqueInt);
 
 	ASSERT_EQUAL(*uniqueInt2, 1, "Failed to reassign handle.");
