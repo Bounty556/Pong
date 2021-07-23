@@ -5,8 +5,8 @@ FieldScene::FieldScene() :
 	m_Player(),
 	m_AI(),
 	m_Ball(15, 0.5f),
-	m_TopBounds(-5.0f, -5.0f, 1310.0f, 30.0f),
-	m_BottomBounds(-5.0f, 715.0f, 1310.0f, 30.0f)
+	m_TopBounds(-5.0f, -5.0f, 1310.0f, 10.0f),
+	m_BottomBounds(-5.0f, 715.0f, 1310.0f, 10.0f)
 {
 	m_Player.setPosition(15.0f, 15.0f);
 	m_AI.setPosition(1280.0f - 32.0f - 15.0f, 15.0f);
@@ -32,6 +32,8 @@ void FieldScene::Draw(sf::RenderStates states) const
 	m_Player.Draw(states);
 	m_AI.Draw(states);
 	m_Ball.Draw(states);
+	m_TopBounds.Draw(states);
+	m_BottomBounds.Draw(states);
 }
 
 void FieldScene::ResetSceneData(void* data)

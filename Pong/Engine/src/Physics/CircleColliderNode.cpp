@@ -1,18 +1,24 @@
 #include "CircleColliderNode.h"
 
 #include <Math/Vectors.h>
+#include <Rendering/Renderer.h>
 
 namespace Soul
 {
 	CircleColliderNode::CircleColliderNode(f32 radius) :
 		IColliderNode(sf::Vector2f(radius * 2, radius * 2), "CircleColliderNode"),
-		m_Radius(radius)
+		m_Radius(radius),
+		m_Collider(radius)
 	{
+		m_Collider.setFillColor(sf::Color::Transparent);
+		m_Collider.setOutlineThickness(1.0f);
+		m_Collider.setOutlineColor(sf::Color::Red);
 	}
 
 	CircleColliderNode::CircleColliderNode(CircleColliderNode&& other) noexcept :
 		IColliderNode(std::move(other)),
-		m_Radius(other.m_Radius)
+		m_Radius(other.m_Radius),
+		m_Collider(std::move(other.m_Collider))
 	{
 	}
 
@@ -20,6 +26,7 @@ namespace Soul
 	{
 		IColliderNode::operator=(std::move(other));
 		m_Radius = other.m_Radius;
+		m_Collider = std::move(other.m_Collider);
 
 		return *this;
 	}
@@ -42,5 +49,10 @@ namespace Soul
 	f32 CircleColliderNode::GetRadius() const
 	{
 		return m_Radius;
+	}
+
+	void CircleColliderNode::DrawCollider(sf::RenderStates states) const
+	{
+		Renderer::Render(m_Collider, states);
 	}
 }

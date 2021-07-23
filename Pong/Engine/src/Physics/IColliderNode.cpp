@@ -1,19 +1,22 @@
 #include "IColliderNode.h"
 
-#include "PhysicsSystem.h"
+#include <Physics/PhysicsSystem.h>
+#include <Rendering/Renderer.h>
 
 namespace Soul
 {
 	IColliderNode::IColliderNode(sf::Vector2f boundingBox, const char* type) :
 		Node(type),
-		m_BoundingBox(boundingBox)
+		m_BoundingBox(boundingBox),
+		m_IsDrawing(false)
 	{
 		PhysicsSystem::RegisterCollider(this);
 	}
 
 	IColliderNode::IColliderNode(IColliderNode&& other) noexcept :
 		Node(std::move(other)),
-		m_BoundingBox(other.m_BoundingBox)
+		m_BoundingBox(other.m_BoundingBox),
+		m_IsDrawing(other.m_IsDrawing)
 	{
 	}
 
@@ -26,6 +29,7 @@ namespace Soul
 	{
 		Node::operator=(std::move(other));
 		m_BoundingBox = other.m_BoundingBox;
+		m_IsDrawing = other.m_IsDrawing;
 
 		return *this;
 	}
@@ -54,5 +58,17 @@ namespace Soul
 	sf::Vector2f IColliderNode::GetBoundingBox() const
 	{
 		return m_BoundingBox;
+	}
+
+	void IColliderNode::SetDrawCollider(bool shouldDraw)
+	{
+		m_IsDrawing = shouldDraw;
+	}
+
+	void IColliderNode::DrawSelf(sf::RenderStates states) const
+	{
+		states.transform *= getTransform();
+		if (m_IsDrawing)
+			DrawCollider(states);
 	}
 }

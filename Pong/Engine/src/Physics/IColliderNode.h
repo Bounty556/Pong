@@ -27,7 +27,14 @@ namespace Soul
 
 		sf::Vector2f GetBoundingBox() const;
 
+		void SetDrawCollider(bool shouldDraw);
+		virtual void DrawSelf(sf::RenderStates states) const override;
+
+	protected:
+		virtual void DrawCollider(sf::RenderStates states) const = 0;
+
 	private:
 		sf::Vector2f m_BoundingBox;
+		bool m_IsDrawing;
 	};
 }

@@ -1,8 +1,9 @@
 #pragma once
 
 #include <Defines.h>
+#include <Physics/IColliderNode.h>
 
-#include "IColliderNode.h"
+#include <SFML/Graphics/CircleShape.hpp>
 
 namespace Soul
 {
@@ -21,7 +22,11 @@ namespace Soul
 
 		f32 GetRadius() const;
 
+	protected:
+		virtual void DrawCollider(sf::RenderStates states) const;
+
 	private:
 		f32 m_Radius;
+		sf::CircleShape m_Collider;
 	};
 }

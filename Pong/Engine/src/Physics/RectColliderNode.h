@@ -2,7 +2,9 @@
 
 #include <Defines.h>
 
-#include "IColliderNode.h"
+#include <Physics/IColliderNode.h>
+
+#include <SFML/Graphics/RectangleShape.hpp>
 
 namespace Soul
 {
@@ -18,5 +20,11 @@ namespace Soul
 		RectColliderNode& operator=(RectColliderNode&& other) noexcept;
 
 		virtual Vector<sf::Vector2f> GetPolygonList() const override;
+
+	protected:
+		virtual void DrawCollider(sf::RenderStates states) const override;
+
+	private:
+		sf::RectangleShape m_Collider;
 	};
 }
