@@ -127,9 +127,15 @@ void UniquePointerArrayUniquePointer()
 	for (u8 i = 0; i < 100; ++i)
 		handleToUniqueArray2[i] = NEW(u32, 1);
 
+	for (u8 i = 0; i < 100; ++i)
+		handleToUniqueArray[i].~UniquePointer();
+
 	handleToUniqueArray = std::move(handleToUniqueArray2);
 
 	ASSERT_EQUAL(*(handleToUniqueArray[0]), 1, "Handle array moving failed.");
+
+	for (u8 i = 0; i < 100; ++i)
+		handleToUniqueArray[i].~UniquePointer();
 
 	END_MEMORY_CHECK();
 }
