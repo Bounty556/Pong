@@ -25,7 +25,7 @@ void Ball::LateUpdateSelf(f32 dt)
 	auto collisions = m_Collider->CheckCollisions();
 	for (u32 i = 0; i < collisions.Count(); ++i)
 	{
-		if (collisions[i].node->HasParentOfType("HardBoundary"))
+		if (collisions[i].node->HasParentOfType("HardBoundary") || collisions[i].node->HasParentOfType("Paddle"))
 		{
 			move(collisions[i].correctionVector);
 			

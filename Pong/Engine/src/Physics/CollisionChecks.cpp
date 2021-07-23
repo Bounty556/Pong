@@ -59,28 +59,28 @@ namespace Soul
 			posA.y >= posB.y - dimensionsA.y && posA.y <= posB.y + dimensionsB.y)
 		{
 			collision.collided = true;
-			collision.fromCenterOfMass = Math::Normalize((posA + dimensionsA * 0.5f) - (posB + dimensionsB * 0.5f));
 
 			// Colliding, find smallest correction vector
 			sf::Vector2f middleA(posA + (dimensionsA * 0.5f));
 			sf::Vector2f middleB(posB + (dimensionsB * 0.5f));
 			sf::Vector2f middleDifference = middleA - middleB;
+			collision.fromCenterOfMass = Math::Normalize(middleDifference);
 
 			// Find the biggest middle difference, as that will point us to the
 			// smallest correction vector
-			if (Math::Abs(middleDifference.x) >= Math::Abs(middleDifference.y))
+			if (Math::Abs(middleDifference.x) < Math::Abs(middleDifference.y))
 			{
 				if (middleDifference.x >= 0)
-					collision.correctionVector = sf::Vector2f(dimensionsA.x - (posA.x - posB.x), 0.0f);
+					collision.correctionVector = sf::Vector2f(dimensionsB.x - (posB.x - posA.x), 0.0f);
 				else if (middleDifference.x < 0)
-					collision.correctionVector = sf::Vector2f(-dimensionsA.x - (posA.x - posB.x), 0.0f);
+					collision.correctionVector = sf::Vector2f(posB.x - (dimensionsA.x - posA.x), 0.0f);
 			}
 			else
 			{
 				if (middleDifference.y >= 0)
-					collision.correctionVector = sf::Vector2f(dimensionsA.y - (posA.y - posB.y), 0.0f);
+					collision.correctionVector = sf::Vector2f(0.0f , dimensionsB.y + (posB.y - posA.y));
 				else if (middleDifference.y < 0)
-					collision.correctionVector = sf::Vector2f(-dimensionsA.y - (posA.y - posB.y), 0.0f);
+					collision.correctionVector = sf::Vector2f(0.0f, posB.y - (dimensionsA.y + posA.y));
 			}
 		}
 

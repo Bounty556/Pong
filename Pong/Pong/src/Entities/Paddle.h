@@ -13,6 +13,7 @@ public:
 	Paddle();
 
 	virtual void UpdateSelf(f32 dt) override;
+	virtual void LateUpdateSelf(f32 dt) override;
 
 private:
 	// Child Nodes

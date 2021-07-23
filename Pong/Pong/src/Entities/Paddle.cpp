@@ -22,9 +22,12 @@ void Paddle::UpdateSelf(f32 dt)
 		move(0.0f, -m_MoveSpeed * dt);
 	if (downState == Soul::Controller::Down || downState == Soul::Controller::Pressed)
 		move(0.0f, m_MoveSpeed * dt);
+}
 
-	if (getPosition().y < 15.0f)
-		setPosition(getPosition().x, 15.0f);
-	else if (getPosition().y > 720 - 15.0f - 128.0f)
-		setPosition(getPosition().x, 720 - 15.0f - 128.0f); // TODO: variableize
+void Paddle::LateUpdateSelf(f32 dt)
+{
+	auto collisions = m_Collider->CheckCollisions();
+	for (u32 i = 0; i < collisions.Count(); ++i)
+		if (collisions[i].node->HasParentOfType("HardBoundary"))
+			move(collisions[i].correctionVector);
 }
