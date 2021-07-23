@@ -4,7 +4,9 @@ FieldScene::FieldScene() :
 	Scene(true, true),
 	m_Player(),
 	m_AI(),
-	m_Ball(15, 0.5f)
+	m_Ball(15, 0.5f),
+	m_TopBounds(-15.0f, -15.0f, 1310.0f, 30.0f),
+	m_BottomBounds(-15.0f, 705.0f, 1310.0f, 30.0f)
 {
 	m_Player.setPosition(15.0f, 15.0f);
 	m_AI.setPosition(1280.0f - 32.0f - 15.0f, 15.0f);
@@ -34,5 +36,4 @@ void FieldScene::Draw(sf::RenderStates states) const
 
 void FieldScene::ResetSceneData(void* data)
 {
-
 }

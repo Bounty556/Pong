@@ -20,12 +20,14 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Entities\Ball.cpp" />
+    <ClCompile Include="src\Entities\HardBoundary.cpp" />
     <ClCompile Include="src\Entities\Paddle.cpp" />
     <ClCompile Include="src\Main.cpp" />
     <ClCompile Include="src\Scenes\FieldScene.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Entities\Ball.h" />
+    <ClInclude Include="src\Entities\HardBoundary.h" />
     <ClInclude Include="src\Entities\Paddle.h" />
     <ClInclude Include="src\Scenes\FieldScene.h" />
   </ItemGroup>

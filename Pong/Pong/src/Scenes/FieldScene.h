@@ -5,6 +5,7 @@
 
 #include "../Entities/Paddle.h"
 #include "../Entities/Ball.h"
+#include "../Entities/HardBoundary.h"
 
 class FieldScene : public Soul::Scene
 {
@@ -21,4 +22,6 @@ private:
 	Paddle m_Player;
 	Paddle m_AI;
 	Ball m_Ball;
+	HardBoundary m_TopBounds;
+	HardBoundary m_BottomBounds;
 };
