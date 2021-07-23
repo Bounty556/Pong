@@ -45,5 +45,15 @@ namespace Soul
 
 			return theta;
 		}
+
+		f32 Dot(const sf::Vector2f& a, const sf::Vector2f b)
+		{
+			return a.x * b.x + a.y * b.y;
+		}
+
+		sf::Vector2f Reflect(const sf::Vector2f& incoming, const sf::Vector2f& normal)
+		{
+			return incoming - 2 * (Dot(incoming, normal)) * normal;
+		}
 	}
 }
