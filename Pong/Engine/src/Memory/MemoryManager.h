@@ -118,7 +118,7 @@ namespace Soul
 
 		MemoryBlock* block = (MemoryBlock*)((u8*)location - sizeof(MemoryBlock));
 
-		if (!header->isArray)
+		if (!block->isArray)
 			location->~T();
 
 		FreeMemoryBlock(block);
