@@ -8,232 +8,191 @@ namespace Soul
 	u8* MemoryManager::m_AllocatedMemory;
 	void* MemoryManager::m_AllocMemoryStart;
 	void* MemoryManager::m_AllocMemoryEnd;
-	bool MemoryManager::m_MemoryInitialized = false;
+	MemoryManager::MemoryBlock* MemoryManager::m_LastAllocBlock;
+	bool MemoryManager::m_IsInitialized = false;
 
 	bool MemoryManager::Initialize(u32 bytes)
 	{
+		ASSERT(!m_IsInitialized);
+
 		m_AllocatedMemory = (u8*)PlatformAllocateMemory(bytes);
 		m_AllocMemoryStart = m_AllocatedMemory;
 		m_AllocMemoryEnd = m_AllocatedMemory + bytes;
 
-		// Create our 0th node at the start
-		MemoryNode* memoryNode = (MemoryNode*)m_AllocMemoryStart;
-		memoryNode->BlockSize = bytes;
-		memoryNode->NextNode = nullptr;
+		PlatformSetMemory(m_AllocMemoryStart, 0, bytes);
+		
+		m_IsInitialized = true;
 
-		m_MemoryInitialized = true;
+		MemoryBlock* firstBlock = (MemoryBlock*)m_AllocMemoryStart;
+		firstBlock->blockSize = bytes;
 
-		return m_AllocatedMemory;
+		m_LastAllocBlock = firstBlock;
+
+		return true;
 	}
 
 	void MemoryManager::Shutdown()
 	{
-		ASSERT(m_MemoryInitialized);
+		ASSERT(m_IsInitialized);
 
 		PlatformFreeMemory(m_AllocatedMemory);
+		m_IsInitialized = false;
 	}
 
-	void* MemoryManager::PartitionMemory(u32 bytes, u32 count)
+	void* MemoryManager::Partition(u32 bytes, u32 count, bool isArray)
 	{
-		ASSERT(m_MemoryInitialized);
+		ASSERT(m_IsInitialized);
 
-		MemoryNode* currentNode = (MemoryNode*)m_AllocMemoryStart;
-		MemoryNode* smallestValidNode = nullptr;
+		MemoryBlock* block = FindFreeBlockOfSize(bytes * count + sizeof(MemoryBlock));
+		void* actualMemory = ((u8*)block) + sizeof(MemoryBlock);
 
-		// Need more bytes to store the header for the partition we're making
-		u32 actualBytes = (bytes * count) + sizeof(PartitionHeader); 
+		ConfigureMemoryBlocks(block, bytes * count + sizeof(MemoryBlock));
 
-		while (currentNode)
-		{
-			// If this node is big enough to contain the partition and is smaller than the
-			// smallest node already found, or if this node is big enough to contain the
-			// partition and we have not found a node yet
-			if (currentNode->BlockSize >= actualBytes)
-			{
-				if ((smallestValidNode && currentNode->BlockSize <= smallestValidNode->BlockSize) || !smallestValidNode)
-					smallestValidNode = currentNode;
-			}
-			currentNode = currentNode->NextNode;
-		}
-
-		if (smallestValidNode)
-		{
-			// If we were to store memory here, can we keep our node?
-			if (smallestValidNode->BlockSize - sizeof(MemoryNode) >= actualBytes)
-			{
-				void* location = ((u8*)smallestValidNode) + (smallestValidNode->BlockSize - actualBytes);
-
-				// Initialize newly partitioned memory to 0
-				PlatformSetMemory(location, 0, actualBytes);
-
-				PartitionHeader* header = (PartitionHeader*)location;
-				header->Bytes = actualBytes;
-				header->Count = count;
-				location = (u8*)location + sizeof(PartitionHeader);
-
-				smallestValidNode->BlockSize -= actualBytes;
-
-				return location;
-			}
-			// In this scenario, we can't keep our node - repair nodes afterwards
-			else if (smallestValidNode->BlockSize >= actualBytes)
-			{
-				// If we try to remove our 0th node everything will break...
-				ASSERT(smallestValidNode != m_AllocMemoryStart);
-
-				void* location = smallestValidNode;
-				u32 blockSize = smallestValidNode->BlockSize;
-
-				RemoveNode(smallestValidNode);
-				PlatformSetMemory(location, 0, smallestValidNode->BlockSize);
-
-				PartitionHeader* header = (PartitionHeader*)location;
-				header->Bytes = blockSize;
-				header->Count = count;
-				location = (u8*)location + sizeof(PartitionHeader);
-
-				return location;
-			}
-		}
-
-		// We couldn't find a valid memory block
-		DrawMemory();
-		LOG_ERROR("Failed to allocate %d bytes.", bytes);
-		return (void*)nullptr;
-	}
-
-	u32 MemoryManager::GetByteSize(void* location)
-	{
-		ASSERT(location >= m_AllocMemoryStart);
-		ASSERT(location < m_AllocMemoryEnd);
-
-		// Back newLocation up to where we put the header
-		PartitionHeader* header = (PartitionHeader*)((u8*)location - sizeof(PartitionHeader));
-		return header->Bytes - sizeof(PartitionHeader);
+		block->isArray = isArray;
+		block->isAllocated = true;
+		return actualMemory;
 	}
 
 	u32 MemoryManager::GetTotalPartitionedMemory()
 	{
-		ASSERT(m_MemoryInitialized);
+		MemoryBlock* currentBlock = (MemoryBlock*)m_AllocMemoryStart;
+		u32 totalSize = 0;
 
-		u32 freeBytes = GetTotalFreeMemory();
-		u32 partitionedBytes = (u32)m_AllocMemoryEnd - (u32)m_AllocMemoryStart - freeBytes;
+		if (currentBlock->isAllocated)
+			totalSize += currentBlock->blockSize;
 
-		return partitionedBytes;
+		while (currentBlock->nextBlock)
+		{
+			currentBlock = currentBlock->nextBlock;
+
+			if (currentBlock->isAllocated)
+				totalSize += currentBlock->blockSize;
+		}
+
+		return totalSize;
 	}
 
 	u32 MemoryManager::GetTotalFreeMemory()
 	{
-		ASSERT(m_MemoryInitialized);
+		MemoryBlock* currentBlock = (MemoryBlock*)m_AllocMemoryStart;
+		u32 totalSize = 0;
 
-		MemoryNode* currentNode = (MemoryNode*)m_AllocMemoryStart;
-		u32 freeBytes = currentNode->BlockSize;
+		if (!currentBlock->isAllocated)
+			totalSize += currentBlock->blockSize;
 
-		while (currentNode->NextNode)
+		while (currentBlock->nextBlock)
 		{
-			currentNode = currentNode->NextNode;
-			freeBytes += currentNode->BlockSize;
+			currentBlock = currentBlock->nextBlock;
+
+			if (!currentBlock->isAllocated)
+				totalSize += currentBlock->blockSize;
 		}
 
-		return freeBytes;
+		return totalSize;
 	}
 
-	void MemoryManager::DrawMemory()
+	MemoryManager::MemoryBlock* MemoryManager::FindFreeBlockOfSize(u32 bytes)
 	{
-		ASSERT(m_MemoryInitialized);
+		MemoryBlock* currentBlock = m_LastAllocBlock;
 
-		LOG_INFO("%d bytes available, %d bytes used. There are %d nodes in memory.",
-			GetTotalFreeMemory(), GetTotalPartitionedMemory(), CountNodes());
-	}
+		while ((currentBlock->isAllocated || currentBlock->blockSize < bytes) && currentBlock->nextBlock)
+			currentBlock = currentBlock->nextBlock;
 
-	void MemoryManager::RemoveNode(MemoryNode* removedNode)
-	{
-		MemoryNode* currentNode = (MemoryNode*)m_AllocMemoryStart;
-
-		while (currentNode->NextNode != nullptr)
+		if (!currentBlock->isAllocated && currentBlock->blockSize >= bytes)
+			return currentBlock;
+		else
 		{
-			if (currentNode->NextNode == removedNode)
-				currentNode->NextNode = removedNode->NextNode;
-			else
-				currentNode = currentNode->NextNode;
+			LOG_FATAL("Couldn't find free MemoryBlock of requested size.");
+			return nullptr;
 		}
 	}
 
-	void MemoryManager::AddNode(void* location)
+	void MemoryManager::ConfigureMemoryBlocks(MemoryBlock* location, u32 bytes)
 	{
-		// Back newLocation up to where we put the header
-		void* newLocation = (u8*)location - sizeof(PartitionHeader);
-		u32 size = ((PartitionHeader*)newLocation)->Bytes;
+		// Check to see if we can make a new MemoryBlock right after this one
+		u8* nextLocation = (u8*)location + bytes;
 
-		// Create a new memory node at the given location
-		MemoryNode* newNode = (MemoryNode*)newLocation;
-		newNode->BlockSize = size;
-
-		MemoryNode* previousNode = (MemoryNode*)m_AllocMemoryStart;
-		MemoryNode* currentNode = (MemoryNode*)m_AllocMemoryStart;
-		while (currentNode->NextNode)
+		// If we have room to make a new block
+		if (location->nextBlock)
 		{
-			currentNode = currentNode->NextNode;
-
-			// We passed the new Node, reconstruct
-			if (newNode < currentNode)
+			if ((u8*)location->nextBlock - nextLocation > sizeof(MemoryBlock))
 			{
-				bool didCombine = false;
-				// Check to see if newNode and currentNode can be combined
-				if ((u8*)newNode + newNode->BlockSize == (u8*)currentNode)
-				{
-					newNode->BlockSize += currentNode->BlockSize;
-					newNode->NextNode = currentNode->NextNode;
-					previousNode->NextNode = newNode;
-					didCombine = true;
-				}
-
-				// Check to see if previousNode and newNode can be combined
-				if ((u8*)previousNode + previousNode->BlockSize == (u8*)newNode)
-				{
-					previousNode->BlockSize += newNode->BlockSize;
-					if (didCombine)
-					{
-						previousNode->NextNode = newNode->NextNode;
-					}
-				}
-				else
-				{
-					previousNode->NextNode = newNode;
-					if (!didCombine)
-					{
-						newNode->NextNode = currentNode;
-					}
-				}
-				return;
+				u32 oldSize = location->blockSize;
+				location->blockSize = bytes;
+				MemoryBlock* newBlock = (MemoryBlock*)nextLocation;
+				newBlock->nextBlock = location->nextBlock;
+				newBlock->prevBlock = location;
+				location->nextBlock->prevBlock = newBlock;
+				location->nextBlock = newBlock;
+				newBlock->isAllocated = false;
+				newBlock->blockSize = oldSize - location->blockSize;
+				m_LastAllocBlock = newBlock;
 			}
-
-			previousNode = currentNode;
+			else // We don't have enough room for a new MemoryBlock
+				location->blockSize = bytes + ((u8*)location->nextBlock - nextLocation);
 		}
-
-		// If we still haven't found this new node, it must be at the end
-		if ((u8*)currentNode + currentNode->BlockSize == (u8*)newNode)
+		else if ((u8*)m_AllocMemoryEnd - nextLocation > sizeof(MemoryBlock))
 		{
-			currentNode->BlockSize += newNode->BlockSize;
+			// Check to see if we have room to add a new MemoryBlock
+			u32 oldSize = location->blockSize;
+			location->blockSize = bytes;
+			MemoryBlock* newBlock = (MemoryBlock*)nextLocation;
+			newBlock->nextBlock = nullptr;
+			newBlock->prevBlock = location;
+			location->nextBlock = newBlock;
+			newBlock->isAllocated = false;
+			newBlock->blockSize = oldSize - location->blockSize;
+			m_LastAllocBlock = newBlock;
+		}
+		else
+			LOG_FATAL("Couldn't find suitable memory for new MemoryBlock.");
+	}
+
+	void MemoryManager::FreeMemoryBlock(MemoryBlock* location)
+	{
+		// Special case if we're deleting the very first thing in memory
+		if (location == (MemoryBlock*)m_AllocMemoryStart)
+		{
+			location->isAllocated = false;
+			location->isArray = false;
+			PlatformSetMemory(location + 1, 0, location->blockSize - sizeof(MemoryBlock));
+
+			m_LastAllocBlock = location;
+			CombineFreeBlocks(location);
 		}
 		else
 		{
-			currentNode->NextNode = newNode;
-			newNode->NextNode = nullptr;
+			MemoryBlock* prevBlock = location->prevBlock;
+
+			location->isAllocated = false;
+
+			if (prevBlock->isAllocated)
+			{
+				location->isArray = false;
+				PlatformSetMemory(location + 1, 0, location->blockSize - sizeof(MemoryBlock));
+
+				m_LastAllocBlock = location;
+				CombineFreeBlocks(location);
+			}
+			else
+				CombineFreeBlocks(prevBlock);
 		}
 	}
 
-	u32 MemoryManager::CountNodes()
+	void MemoryManager::CombineFreeBlocks(MemoryBlock* block)
 	{
-		MemoryNode* currentNode = (MemoryNode*)m_AllocMemoryStart;
-		u32 nodeCount = 0;
-
-		while (currentNode)
+		while (block->nextBlock && !block->nextBlock->isAllocated)
 		{
-			nodeCount++;
-			currentNode = currentNode->NextNode;
-		}
+			// Combine this block with the next block
+			MemoryBlock* newNext = block->nextBlock->nextBlock;
+			block->blockSize += block->nextBlock->blockSize;
+			PlatformSetMemory(block->nextBlock, 0, block->nextBlock->blockSize);
+			block->nextBlock = newNext;
 
-		return nodeCount;
+			if (newNext)
+				newNext->prevBlock = block;
+
+			m_LastAllocBlock = block;
+		}
 	}
 }

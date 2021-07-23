@@ -8,7 +8,7 @@ int main()
 {
 	if (Soul::InitializeEngine(1280, 720, "Pong!"))
 	{
-		FieldScene* scene = PARTITION(FieldScene);
+		FieldScene* scene = NEW(FieldScene);
 
 		Soul::SetScene(scene);
 	}
