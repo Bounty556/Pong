@@ -7,6 +7,7 @@
 
 #define NEW(type, ...) (new (Soul::MemoryManager::Partition(sizeof(type))) type(__VA_ARGS__))
 #define NEW_ARRAY(type, count) ((type*)(Soul::MemoryManager::Partition(sizeof(type), count, true)))
+#define DELETE(location) (Soul::MemoryManager::FreeMemory(location))
 
 namespace Soul
 {

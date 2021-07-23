@@ -11,16 +11,16 @@ namespace Soul
 
 	bool MessageBus::Initialize()
 	{
-		m_Map = PARTITION(MessageBusMap);
-		m_Messages = PARTITION(Queue<MessageBus::Message>, 64);
+		m_Map = NEW(MessageBusMap);
+		m_Messages = NEW(Queue<MessageBus::Message>, 64);
 
 		return true;
 	}
 
 	void MessageBus::Shutdown()
 	{
-		MemoryManager::FreeMemory(m_Map);
-		MemoryManager::FreeMemory(m_Messages);
+		DELETE(m_Map);
+		DELETE(m_Messages);
 	}
 
 	void MessageBus::Subscribe(const char* message, Listener* listener)
