@@ -62,12 +62,6 @@ namespace Soul
 		static void FreeMemory(T* location);
 
 		/*
-		Get the size of the memory allocation, assuming the location has a
-		valid partition header
-		*/
-		static u32 GetByteSize(void* location);
-
-		/*
 		Returns the total number of bytes partitioned in the memory arena.
 		*/
 		static u32 GetTotalPartitionedMemory();
