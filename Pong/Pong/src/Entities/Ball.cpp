@@ -27,8 +27,6 @@ void Ball::LateUpdateSelf(f32 dt)
 	{
 		if (collisions[i].node->HasParentOfType("HardBoundary") || collisions[i].node->HasParentOfType("Paddle"))
 		{
-			move(collisions[i].correctionVector);
-			
 			sf::Vector2f normal = Soul::Math::Normalize(collisions[i].correctionVector);
 
 			m_Direction = Soul::Math::Reflect(m_Direction, normal);

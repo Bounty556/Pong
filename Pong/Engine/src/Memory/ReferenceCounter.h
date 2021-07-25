@@ -1,5 +1,7 @@
 #pragma once
 
+#include <Defines.h>
+
 namespace Soul
 {
 	class ReferenceCounter
@@ -9,9 +11,9 @@ namespace Soul
 
 		void AddReference();
 
-		unsigned int RemoveReference();
+		u32 RemoveReference();
 
 	private:
-		unsigned int m_Counter;
+		u32 m_Counter;
 	};
 }

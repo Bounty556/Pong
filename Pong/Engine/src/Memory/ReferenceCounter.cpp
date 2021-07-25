@@ -5,7 +5,6 @@ namespace Soul
 	ReferenceCounter::ReferenceCounter() : 
 		m_Counter(0)
 	{
-
 	}
 
 	void ReferenceCounter::AddReference()
@@ -13,9 +12,8 @@ namespace Soul
 		++m_Counter;
 	}
 
-	unsigned int ReferenceCounter::RemoveReference()
+	u32 ReferenceCounter::RemoveReference()
 	{
 		return --m_Counter;
 	}
-
 }

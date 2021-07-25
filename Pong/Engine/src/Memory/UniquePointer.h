@@ -3,7 +3,6 @@
 #include <Defines.h>
 #include <Memory/MemoryManager.h>
 
-// TODO: Allow UniquePointers to be able to be instantiated with no value, and just be "invalid".
 
 namespace Soul
 {
@@ -25,6 +24,7 @@ namespace Soul
 		T& operator[](u32 index) const;
 
 		T* Raw() const;
+		T* Raw();
 
 	private:
 		T* m_Pointer;
@@ -47,14 +47,14 @@ namespace Soul
 	UniquePointer<T>::~UniquePointer()
 	{
 		if (m_Pointer)
-			MemoryManager::FreeMemory(m_Pointer);
+			DELETE(m_Pointer);
 	}
 
 	template <class T>
 	UniquePointer<T>& UniquePointer<T>::operator=(UniquePointer<T>&& otherPointer)
 	{
 		if (m_Pointer)
-			MemoryManager::FreeMemory(m_Pointer);
+			DELETE(m_Pointer);
 
 		m_Pointer = otherPointer.m_Pointer;
 		otherPointer.m_Pointer = nullptr;
@@ -66,7 +66,7 @@ namespace Soul
 	UniquePointer<T>& UniquePointer<T>::operator=(T* otherPointer)
 	{
 		if (m_Pointer)
-			MemoryManager::FreeMemory(m_Pointer);
+			DELETE(m_Pointer);
 
 		m_Pointer = otherPointer;
 
@@ -93,6 +93,12 @@ namespace Soul
 
 	template <class T>
 	T* UniquePointer<T>::Raw() const
+	{
+		return m_Pointer;
+	}
+
+	template <class T>
+	T* UniquePointer<T>::Raw()
 	{
 		return m_Pointer;
 	}

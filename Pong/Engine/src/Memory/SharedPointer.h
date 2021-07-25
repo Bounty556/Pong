@@ -4,8 +4,6 @@
 #include <Memory/MemoryManager.h>
 #include <Memory/ReferenceCounter.h>
 
-// TODO: SharedPointer should be able to be initialized with no values, as well as be able to be reassigned to new values and behave accordingly. Fo SharedPointers, it should decrease the reference counter pointing to that value and potentially free the memory at that location. At the moment I'm not really using any SharedPointers however, so I'm going to leave this to future Jake.
-
 namespace Soul
 {
 	template <class T>
@@ -19,10 +17,14 @@ namespace Soul
 
 		SharedPointer<T>& operator=(const SharedPointer<T>& otherPointer);
 		SharedPointer<T>& operator=(SharedPointer<T>&& otherPointer);
+		SharedPointer<T>& operator=(T* otherPointer);
 
 		T* operator->() const;
 		T& operator*() const;
-		T& operator[](unsigned int index) const;
+		T& operator[](u32 index) const;
+
+		T* Raw() const;
+		T* Raw();
 
 	private:
 		T* m_Pointer;
@@ -31,9 +33,9 @@ namespace Soul
 
 	template <class T>
 	SharedPointer<T>::SharedPointer(T* pointer) :
-		m_Pointer(pointer)
+		m_Pointer(pointer),
+		m_References(NEW(ReferenceCounter))
 	{
-		m_References = PARTITION(ReferenceCounter);
 		m_References->AddReference();
 	}
 
@@ -57,13 +59,10 @@ namespace Soul
 	template <class T>
 	SharedPointer<T>::~SharedPointer()
 	{
-		if (m_References)
+		if (m_References && m_References->RemoveReference() == 0 && m_Pointer)
 		{
-			if (m_References->RemoveReference() == 0)
-			{
-				MemoryManager::FreeMemory(m_References);
-				MemoryManager::FreeMemory(m_Pointer);
-			}
+			DELETE(m_References);
+			DELETE(m_Pointer);
 		}
 	}
 
@@ -75,8 +74,8 @@ namespace Soul
 		{
 			if (m_Pointer && m_References->RemoveReference() == 0)
 			{
-				MemoryManager::FreeMemory(m_References);
-				MemoryManager::FreeMemory(m_Pointer);
+				DELETE(m_References);
+				DELETE(m_Pointer);
 			}
 
 			m_Pointer = otherPointer.m_Pointer;
@@ -90,10 +89,10 @@ namespace Soul
 	template <class T>
 	SharedPointer<T>& SharedPointer<T>::operator=(SharedPointer<T>&& otherPointer)
 	{
-		if (m_Pointer && m_References->RemoveReference() == 0)
+		if (m_References && m_References->RemoveReference() == 0 && m_Pointer)
 		{
-			MemoryManager::FreeMemory(m_References);
-			MemoryManager::FreeMemory(m_Pointer);
+			DELETE(m_References);
+			DELETE(m_Pointer);
 		}
 
 		m_Pointer = otherPointer.m_Pointer;
@@ -101,6 +100,23 @@ namespace Soul
 
 		otherPointer.m_Pointer = nullptr;
 		otherPointer.m_References = nullptr;
+
+		return *this;
+	}
+
+	template <class T>
+	SharedPointer<T>& SharedPointer<T>::operator=(T* otherPointer)
+	{
+		if (m_References && m_References->RemoveReference() == 0 && m_Pointer)
+		{
+			DELETE(m_References);
+			DELETE(m_Pointer);
+		}
+
+		m_Pointer = otherPointer;
+		m_References = NEW(ReferenceCounter);
+
+		return *this;
 	}
 
 	template <class T>
@@ -116,8 +132,20 @@ namespace Soul
 	}
 
 	template <class T>
-	T& SharedPointer<T>::operator[](unsigned int index) const
+	T& SharedPointer<T>::operator[](u32 index) const
 	{
 		return m_Pointer[index];
+	}
+
+	template <class T>
+	T* SharedPointer<T>::Raw() const
+	{
+		return m_Pointer;
+	}
+
+	template <class T>
+	T* SharedPointer<T>::Raw()
+	{
+		return m_Pointer;
 	}
 }
