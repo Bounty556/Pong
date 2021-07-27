@@ -100,6 +100,7 @@
     <ClCompile Include="src\Tests\PhysicsSystemTests.cpp" />
     <ClCompile Include="src\Tests\QuadTreeTests.cpp" />
     <ClCompile Include="src\Tests\QueueTests.cpp" />
+    <ClCompile Include="src\Tests\SharedPointerTests.cpp" />
     <ClCompile Include="src\Tests\StackTests.cpp" />
     <ClCompile Include="src\Tests\StringTests.cpp" />
     <ClCompile Include="src\Tests\TestClass.cpp" />
@@ -118,6 +119,7 @@
     <ClInclude Include="src\Tests\PhysicsSystemTests.h" />
     <ClInclude Include="src\Tests\QuadTreeTests.h" />
     <ClInclude Include="src\Tests\QueueTests.h" />
+    <ClInclude Include="src\Tests\SharedPointerTests.h" />
     <ClInclude Include="src\Tests\StackTests.h" />
     <ClInclude Include="src\Tests\StringTests.h" />
     <ClInclude Include="src\Tests\TestClass.h" />

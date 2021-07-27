@@ -140,7 +140,7 @@ void UniquePointerArrayUniquePointer()
 	END_MEMORY_CHECK();
 }
 
-void Move()
+void MoveUniquePointerTest()
 {
 	START_MEMORY_CHECK();
 
@@ -160,5 +160,5 @@ void UniquePointerTests::RunAllTests()
 	RUN_TEST(PrimitiveArrayUniquePointer);
 	RUN_TEST(ObjectArrayUniquePointer);
 	RUN_TEST(UniquePointerArrayUniquePointer);
-	RUN_TEST(Move);
+	RUN_TEST(MoveUniquePointerTest);
 }

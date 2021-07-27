@@ -4,7 +4,7 @@
 
 namespace Soul
 {
-	class ReferenceCounter
+	class SOULAPI ReferenceCounter
 	{
 	public:
 		ReferenceCounter();

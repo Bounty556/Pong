@@ -13,6 +13,7 @@
 #include "Tests/PhysicsSystemTests.h"
 #include "Tests/QuadTreeTests.h"
 #include "Tests/QueueTests.h"
+#include "Tests/SharedPointerTests.h"
 #include "Tests/StackTests.h"
 #include "Tests/StringTests.h"
 #include "Tests/UniquePointerTests.h"
@@ -34,6 +35,7 @@ void RunAllTestSuites()
 	CREATE_TEST_SUITE(PhysicsSystemTests);
 	CREATE_TEST_SUITE(QuadTreeTests);
 	CREATE_TEST_SUITE(QueueTests);
+	CREATE_TEST_SUITE(SharedPointerTests);
 	CREATE_TEST_SUITE(StackTests);
 	CREATE_TEST_SUITE(StringTests);
 	CREATE_TEST_SUITE(UniquePointerTests);

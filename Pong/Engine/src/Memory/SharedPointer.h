@@ -12,11 +12,11 @@ namespace Soul
 	public:
 		SharedPointer(T* pointer);
 		SharedPointer(const SharedPointer<T>& otherPointer);
-		SharedPointer(SharedPointer<T>&& otherPointer);
+		SharedPointer(SharedPointer<T>&& otherPointer) noexcept;
 		~SharedPointer();
 
 		SharedPointer<T>& operator=(const SharedPointer<T>& otherPointer);
-		SharedPointer<T>& operator=(SharedPointer<T>&& otherPointer);
+		SharedPointer<T>& operator=(SharedPointer<T>&& otherPointer) noexcept;
 		SharedPointer<T>& operator=(T* otherPointer);
 
 		T* operator->() const;
@@ -25,6 +25,8 @@ namespace Soul
 
 		T* Raw() const;
 		T* Raw();
+
+		bool IsValid() const;
 
 	private:
 		T* m_Pointer;
@@ -48,7 +50,7 @@ namespace Soul
 	}
 
 	template <class T>
-	SharedPointer<T>::SharedPointer(SharedPointer<T>&& otherPointer) :
+	SharedPointer<T>::SharedPointer(SharedPointer<T>&& otherPointer) noexcept :
 		m_Pointer(otherPointer.m_Pointer),
 		m_References(otherPointer.m_References)
 	{
@@ -87,7 +89,7 @@ namespace Soul
 	}
 
 	template <class T>
-	SharedPointer<T>& SharedPointer<T>::operator=(SharedPointer<T>&& otherPointer)
+	SharedPointer<T>& SharedPointer<T>::operator=(SharedPointer<T>&& otherPointer) noexcept
 	{
 		if (m_References && m_References->RemoveReference() == 0 && m_Pointer)
 		{
@@ -115,6 +117,7 @@ namespace Soul
 
 		m_Pointer = otherPointer;
 		m_References = NEW(ReferenceCounter);
+		m_References->AddReference();
 
 		return *this;
 	}
@@ -147,5 +150,11 @@ namespace Soul
 	T* SharedPointer<T>::Raw()
 	{
 		return m_Pointer;
+	}
+
+	template <class T>
+	bool SharedPointer<T>::IsValid() const
+	{
+		return (bool)m_Pointer;
 	}
 }
