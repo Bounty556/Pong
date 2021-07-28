@@ -2,6 +2,9 @@
 
 #include <Structures/Vector.h>
 
+#include <Memory/SharedPointer.h>
+#include <Core/String.h>
+
 #include <SFML/Graphics/Transformable.hpp>
 #include <SFML/Graphics/RenderStates.hpp>
 
@@ -37,6 +40,10 @@ namespace Soul
 		bool HasChildOfType(const char* type) const;
 		bool HasParentOfType(const char* type) const;
 	
+		void AddTag(const char* tag);
+		bool HasTag(const char* tag) const;
+		void RemoveTag(const char* tag);
+
 	protected:
 		virtual void UpdateSelf(f32 dt);
 		virtual void LateUpdateSelf(f32 dt);
@@ -51,5 +58,6 @@ namespace Soul
 		Node* m_Parent;
 		Vector<Node*> m_Children;
 		const char* m_Type;
+		SharedPointer<Vector<String>> m_Tags;
 	};
 }

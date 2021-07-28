@@ -5,16 +5,17 @@ namespace Soul
 	Node::Node(const char* type) :
 		m_Children(),
 		m_Parent(nullptr),
-		m_Type(type)
+		m_Type(type),
+		m_Tags(NEW(Vector<String>, 16))
 	{
 	}
 
 	Node::Node(Node&& other) noexcept :
 		m_Children(std::move(other.m_Children)),
 		m_Parent(other.m_Parent),
-		m_Type(other.m_Type)
+		m_Type(other.m_Type),
+		m_Tags(std::move(other.m_Tags))
 	{
-		// TODO: Maybe we can call the transformable constructor here
 		setPosition(other.getPosition());
 	}
 
@@ -30,6 +31,7 @@ namespace Soul
 		m_Children = std::move(other.m_Children);
 		m_Parent = other.m_Parent;
 		m_Type = other.m_Type;
+		m_Tags = std::move(other.m_Tags);
 		setPosition(other.getPosition());
 
 		return *this;
@@ -59,12 +61,18 @@ namespace Soul
 	{
 		m_Children.Push(child);
 		child->m_Parent = this;
+		
+		// Add any tags this child has to us, reassign child tags
+		for (u32 i = 0; i < child->m_Tags->Count(); ++i)
+			AddTag((*child->m_Tags)[i].GetCString());
+		child->m_Tags = m_Tags;
 	}
 
 	void Node::RemoveChild(Node* child)
 	{
 		m_Children.Remove(child);
 		child->m_Parent = nullptr;
+		child->m_Tags = NEW(Vector<String>, 16);
 	}
 
 	sf::Vector2f Node::GetWorldPosition() const
@@ -120,6 +128,28 @@ namespace Soul
 	bool Node::HasParentOfType(const char* type) const
 	{
 		return m_Parent && (m_Parent->GetType() == type || m_Parent->HasParentOfType(type));
+	}
+
+	void Node::AddTag(const char* tag)
+	{
+		// TODO: Maybe consider adding a Set structure
+		for (u32 i = 0; i < m_Tags->Count(); ++i)
+			if ((*m_Tags)[i] == tag)
+				return;
+		m_Tags->Push(tag);
+	}
+
+	bool Node::HasTag(const char* tag) const
+	{
+		for (u32 i = 0; i < m_Tags->Count(); ++i)
+			if ((*m_Tags)[i] == tag)
+				return true;
+		return false;
+	}
+
+	void Node::RemoveTag(const char* tag)
+	{
+		m_Tags->Remove(tag);
 	}
 
 	void Node::UpdateSelf(f32 dt)

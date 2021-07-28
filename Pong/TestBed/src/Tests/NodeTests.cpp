@@ -101,6 +101,47 @@ void VectorOfNodesTest()
 	END_MEMORY_CHECK();
 }
 
+void TagTest()
+{
+	START_MEMORY_CHECK();
+
+	// Parent has tag
+	TestNode node;
+	node.AddTag("Tag1");
+
+	ASSERT_TRUE(node.HasTag("Tag1"), "Failed to add tag to node.");
+	
+	// Parent remove tag
+	node.RemoveTag("Tag1");
+
+	ASSERT_FALSE(node.HasTag("Tag1"), "Failed to remove tag from node.");
+
+	// Add tag back in
+	node.AddTag("Tag1");
+
+	// Make child with tag
+	Soul::UniquePointer<TestNode> childNode(NEW(TestNode));
+	childNode->AddTag("Tag2");
+	
+	// Parent should now have Tag2 as well
+	node.AddChild(childNode.Raw());
+
+	ASSERT_TRUE(childNode->HasTag("Tag2"), "Failed to add tag to node.");
+	ASSERT_TRUE(childNode->HasTag("Tag1"), "Failed to inherit parent tag.");
+	ASSERT_TRUE(node.HasTag("Tag1"), "Failed to add tag to node.");
+	ASSERT_TRUE(node.HasTag("Tag2"), "Failed to inherit child tag.");
+
+	node.RemoveChild(childNode.Raw());
+
+	ASSERT_TRUE(node.HasTag("Tag1"), "Incorrectly removed tag.");
+	ASSERT_TRUE(node.HasTag("Tag2"), "Incorrectly removed tag.");
+
+	ASSERT_FALSE(childNode->HasTag("Tag2"), "Incorrectly kept tag.");
+	ASSERT_FALSE(childNode->HasTag("Tag1"), "Incorrectly kept tag.");
+
+	END_MEMORY_CHECK();
+}
+
 void NodeTests::RunAllTests()
 {
 	RUN_TEST(BasicNodes);
@@ -109,4 +150,5 @@ void NodeTests::RunAllTests()
 	RUN_TEST(NodeParent);
 	RUN_TEST(ChildrenOfTypeTest);
 	RUN_TEST(VectorOfNodesTest);
+	RUN_TEST(TagTest);
 }
