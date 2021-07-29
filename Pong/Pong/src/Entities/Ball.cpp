@@ -7,17 +7,11 @@
 
 Ball::Ball(f32 radius, f32 speed) :
 	Node("Ball"),
-	m_Collider(NEW(Soul::CircleColliderNode, radius)),
-	m_Direction(Soul::Math::AngleToVector((f32)Soul::Math::Rand32(360))),
-	m_Speed(speed)
+	m_Collider(NEW(Soul::CircleColliderNode, radius))
 {
 	AddChild(m_Collider);
 	AddChild(NEW(Soul::CircleSpriteNode, radius, sf::Color::White));
-}
-
-void Ball::UpdateSelf(f32 dt)
-{
-	move(m_Direction * m_Speed * dt);
+	SetVelocity(Soul::Math::AngleToVector((f32)Soul::Math::Rand32(360)) * speed);
 }
 
 void Ball::LateUpdateSelf(f32 dt)
@@ -29,7 +23,7 @@ void Ball::LateUpdateSelf(f32 dt)
 		{
 			sf::Vector2f normal = Soul::Math::Normalize(collisions[i].correctionVector);
 
-			m_Direction = Soul::Math::Reflect(m_Direction, normal);
+			SetVelocity(Soul::Math::Reflect(GetWorldVelocity(), normal));
 		}
 	}
 }

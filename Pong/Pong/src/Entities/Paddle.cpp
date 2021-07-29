@@ -19,10 +19,12 @@ void Paddle::UpdateSelf(f32 dt)
 	Soul::Controller::ButtonState upState = Soul::InputManager::GetControlState(-1, "Up").state;
 	Soul::Controller::ButtonState downState = Soul::InputManager::GetControlState(-1, "Down").state;
 
-	if (upState == Soul::Controller::Down || upState == Soul::Controller::Pressed)
-		move(0.0f, -m_MoveSpeed * dt);
-	if (downState == Soul::Controller::Down || downState == Soul::Controller::Pressed)
-		move(0.0f, m_MoveSpeed * dt);
+	if (upState == Soul::Controller::Released || downState == Soul::Controller::Released)
+		SetVelocity(0.0f, 0.0f);
+	if (upState == Soul::Controller::Pressed || upState == Soul::Controller::Down)
+		SetVelocity(0.0f, -m_MoveSpeed);
+	if (downState == Soul::Controller::Pressed || downState == Soul::Controller::Down)
+		SetVelocity(0.0f, m_MoveSpeed);
 }
 
 void Paddle::LateUpdateSelf(f32 dt)

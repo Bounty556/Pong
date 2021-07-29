@@ -2,8 +2,8 @@
 
 #include <Structures/Vector.h>
 
-#include <Memory/SharedPointer.h>
 #include <Core/String.h>
+#include <Memory/SharedPointer.h>
 
 #include <SFML/Graphics/Transformable.hpp>
 #include <SFML/Graphics/RenderStates.hpp>
@@ -30,15 +30,21 @@ namespace Soul
 		void AddChild(Node* child);
 		void RemoveChild(Node* child);
 
+		void SetVelocity(sf::Vector2f velocity);
+		void SetVelocity(f32 xv, f32 yv);
+		void Accelerate(sf::Vector2f dv);
+		void Accelerate(f32 xdv, f32 ydv);
+		sf::Vector2f GetVelocity() const;
+		sf::Vector2f GetWorldVelocity() const;
 		sf::Vector2f GetWorldPosition() const;
 		
 		const Vector<Node*>& GetChildren() const;
 		const Node* GetParent() const;
 
-		const char* GetType() const;
-		Vector<Node*> GetChildrenOfType(const char* type) const;
 		bool HasChildOfType(const char* type) const;
 		bool HasParentOfType(const char* type) const;
+		const char* GetType() const;
+		Vector<Node*> GetChildrenOfType(const char* type) const;
 	
 		void AddTag(const char* tag);
 		bool HasTag(const char* tag) const;
@@ -59,5 +65,6 @@ namespace Soul
 		Vector<Node*> m_Children;
 		const char* m_Type;
 		SharedPointer<Vector<String>> m_Tags;
+		sf::Vector2f m_Velocity;
 	};
 }

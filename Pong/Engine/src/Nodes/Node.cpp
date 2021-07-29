@@ -45,6 +45,9 @@ namespace Soul
 
 	void Node::LateUpdate(f32 dt)
 	{
+		// Move based on velocity
+		// TODO: Change velocity by acceleration?
+		move(m_Velocity * dt);
 		LateUpdateSelf(dt);
 		LateUpdateChildren(dt);
 	}
@@ -73,6 +76,46 @@ namespace Soul
 		m_Children.Remove(child);
 		child->m_Parent = nullptr;
 		child->m_Tags = NEW(Vector<String>, 16);
+	}
+
+	void Node::SetVelocity(sf::Vector2f velocity)
+	{
+		m_Velocity = velocity;
+	}
+
+	void Node::SetVelocity(f32 xv, f32 yv)
+	{
+		m_Velocity = sf::Vector2f(xv, yv);
+	}
+
+	void Node::Accelerate(sf::Vector2f dv)
+	{
+		m_Velocity += dv;
+	}
+
+	void Node::Accelerate(f32 xdv, f32 ydv)
+	{
+		m_Velocity += sf::Vector2f(xdv, ydv);
+	}
+
+	sf::Vector2f Node::GetVelocity() const
+	{
+		return m_Velocity;
+	}
+
+	sf::Vector2f Node::GetWorldVelocity() const
+	{
+		sf::Vector2f velocity = m_Velocity;
+
+		const Node* current = this;
+
+		while (current->m_Parent)
+		{
+			velocity += m_Parent->m_Velocity;
+			current = current->m_Parent;
+		}
+
+		return velocity;
 	}
 
 	sf::Vector2f Node::GetWorldPosition() const
