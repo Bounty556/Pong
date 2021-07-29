@@ -11,6 +11,7 @@ Paddle::Paddle() :
 {
 	AddChild(m_Collider);
 	AddChild(NEW(Soul::RectSpriteNode, 32.0f, 128.0f, sf::Color::White));
+	AddTag("Hard");
 }
 
 void Paddle::UpdateSelf(f32 dt)
@@ -28,6 +29,6 @@ void Paddle::LateUpdateSelf(f32 dt)
 {
 	auto collisions = m_Collider->CheckCollisions();
 	for (u32 i = 0; i < collisions.Count(); ++i)
-		if (collisions[i].node->HasParentOfType("HardBoundary"))
+		if (collisions[i].node->HasTag("Hard"))
 			move(collisions[i].correctionVector);
 }
