@@ -45,9 +45,10 @@ namespace Soul
 
 	void Node::LateUpdate(f32 dt)
 	{
-		// Move based on velocity
-		// TODO: Change velocity by acceleration?
+		// Integrate
+		Accelerate(m_Acceleration * dt);
 		move(m_Velocity * dt);
+
 		LateUpdateSelf(dt);
 		LateUpdateChildren(dt);
 	}
@@ -98,9 +99,34 @@ namespace Soul
 		m_Velocity += sf::Vector2f(xdv, ydv);
 	}
 
+	void Node::SetAcceleration(sf::Vector2f accel)
+	{
+		m_Acceleration = accel;
+	}
+
+	void Node::SetAcceleration(f32 xa, f32 ya)
+	{
+		m_Acceleration = sf::Vector2f(xa, ya);
+	}
+
+	void Node::Jerk(sf::Vector2f da)
+	{
+		m_Acceleration += da;
+	}
+
+	void Node::Jerk(f32 xda, f32 yda)
+	{
+		m_Acceleration += sf::Vector2f(xda, yda);
+	}
+
 	sf::Vector2f Node::GetVelocity() const
 	{
 		return m_Velocity;
+	}
+
+	sf::Vector2f Node::GetAcceleration() const
+	{
+		return m_Acceleration;
 	}
 
 	sf::Vector2f Node::GetWorldVelocity() const
@@ -116,6 +142,21 @@ namespace Soul
 		}
 
 		return velocity;
+	}
+
+	sf::Vector2f Node::GetWorldAcceleration() const
+	{
+		sf::Vector2f accel = m_Acceleration;
+
+		const Node* current = this;
+
+		while (current->m_Parent)
+		{
+			accel += m_Parent->m_Acceleration;
+			current = current->m_Parent;
+		}
+
+		return accel;
 	}
 
 	sf::Vector2f Node::GetWorldPosition() const

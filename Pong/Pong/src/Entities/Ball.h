@@ -18,5 +18,4 @@ private:
 	Soul::CircleColliderNode* m_Collider;
 
 	sf::Vector2f m_Direction;
-	f32 m_Speed;
 };

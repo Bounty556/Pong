@@ -44,7 +44,7 @@ namespace Soul
 		{
 			collision.collided = true;
 			sf::Vector2f direction = Math::Normalize(posA - closest);
-			collision.correctionVector = direction * distance;
+			collision.correctionVector = direction * (radiusA - distance);
 			collision.fromCenterOfMass = Math::Normalize(posA - (posB + dimensionsB * 0.5f));
 		}
 

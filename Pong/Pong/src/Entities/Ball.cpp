@@ -23,6 +23,8 @@ void Ball::LateUpdateSelf(f32 dt)
 		{
 			sf::Vector2f normal = Soul::Math::Normalize(collisions[i].correctionVector);
 
+			move(collisions[i].correctionVector);
+
 			SetVelocity(Soul::Math::Reflect(GetWorldVelocity(), normal));
 		}
 	}

@@ -34,8 +34,14 @@ namespace Soul
 		void SetVelocity(f32 xv, f32 yv);
 		void Accelerate(sf::Vector2f dv);
 		void Accelerate(f32 xdv, f32 ydv);
+		void SetAcceleration(sf::Vector2f accel);
+		void SetAcceleration(f32 xa, f32 ya);
+		void Jerk(sf::Vector2f da);
+		void Jerk(f32 xda, f32 yda);
 		sf::Vector2f GetVelocity() const;
+		sf::Vector2f GetAcceleration() const;
 		sf::Vector2f GetWorldVelocity() const;
+		sf::Vector2f GetWorldAcceleration() const;
 		sf::Vector2f GetWorldPosition() const;
 		
 		const Vector<Node*>& GetChildren() const;
@@ -66,5 +72,6 @@ namespace Soul
 		const char* m_Type;
 		SharedPointer<Vector<String>> m_Tags;
 		sf::Vector2f m_Velocity;
+		sf::Vector2f m_Acceleration;
 	};
 }
