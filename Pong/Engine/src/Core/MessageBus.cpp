@@ -55,13 +55,16 @@ namespace Soul
 		m_Messages->Que(Message{ message, data });
 	}
 
-	void MessageBus::ImmediateMessage(const char* message, void* data)
+	void MessageBus::ImmediateMessage(const char* message, void* data, bool cleanup)
 	{
 		Vector<Listener*>* listeners = m_Map->GetValue(message);
 
 		if (listeners)
 			for (u32 i = 0; i < listeners->Count(); ++i)
 				(*listeners)[i]->Response(message, data);
+
+		if (cleanup)
+			DELETE(data);
 	}
 	
 	void MessageBus::PumpQueue()

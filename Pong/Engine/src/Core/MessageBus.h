@@ -49,7 +49,7 @@ namespace Soul
 		/*
 		Send a message directly to a listener without going through the queue.
 		*/
-		static void ImmediateMessage(const char* message, void* data);
+		static void ImmediateMessage(const char* message, void* data, bool cleanup);
 
 		/*
 		Sends all messages in the queue out, effectively emptying it.
