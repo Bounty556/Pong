@@ -1,16 +1,22 @@
 #include "FieldScene.h"
 
+#include <Core/MessageBus.h>
+
 FieldScene::FieldScene() :
 	Scene(true, true),
 	m_Player(),
 	m_AI(),
 	m_Ball(15, 0.5f),
 	m_TopBounds(-5.0f, -5.0f, 1310.0f, 10.0f),
-	m_BottomBounds(-5.0f, 715.0f, 1310.0f, 10.0f)
+	m_BottomBounds(-5.0f, 715.0f, 1310.0f, 10.0f),
+	m_Listener()
 {
 	m_Player.setPosition(15.0f, 15.0f);
 	m_AI.setPosition(1280.0f - 32.0f - 15.0f, 15.0f);
 	m_Ball.setPosition(1280.0f / 2.0f, 720.0f / 2.0f);
+
+	m_Listener.Subscribe("Wait!", [](void* data) { LOG_INFO("Done!"); });
+	Soul::MessageBus::QueueMessage("Wait!", nullptr, 5000.0f);
 }
 
 void FieldScene::Update(f32 dt)

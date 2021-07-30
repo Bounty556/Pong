@@ -16,6 +16,7 @@ namespace Soul
 		{
 			const char* message;
 			void* data;
+			f32 time;
 		};
 
 	public:
@@ -44,17 +45,18 @@ namespace Soul
 		/*
 		Queue a message up to be pumped later.
 		*/
-		static void QueueMessage(const char* message, void* data);
+		static void QueueMessage(const char* message, void* data, f32 time = 0.0f);
 
 		/*
 		Send a message directly to a listener without going through the queue.
 		*/
-		static void ImmediateMessage(const char* message, void* data, bool cleanup);
+		static void ImmediateMessage(const char* message, void* data);
 
 		/*
-		Sends all messages in the queue out, effectively emptying it.
+		Updates messages in the queue. Those whose time is out are sent out and
+		removed.
 		*/
-		static void PumpQueue();
+		static void PumpQueue(f32 dt);
 		
 	private:
 		static Map<const char*, Vector<Listener*>>* m_Map;

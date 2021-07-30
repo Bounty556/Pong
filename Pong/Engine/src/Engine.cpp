@@ -110,8 +110,7 @@ namespace Soul
 				SceneManager::Draw(sf::RenderStates::Default);
 				window->display();
 
-				MessageBus::ImmediateMessage("Update", NEW(f32, TARGET_FRAMERATE), true);
-				MessageBus::PumpQueue();
+				MessageBus::PumpQueue(TARGET_FRAMERATE);
 
 				accumulatedTime -= TARGET_FRAMERATE;
 			}

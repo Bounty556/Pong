@@ -50,12 +50,12 @@ namespace Soul
 			listeners->Remove(listener);
 	}
 
-	void MessageBus::QueueMessage(const char* message, void* data)
+	void MessageBus::QueueMessage(const char* message, void* data, f32 time /*=0.0f*/)
 	{
-		m_Messages->Que(Message{ message, data });
+		m_Messages->Que(Message{ message, data, time});
 	}
 
-	void MessageBus::ImmediateMessage(const char* message, void* data, bool cleanup)
+	void MessageBus::ImmediateMessage(const char* message, void* data)
 	{
 		Vector<Listener*>* listeners = m_Map->GetValue(message);
 
@@ -63,21 +63,36 @@ namespace Soul
 			for (u32 i = 0; i < listeners->Count(); ++i)
 				(*listeners)[i]->Response(message, data);
 
-		if (cleanup)
+		if (data)
 			DELETE(data);
 	}
 	
-	void MessageBus::PumpQueue()
+	void MessageBus::PumpQueue(f32 dt)
 	{
+		Vector<Message> messagesLeft;
+
 		while (!m_Messages->IsEmpty())
 		{
 			Message message = m_Messages->Deque();
 
-			Vector<Listener*>* listeners = m_Map->GetValue(message.message);
+			message.time -= dt;
 
-			if (listeners)
-				for (u32 i = 0; i < listeners->Count(); ++i)
-					(*listeners)[i]->Response(message.message, message.data);
+			if (message.time <= 0.0f)
+			{
+				Vector<Listener*>* listeners = m_Map->GetValue(message.message);
+
+				if (listeners)
+					for (u32 i = 0; i < listeners->Count(); ++i)
+						(*listeners)[i]->Response(message.message, message.data);
+
+				if (message.data)
+					DELETE(message.data);
+			}
+			else
+				messagesLeft.Push(message);
 		}
+
+		while (!messagesLeft.IsEmpty())
+			m_Messages->Que(messagesLeft.Pop());
 	}
 }

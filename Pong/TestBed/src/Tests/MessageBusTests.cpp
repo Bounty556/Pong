@@ -23,7 +23,7 @@ void BasicListeningTest()
 	START_MEMORY_CHECK();
 	
 	Soul::MessageBus::QueueMessage("ChangeInt", NEW(i32, 50));
-	Soul::MessageBus::PumpQueue();
+	Soul::MessageBus::PumpQueue(0.0f);
 
 	ASSERT_EQUAL(testInt, 50, "Failed to change int via message.");
 
@@ -49,7 +49,7 @@ void ObjectListeningTest()
 	START_MEMORY_CHECK();
 
 	Soul::MessageBus::QueueMessage("ChangeValues", NEW(TestClass, 4, 5, 6));
-	Soul::MessageBus::PumpQueue();
+	Soul::MessageBus::PumpQueue(0.0f);
 
 	ASSERT_EQUAL(testClass.m_X, 4, "Failed to change object via message.");
 	ASSERT_EQUAL(testClass.m_Y, 5, "Failed to change object via message.");

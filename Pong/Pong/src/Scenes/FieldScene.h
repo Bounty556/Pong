@@ -3,6 +3,8 @@
 #include <Defines.h>
 #include <Core/Scene.h>
 
+#include <Core/Listener.h>
+
 #include "../Entities/Paddle.h"
 #include "../Entities/Ball.h"
 #include "../Entities/HardBoundary.h"
@@ -24,4 +26,5 @@ private:
 	Ball m_Ball;
 	HardBoundary m_TopBounds;
 	HardBoundary m_BottomBounds;
+	Soul::Listener m_Listener;
 };
