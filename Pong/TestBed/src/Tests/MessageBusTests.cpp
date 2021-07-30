@@ -16,7 +16,6 @@ void BasicListeningTest()
 		[&](void* data)
 		{
 			testInt = *(i32*)data;
-			DELETE((i32*)data);
 		});
 
 
@@ -43,7 +42,6 @@ void ObjectListeningTest()
 			testClass.m_X = other->m_X;
 			testClass.m_Y = other->m_Y;
 			testClass.m_Z = other->m_Z;
-			DELETE((TestClass*)data);
 		});
 
 	START_MEMORY_CHECK();
