@@ -1,12 +1,13 @@
 #include "FieldScene.h"
 
 #include <Core/MessageBus.h>
+#include <Core/SceneManager.h>
 
 FieldScene::FieldScene() :
 	Scene(true, true),
 	m_Player(),
 	m_AI(),
-	m_Ball(NEW(Ball, 15, 0.5f)),
+	m_Ball(NEW(Ball, 8, 0.5f)),
 	m_TopBounds(-5.0f, -5.0f, 1310.0f, 10.0f),
 	m_BottomBounds(-5.0f, 715.0f, 1310.0f, 10.0f),
 	m_LeftTrigger(-10.0f, 0.0f, 10.0f, 720.0f),
@@ -22,8 +23,16 @@ FieldScene::FieldScene() :
 	m_LeftTrigger.AddTag("AI Score");
 	m_RightTrigger.AddTag("Player Score");
 
-	m_Listener.Subscribe("AIScore", [&](void* data) { LOG_INFO("LOSER!"); DELETE(m_Ball.Raw()), m_Ball = nullptr; });
-	m_Listener.Subscribe("PlayerScore", [&](void* data) { LOG_INFO("WINNER!"); DELETE(m_Ball.Raw()), m_Ball = nullptr; });
+	m_Listener.Subscribe("AIScore", 
+		[&](void* data)
+		{
+			Soul::SceneManager::ResetScene(this, NEW(sf::Vector2f, m_Player.GetWorldPosition().y, m_AI.GetWorldPosition().y));
+		});
+	m_Listener.Subscribe("PlayerScore",
+		[&](void* data)
+		{
+			Soul::SceneManager::ResetScene(this, NEW(sf::Vector2f, m_Player.GetWorldPosition().y, m_AI.GetWorldPosition().y));
+		});
 }
 
 void FieldScene::Update(f32 dt)
@@ -52,4 +61,10 @@ void FieldScene::Draw(sf::RenderStates states) const
 
 void FieldScene::ResetSceneData(void* data)
 {
+	sf::Vector2f* posData = (sf::Vector2f*)data;
+
+	m_Player.setPosition(m_Player.GetWorldPosition().x, posData->x);
+	m_AI.setPosition(m_AI.GetWorldPosition().x, posData->y);
+
+	DELETE(data);
 }
