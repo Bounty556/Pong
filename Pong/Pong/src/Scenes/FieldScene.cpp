@@ -3,10 +3,20 @@
 #include <Core/MessageBus.h>
 #include <Core/SceneManager.h>
 
+struct ResetData
+{
+	u8 playerScore;
+	u8 aiScore;
+	f32 playerY;
+	f32 aiY;
+};
+
 FieldScene::FieldScene() :
 	Scene(true, true),
 	m_Player(),
 	m_AI(),
+	m_PlayerScore(0),
+	m_AIScore(0),
 	m_Ball(NEW(Ball, 8, 0.5f)),
 	m_TopBounds(-5.0f, -5.0f, 1310.0f, 10.0f),
 	m_BottomBounds(-5.0f, 715.0f, 1310.0f, 10.0f),
@@ -26,12 +36,22 @@ FieldScene::FieldScene() :
 	m_Listener.Subscribe("AIScore", 
 		[&](void* data)
 		{
-			Soul::SceneManager::ResetScene(this, NEW(sf::Vector2f, m_Player.GetWorldPosition().y, m_AI.GetWorldPosition().y));
+			ResetData* resetData = NEW(ResetData);
+			resetData->playerScore = m_PlayerScore;
+			resetData->aiScore = m_AIScore + 1;
+			resetData->playerY = m_Player.GetWorldPosition().y;
+			resetData->aiY = m_AI.GetWorldPosition().y;
+			Soul::SceneManager::ResetScene(this, resetData);
 		});
 	m_Listener.Subscribe("PlayerScore",
 		[&](void* data)
 		{
-			Soul::SceneManager::ResetScene(this, NEW(sf::Vector2f, m_Player.GetWorldPosition().y, m_AI.GetWorldPosition().y));
+			ResetData* resetData = NEW(ResetData);
+			resetData->playerScore = m_PlayerScore + 1;
+			resetData->aiScore = m_AIScore;
+			resetData->playerY = m_Player.GetWorldPosition().y;
+			resetData->aiY = m_AI.GetWorldPosition().y;
+			Soul::SceneManager::ResetScene(this, resetData);
 		});
 }
 
@@ -61,10 +81,14 @@ void FieldScene::Draw(sf::RenderStates states) const
 
 void FieldScene::ResetSceneData(void* data)
 {
-	sf::Vector2f* posData = (sf::Vector2f*)data;
+	ResetData* resetData = (ResetData*)data;
 
-	m_Player.setPosition(m_Player.GetWorldPosition().x, posData->x);
-	m_AI.setPosition(m_AI.GetWorldPosition().x, posData->y);
+	m_Player.setPosition(m_Player.GetWorldPosition().x, resetData->playerY);
+	m_AI.setPosition(m_AI.GetWorldPosition().x, resetData->aiY);
+	m_PlayerScore = resetData->playerScore;
+	m_AIScore = resetData->aiScore;
+
+	LOG_INFO("Score:\n\tPlayer: %d\t\tAI: %d", m_PlayerScore, m_AIScore);
 
 	DELETE(data);
 }

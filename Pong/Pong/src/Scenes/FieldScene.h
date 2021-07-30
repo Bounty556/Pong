@@ -23,6 +23,8 @@ public:
 private:
 	Paddle m_Player;
 	Paddle m_AI;
+	u8 m_PlayerScore;
+	u8 m_AIScore;
 	Soul::UniquePointer<Ball> m_Ball;
 	Soul::AreaNode m_TopBounds;
 	Soul::AreaNode m_BottomBounds;
