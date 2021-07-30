@@ -12,6 +12,7 @@
 #include <Platform/Platform.h>
 #include <Platform/Timer.h>
 #include <Rendering/Renderer.h>
+#include <Resources/ResourceManager.h>
 
 #include <SFML/Graphics.hpp>
 
@@ -62,10 +63,13 @@ namespace Soul
 			LOG_FATAL("Failed to initialize PhysicsSystem.");
 			return false;
 		}
+		if (!ResourceManager::Initialize())
+		{
+			LOG_FATAL("Failed to initialize ResourceManager.");
+			return false;
+		}
 
 		window = NEW(sf::RenderWindow, sf::VideoMode(windowWidth, windowHeight), windowName, sf::Style::Close | sf::Style::Titlebar);
-		window->setVerticalSyncEnabled(false);
-		window->setFramerateLimit(0);
 
 		if (!Renderer::Initialize(window))
 		{
@@ -91,9 +95,6 @@ namespace Soul
 			accumulatedTime += gameTimer.GetDeltaTime();
 			while (accumulatedTime >= TARGET_FRAMERATE)
 			{
-				if (accumulatedTime > 1000.0f)
-					accumulatedTime = 0.0f;
-
 				// Input
 				ProcessEvents();
 				InputManager::UpdateControllers();
@@ -113,6 +114,8 @@ namespace Soul
 				MessageBus::PumpQueue(TARGET_FRAMERATE);
 
 				accumulatedTime -= TARGET_FRAMERATE;
+				if (accumulatedTime > 1000.0f)
+					accumulatedTime = 0.0f;
 			}
 		}
 	}
@@ -126,10 +129,12 @@ namespace Soul
 
 		DELETE(window);
 		
+		ResourceManager::Shutdown();
 		PhysicsSystem::Shutdown();
 		InputManager::Shutdown();
 		MessageBus::Shutdown();
 		ShutdownLogger();
+		ASSERT(MemoryManager::GetTotalPartitionedMemory() == 0);
 		MemoryManager::Shutdown();
 	}
 
