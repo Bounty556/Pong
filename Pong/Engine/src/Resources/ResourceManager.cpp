@@ -6,7 +6,7 @@ namespace Soul
 
 	bool ResourceManager::Initialize()
 	{
-		m_ResourceMap = NEW(ResourceMap);
+		m_ResourceMap = NEW(ResourceMap, 100);
 
 		return true;
 	}

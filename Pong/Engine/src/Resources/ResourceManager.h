@@ -33,8 +33,11 @@ namespace Soul
 	template <class T>
 	void ResourceManager::LoadResource(const char* resourcePath, const char* resourceName)
 	{
-		T resource(resourcePath);
-		m_ResourceMap->AddPair(resourceName, std::move(resource));
+		if (!m_ResourceMap->GetValue(resourceName))
+		{
+			T resource(resourcePath);
+			m_ResourceMap->AddPair(resourceName, std::move(resource));
+		}
 	}
 
 	template <class T>
