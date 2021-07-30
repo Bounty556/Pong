@@ -196,6 +196,7 @@
     <ClInclude Include="src\Memory\ReferenceCounter.h" />
     <ClInclude Include="src\Memory\SharedPointer.h" />
     <ClInclude Include="src\Memory\UniquePointer.h" />
+    <ClInclude Include="src\Nodes\AreaNode.h" />
     <ClInclude Include="src\Nodes\CircleSpriteNode.h" />
     <ClInclude Include="src\Nodes\Node.h" />
     <ClInclude Include="src\Nodes\RectSpriteNode.h" />
@@ -243,6 +244,7 @@
     <ClCompile Include="src\Math\Vectors.cpp" />
     <ClCompile Include="src\Memory\MemoryManager.cpp" />
     <ClCompile Include="src\Memory\ReferenceCounter.cpp" />
+    <ClCompile Include="src\Nodes\AreaNode.cpp" />
     <ClCompile Include="src\Nodes\CircleSpriteNode.cpp" />
     <ClCompile Include="src\Nodes\Node.cpp" />
     <ClCompile Include="src\Nodes\RectSpriteNode.cpp" />

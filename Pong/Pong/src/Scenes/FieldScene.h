@@ -1,13 +1,13 @@
 #pragma once
 
 #include <Defines.h>
-#include <Core/Scene.h>
-
 #include <Core/Listener.h>
+#include <Core/Scene.h>
+#include <Memory/UniquePointer.h>
+#include <Nodes/AreaNode.h>
 
 #include "../Entities/Paddle.h"
 #include "../Entities/Ball.h"
-#include "../Entities/HardBoundary.h"
 
 class FieldScene : public Soul::Scene
 {
@@ -23,8 +23,10 @@ public:
 private:
 	Paddle m_Player;
 	Paddle m_AI;
-	Ball m_Ball;
-	HardBoundary m_TopBounds;
-	HardBoundary m_BottomBounds;
+	Soul::UniquePointer<Ball> m_Ball;
+	Soul::AreaNode m_TopBounds;
+	Soul::AreaNode m_BottomBounds;
+	Soul::AreaNode m_LeftTrigger;
+	Soul::AreaNode m_RightTrigger;
 	Soul::Listener m_Listener;
 };

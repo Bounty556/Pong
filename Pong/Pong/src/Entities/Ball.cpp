@@ -1,5 +1,6 @@
 #include "Ball.h"
 
+#include <Core/MessageBus.h>
 #include <Math/Random.h>
 #include <Math/Vectors.h>
 #include <Nodes/CircleSpriteNode.h>
@@ -27,5 +28,9 @@ void Ball::LateUpdateSelf(f32 dt)
 
 			SetVelocity(Soul::Math::Reflect(GetWorldVelocity(), normal));
 		}
+		else if (collisions[i].node->HasTag("AI Score"))
+			Soul::MessageBus::QueueMessage("AIScore", nullptr);
+		else if (collisions[i].node->HasTag("Player Score"))
+			Soul::MessageBus::QueueMessage("PlayerScore", nullptr);
 	}
 }

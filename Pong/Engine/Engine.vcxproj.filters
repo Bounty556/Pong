@@ -162,6 +162,9 @@
     <ClInclude Include="src\Nodes\CircleSpriteNode.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\Nodes\AreaNode.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\core\Logger.cpp">
@@ -285,6 +288,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Nodes\CircleSpriteNode.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Nodes\AreaNode.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
