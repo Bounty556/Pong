@@ -2,9 +2,9 @@
 
 #include <Defines.h>
 #include <Structures/Map.h>
-#include <Resources/Resource.h>
+#include <Resources/IResource.h>
 
-#define ResourceMap Map<String, Resource>
+#define ResourceMap Map<String, IResource>
 
 namespace Soul
 {

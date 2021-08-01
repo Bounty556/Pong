@@ -4,7 +4,7 @@
 
 namespace Soul
 {
-	class Resource
+	class IResource
 	{
 	};
 }
