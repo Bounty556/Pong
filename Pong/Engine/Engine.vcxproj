@@ -210,6 +210,7 @@
     <ClInclude Include="src\Rendering\Renderer.h" />
     <ClInclude Include="src\Resources\IResource.h" />
     <ClInclude Include="src\Resources\ResourceManager.h" />
+    <ClInclude Include="src\Resources\SoundResource.h" />
     <ClInclude Include="src\Resources\TextureResource.h" />
     <ClInclude Include="src\Structures\Map.h" />
     <ClInclude Include="src\Structures\QuadTree.h" />
@@ -257,6 +258,7 @@
     <ClCompile Include="src\Platform\TimerWin32.cpp" />
     <ClCompile Include="src\Rendering\Renderer.cpp" />
     <ClCompile Include="src\Resources\ResourceManager.cpp" />
+    <ClCompile Include="src\Resources\SoundResource.cpp" />
     <ClCompile Include="src\Resources\TextureResource.cpp" />
     <ClCompile Include="src\Structures\QuadTree.cpp" />
     <ClCompile Include="src\UI\UIButton.cpp" />
