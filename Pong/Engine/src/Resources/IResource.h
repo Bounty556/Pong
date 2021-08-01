@@ -4,7 +4,7 @@
 
 namespace Soul
 {
-	class IResource
+	class SOULAPI IResource
 	{
 	};
 }

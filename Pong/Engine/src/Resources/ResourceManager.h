@@ -43,6 +43,6 @@ namespace Soul
 	template <class T>
 	T* ResourceManager::GetResource(const char* resourceName)
 	{
-		return m_ResourceMap->GetValue(resourceName);
+		return (T*)m_ResourceMap->GetValue(resourceName);
 	}
 }

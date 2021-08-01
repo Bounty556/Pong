@@ -7,7 +7,7 @@
 
 namespace Soul
 {
-	class TextureResource : public IResource
+	class SOULAPI TextureResource : public IResource
 	{
 	public:
 		TextureResource(const char* filePath);
@@ -18,7 +18,7 @@ namespace Soul
 		TextureResource& operator=(const TextureResource& other) = delete;
 		TextureResource& operator=(TextureResource&& other) noexcept;
 
-		const sf::Texture& GetTexture() const;
+		const sf::Texture* GetTexture() const;
 
 	private:
 		UniquePointer<sf::Texture> m_Texture;

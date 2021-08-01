@@ -20,10 +20,12 @@ namespace Soul
 	TextureResource& TextureResource::operator=(TextureResource&& other) noexcept
 	{
 		m_Texture = std::move(other.m_Texture);
+
+		return *this;
 	}
 
-	const sf::Texture& TextureResource::GetTexture() const
+	const sf::Texture* TextureResource::GetTexture() const
 	{
-		return (*m_Texture.Raw());
+		return m_Texture.Raw();
 	}
 }
