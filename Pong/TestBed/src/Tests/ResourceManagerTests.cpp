@@ -1,9 +1,10 @@
 #include "ResourceManagerTests.h"
 
 #include <Memory/MemoryManager.h>
+#include <Resources/FontResource.h>
 #include <Resources/ResourceManager.h>
-#include <Resources/TextureResource.h>
 #include <Resources/SoundResource.h>
+#include <Resources/TextureResource.h>
 
 #include "../TestMacros.h"
 
@@ -44,8 +45,29 @@ void SoundResourceTest()
 
 	END_MEMORY_CHECK();
 }
+
+void FontResourceTest()
+{
+	START_MEMORY_CHECK();
+
+	Soul::ResourceManager::LoadResource<Soul::FontResource>("res/Fonts/font.otf", "Font");
+
+	Soul::FontResource* resource = Soul::ResourceManager::GetResource<Soul::FontResource>("Font");
+
+	ASSERT_NOT_EQUAL(resource, nullptr, "Failed to load and retrieve resource.");
+
+	Soul::ResourceManager::UnloadResource("Font");
+
+	Soul::FontResource* resource2 = Soul::ResourceManager::GetResource<Soul::FontResource>("Font");
+
+	ASSERT_EQUAL(resource2, nullptr, "Failed to delete resource.");
+
+	END_MEMORY_CHECK();
+}
+
 void ResourceManagerTests::RunAllTests()
 {
 	RUN_TEST(TextureResourceTest);
 	RUN_TEST(SoundResourceTest);
+	RUN_TEST(FontResourceTest);
 }
