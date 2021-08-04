@@ -53,13 +53,20 @@ namespace Soul
 		static void ImmediateMessage(const char* message, void* data);
 
 		/*
+		Erases all messages and any pending data they may have stored.
+		*/
+		static void ClearQueue();
+
+		/*
 		Updates messages in the queue. Those whose time is out are sent out and
 		removed.
 		*/
 		static void PumpQueue(f32 dt);
 		
 	private:
+		static bool m_IsInitialized;
 		static Map<const char*, Vector<Listener*>>* m_Map;
 		static Queue<Message>* m_Messages;
+		static Vector<Message>* m_TimedMessages;
 	};
 }

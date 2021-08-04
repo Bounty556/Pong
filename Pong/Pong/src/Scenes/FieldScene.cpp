@@ -42,6 +42,7 @@ FieldScene::FieldScene() :
 			resetData->aiScore = m_AIScore + 1;
 			resetData->playerY = m_Player.GetWorldPosition().y;
 			resetData->aiY = m_AI.GetWorldPosition().y;
+			Soul::MessageBus::ClearQueue();
 			Soul::SceneManager::ResetScene(this, resetData);
 		});
 	m_Listener.Subscribe("PlayerScore",
@@ -52,6 +53,7 @@ FieldScene::FieldScene() :
 			resetData->aiScore = m_AIScore;
 			resetData->playerY = m_Player.GetWorldPosition().y;
 			resetData->aiY = m_AI.GetWorldPosition().y;
+			Soul::MessageBus::ClearQueue();
 			Soul::SceneManager::ResetScene(this, resetData);
 		});
 
@@ -102,7 +104,6 @@ FieldScene::FieldScene() :
 	m_Container.AddChild(bmContainer);
 	m_Container.AddChild(brContainer);
 
-	// TODO: Solve issue with duplicating message chains on level restart
 	Soul::MessageBus::QueueMessage("ChangeContainer", NEW(sf::Vector2f, m_Container.GetSize() * 1.1f), 1000.0f);
 }
 

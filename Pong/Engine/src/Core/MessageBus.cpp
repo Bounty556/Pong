@@ -6,25 +6,39 @@
 
 namespace Soul
 {
+	bool MessageBus::m_IsInitialized = false;
 	Map<const char*, Vector<Listener*>>* MessageBus::m_Map;
 	Queue<MessageBus::Message>* MessageBus::m_Messages;
+	Vector<MessageBus::Message>* MessageBus::m_TimedMessages;
 
 	bool MessageBus::Initialize()
 	{
+		ASSERT(!m_IsInitialized);
+		m_IsInitialized = true;
+
 		m_Map = NEW(MessageBusMap);
 		m_Messages = NEW(Queue<MessageBus::Message>, 64);
+		m_TimedMessages = NEW(Vector<MessageBus::Message>, 64);
 
 		return true;
 	}
 
 	void MessageBus::Shutdown()
 	{
+		ASSERT(m_IsInitialized);
+
+		ClearQueue();
 		DELETE(m_Map);
 		DELETE(m_Messages);
+		DELETE(m_TimedMessages);
+
+		m_IsInitialized = false;
 	}
 
 	void MessageBus::Subscribe(const char* message, Listener* listener)
 	{
+		ASSERT(m_IsInitialized);
+
 		// Find a spot in the map
 		Vector<Listener*>* listeners = m_Map->GetValue(message);
 
@@ -42,6 +56,8 @@ namespace Soul
 
 	void MessageBus::Unsubscribe(const char* message, Listener* listener)
 	{
+		ASSERT(m_IsInitialized);
+
 		// Find the listener list in the map.
 		Vector<Listener*>* listeners = m_Map->GetValue(message);
 		
@@ -52,11 +68,15 @@ namespace Soul
 
 	void MessageBus::QueueMessage(const char* message, void* data, f32 time /*=0.0f*/)
 	{
+		ASSERT(m_IsInitialized);
+
 		m_Messages->Que(Message{ message, data, time});
 	}
 
 	void MessageBus::ImmediateMessage(const char* message, void* data)
 	{
+		ASSERT(m_IsInitialized);
+	
 		Vector<Listener*>* listeners = m_Map->GetValue(message);
 
 		if (listeners)
@@ -67,10 +87,29 @@ namespace Soul
 			DELETE(data);
 	}
 	
+	void MessageBus::ClearQueue()
+	{
+		ASSERT(m_IsInitialized);
+
+		while (!m_Messages->IsEmpty())
+		{
+			Message message = m_Messages->Deque();
+			if (message.data)
+				DELETE(message.data);
+		}
+
+		while (!m_TimedMessages->IsEmpty())
+		{
+			Message message = m_TimedMessages->Pop();
+			if (message.data)
+				DELETE(message.data);
+		}
+	}
+
 	void MessageBus::PumpQueue(f32 dt)
 	{
-		Vector<Message> messagesLeft;
-
+		ASSERT(m_IsInitialized);
+		
 		while (!m_Messages->IsEmpty())
 		{
 			Message message = m_Messages->Deque();
@@ -89,10 +128,10 @@ namespace Soul
 					DELETE(message.data);
 			}
 			else
-				messagesLeft.Push(message);
+				m_TimedMessages->Push(message);
 		}
 
-		while (!messagesLeft.IsEmpty())
-			m_Messages->Que(messagesLeft.Pop());
+		while (!m_TimedMessages->IsEmpty())
+			m_Messages->Que(m_TimedMessages->Pop());
 	}
 }
