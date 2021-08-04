@@ -2,6 +2,8 @@
 
 #include <Defines.h>
 
+#include <UI/UIPalette.h>
+
 #include <SFML/Graphics/RenderStates.hpp>
 #include <SFML/Graphics/Transformable.hpp>
 #include <SFML/System/Vector2.hpp>
@@ -47,6 +49,8 @@ namespace Soul
 		void SetWeightingAnchor(UIAnchor anchor);
 		void SetAnchorWeight(f32 weight);
 
+		void SetUIPalette(UIPalette palette);
+
 		virtual void AddChild(UI* child) = 0;
 
 	protected:
@@ -69,5 +73,6 @@ namespace Soul
 		UIAnchor m_MainAnchor;
 		UIAnchor m_WeightingAnchor;
 		f32 m_AnchorWeight;
+		UIPalette m_Palette;
 	};
 }

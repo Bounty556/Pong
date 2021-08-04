@@ -7,7 +7,8 @@ namespace Soul
 		m_Parent(parent),
 		m_MainAnchor(UIAnchor::None),
 		m_WeightingAnchor(UIAnchor::MiddleMiddle),
-		m_AnchorWeight(0.0f)
+		m_AnchorWeight(0.0f),
+		m_Palette(1, sf::Color::White)
 	{
 	}
 
@@ -16,7 +17,8 @@ namespace Soul
 		m_Parent(parent),
 		m_MainAnchor(UIAnchor::None),
 		m_WeightingAnchor(UIAnchor::MiddleMiddle),
-		m_AnchorWeight(0.0f)
+		m_AnchorWeight(0.0f),
+		m_Palette(1, sf::Color::White)
 	{
 	}
 
@@ -25,7 +27,8 @@ namespace Soul
 		m_Parent(other.m_Parent),
 		m_MainAnchor(other.m_MainAnchor),
 		m_WeightingAnchor(other.m_WeightingAnchor),
-		m_AnchorWeight(other.m_AnchorWeight)
+		m_AnchorWeight(other.m_AnchorWeight),
+		m_Palette(other.m_Palette)
 	{
 	}
 
@@ -34,7 +37,8 @@ namespace Soul
 		m_Parent(other.m_Parent),
 		m_MainAnchor(other.m_MainAnchor),
 		m_WeightingAnchor(other.m_WeightingAnchor),
-		m_AnchorWeight(other.m_AnchorWeight)
+		m_AnchorWeight(other.m_AnchorWeight),
+		m_Palette(std::move(other.m_Palette))
 	{
 	}
 
@@ -45,6 +49,7 @@ namespace Soul
 		m_MainAnchor = other.m_MainAnchor;
 		m_WeightingAnchor = other.m_WeightingAnchor;
 		m_AnchorWeight = other.m_AnchorWeight;
+		m_Palette = other.m_Palette;
 
 		return *this;
 	}
@@ -56,6 +61,7 @@ namespace Soul
 		m_MainAnchor = other.m_MainAnchor;
 		m_WeightingAnchor = other.m_WeightingAnchor;
 		m_AnchorWeight = other.m_AnchorWeight;
+		m_Palette = std::move(other.m_Palette);
 		
 		return *this;
 	}
@@ -110,6 +116,11 @@ namespace Soul
 	void UI::SetAnchorWeight(f32 weight)
 	{
 		m_AnchorWeight = weight;
+	}
+
+	void UI::SetUIPalette(UIPalette palette)
+	{
+		m_Palette = palette;
 	}
 
 	void UI::SetParent(UI* parent)
