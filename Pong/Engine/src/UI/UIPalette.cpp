@@ -62,6 +62,8 @@ namespace Soul
 
 		m_Colors = std::move(other.m_Colors);
 		m_Count = other.m_Count;
+
+		return *this;
 	}
 
 	UIPalette::~UIPalette()

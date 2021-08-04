@@ -50,6 +50,8 @@ namespace Soul
 		m_WeightingAnchor = other.m_WeightingAnchor;
 		m_AnchorWeight = other.m_AnchorWeight;
 		m_Palette = other.m_Palette;
+		
+		ResetColors();
 
 		return *this;
 	}
@@ -61,8 +63,10 @@ namespace Soul
 		m_MainAnchor = other.m_MainAnchor;
 		m_WeightingAnchor = other.m_WeightingAnchor;
 		m_AnchorWeight = other.m_AnchorWeight;
-		m_Palette = std::move(other.m_Palette);
+		m_Palette = other.m_Palette;
 		
+		ResetColors();
+
 		return *this;
 	}
 
@@ -87,6 +91,21 @@ namespace Soul
 		states.transform *= getTransform();
 		DrawSelf(states);
 		DrawChildren(states);
+	}
+
+	const UI::UIAnchor& UI::GetMainAnchor() const
+	{
+		return m_MainAnchor;
+	}
+
+	const UI::UIAnchor& UI::GetWeightingAnchor() const
+	{
+		return m_WeightingAnchor;
+	}
+
+	f32 UI::GetAnchorWeight() const
+	{
+		return m_AnchorWeight;
 	}
 
 	sf::Vector2f UI::GetAnchorPosition(UIAnchor anchor) const
@@ -121,11 +140,21 @@ namespace Soul
 	void UI::SetUIPalette(UIPalette palette)
 	{
 		m_Palette = palette;
+		ResetColors();
+	}
+
+	const UIPalette& UI::GetUIPalette() const
+	{
+		return m_Palette;
 	}
 
 	void UI::SetParent(UI* parent)
 	{
 		m_Parent = parent;
+	}
+
+	void UI::Redraw()
+	{
 	}
 
 	void UI::UpdateChildren(f32 dt)

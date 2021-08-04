@@ -218,11 +218,9 @@
     <ClInclude Include="src\Structures\Queue.h" />
     <ClInclude Include="src\Structures\Stack.h" />
     <ClInclude Include="src\Structures\Vector.h" />
-    <ClInclude Include="src\UI\UIButton.h" />
-    <ClInclude Include="src\UI\UIComponent.h" />
+    <ClInclude Include="src\UI\UI.h" />
     <ClInclude Include="src\UI\UIContainer.h" />
-    <ClInclude Include="src\UI\UILabel.h" />
-    <ClInclude Include="src\UI\UISprite.h" />
+    <ClInclude Include="src\UI\UIPalette.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Core\Listener.cpp" />
@@ -263,11 +261,9 @@
     <ClCompile Include="src\Resources\SoundResource.cpp" />
     <ClCompile Include="src\Resources\TextureResource.cpp" />
     <ClCompile Include="src\Structures\QuadTree.cpp" />
-    <ClCompile Include="src\UI\UIButton.cpp" />
-    <ClCompile Include="src\UI\UIComponent.cpp" />
+    <ClCompile Include="src\UI\UI.cpp" />
     <ClCompile Include="src\UI\UIContainer.cpp" />
-    <ClCompile Include="src\UI\UILabel.cpp" />
-    <ClCompile Include="src\UI\UISprite.cpp" />
+    <ClCompile Include="src\UI\UIPalette.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -43,21 +43,25 @@ namespace Soul
 		void Update(f32 dt);
 		void Draw(sf::RenderStates states) const;
 
+		const UIAnchor& GetMainAnchor() const;
+		const UIAnchor& GetWeightingAnchor() const;
+		f32 GetAnchorWeight() const;
 		sf::Vector2f GetAnchorPosition(UIAnchor anchor) const;
-		
 		void SetAnchor(UIAnchor anchor);
 		void SetWeightingAnchor(UIAnchor anchor);
 		void SetAnchorWeight(f32 weight);
 
 		void SetUIPalette(UIPalette palette);
+		const UIPalette& GetUIPalette() const;
 
 		virtual void AddChild(UI* child) = 0;
 
+		virtual void Redraw();
+
 	protected:
 		void SetParent(UI* parent);
-	
-		virtual void SetSize(sf::Vector2f size) = 0;
-		virtual void SetSize(f32 width, f32 height) = 0;
+
+		virtual void ResetColors() = 0;
 
 		virtual void Resize(sf::Vector2f newSize) = 0;
 		virtual void Resize(f32 width, f32 height) = 0;
@@ -67,7 +71,7 @@ namespace Soul
 		virtual void UpdateChildren(f32 dt);
 		virtual void DrawChildren(sf::RenderStates states) const;
 
-	private:
+	protected:
 		sf::Vector2f m_Size;
 		UI* m_Parent;
 		UIAnchor m_MainAnchor;

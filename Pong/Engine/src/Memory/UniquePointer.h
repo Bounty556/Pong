@@ -12,11 +12,11 @@ namespace Soul
 	public:
 		UniquePointer(T* pointer);
 		UniquePointer(const UniquePointer<T>&) = delete;
-		UniquePointer(UniquePointer<T>&& otherPointer);
+		UniquePointer(UniquePointer<T>&& otherPointer) noexcept;
 		~UniquePointer();
 
 		UniquePointer<T>& operator=(const UniquePointer<T>&) = delete;
-		UniquePointer<T>& operator=(UniquePointer<T>&& otherPointer);
+		UniquePointer<T>& operator=(UniquePointer<T>&& otherPointer) noexcept;
 		UniquePointer<T>& operator=(T* otherPointer);
 
 		T* operator->() const;
@@ -37,7 +37,7 @@ namespace Soul
 	}
 
 	template <class T>
-	UniquePointer<T>::UniquePointer(UniquePointer<T>&& otherPointer) :
+	UniquePointer<T>::UniquePointer(UniquePointer<T>&& otherPointer) noexcept :
 		m_Pointer(otherPointer.m_Pointer)
 	{
 		otherPointer.m_Pointer = nullptr;
@@ -51,7 +51,7 @@ namespace Soul
 	}
 
 	template <class T>
-	UniquePointer<T>& UniquePointer<T>::operator=(UniquePointer<T>&& otherPointer)
+	UniquePointer<T>& UniquePointer<T>::operator=(UniquePointer<T>&& otherPointer) noexcept
 	{
 		if (m_Pointer)
 			DELETE(m_Pointer);
