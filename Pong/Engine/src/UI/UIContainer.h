@@ -14,8 +14,8 @@ namespace Soul
 		UIContainer(sf::Vector2f position, sf::Vector2f size);
 		UIContainer(f32 x, f32 y, f32 width, f32 height);
 
-		UIContainer(sf::Vector2f size, UI* parent, UIAnchor mainAnchor, f32 anchorWeight = 100.0f, UIAnchor weightingAnchor = UIAnchor::MiddleMiddle);
-		UIContainer(f32 width, f32 height, UI* parent, UIAnchor mainAnchor, f32 anchorWeight = 100.0f, UIAnchor weightingAnchor = UIAnchor::MiddleMiddle);
+		UIContainer(sf::Vector2f size, UIAnchor mainAnchor, f32 anchorWeight = 1.0f, UIAnchor weightingAnchor = UIAnchor::MiddleMiddle);
+		UIContainer(f32 width, f32 height, UIAnchor mainAnchor, f32 anchorWeight = 1.0f, UIAnchor weightingAnchor = UIAnchor::MiddleMiddle);
 	
 		UIContainer(const UIContainer& other) = delete;
 		UIContainer(UIContainer&& other) noexcept;
@@ -23,18 +23,20 @@ namespace Soul
 		UIContainer& operator=(const UIContainer& other) = delete;
 		UIContainer& operator=(UIContainer&& other) noexcept;
 
-		virtual void AddChild(UI* child) override;
+		void AddChild(UI* child);
 
 		virtual void Redraw() override;
-
-	protected:
-		virtual void ResetColors() override;
 
 		virtual void Resize(sf::Vector2f newSize) override;
 		virtual void Resize(f32 width, f32 height) override;
 
+	protected:
+		virtual void ResetColors() override;
+
 		virtual void UpdateSelf(f32 dt) override;
 		virtual void DrawSelf(sf::RenderStates states) const override;
+		virtual void UpdateChildren(f32 dt) override;
+		virtual void DrawChildren(sf::RenderStates states) const override;
 
 	private:
 		Vector<UniquePointer<UI>> m_Children;

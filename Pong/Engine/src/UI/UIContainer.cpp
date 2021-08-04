@@ -22,8 +22,8 @@ namespace Soul
 		ResetColors();
 	}
 
-	UIContainer::UIContainer(sf::Vector2f size, UI* parent, UIAnchor mainAnchor, f32 anchorWeight /*= 100.0f*/, UIAnchor weightingAnchor /*= UIAnchor::MiddleMiddle*/) :
-		UI(size, parent),
+	UIContainer::UIContainer(sf::Vector2f size, UIAnchor mainAnchor, f32 anchorWeight /*= 100.0f*/, UIAnchor weightingAnchor /*= UIAnchor::MiddleMiddle*/) :
+		UI(size),
 		m_Children(),
 		m_Rect(size)
 	{
@@ -33,8 +33,8 @@ namespace Soul
 		ResetColors();
 	}
 
-	UIContainer::UIContainer(f32 width, f32 height, UI* parent, UIAnchor mainAnchor, f32 anchorWeight /*= 100.0f*/, UIAnchor weightingAnchor /*= UIAnchor::MiddleMiddle*/) :
-		UI(width, height, parent),
+	UIContainer::UIContainer(f32 width, f32 height, UIAnchor mainAnchor, f32 anchorWeight /*= 100.0f*/, UIAnchor weightingAnchor /*= UIAnchor::MiddleMiddle*/) :
+		UI(width, height),
 		m_Children(),
 		m_Rect(sf::Vector2f(width, height))
 	{
@@ -66,6 +66,7 @@ namespace Soul
 	void UIContainer::AddChild(UI* child)
 	{
 		m_Children.Push(child);
+		child->SetParent(this);
 
 		Redraw();
 	}
@@ -77,22 +78,22 @@ namespace Soul
 			// TODO: take into account origins on children
 			sf::Vector2f anchorA = GetAnchorPosition(m_Children[i]->GetMainAnchor());
 			sf::Vector2f anchorB = GetAnchorPosition(m_Children[i]->GetWeightingAnchor());
-			sf::Vector2f anchorDiff = anchorB - anchorA;
-			m_Children[i]->setPosition(anchorA + (anchorDiff * m_Children[i]->GetAnchorWeight()));
+			sf::Vector2f anchorDiff = anchorA - anchorB;
+			sf::Vector2f smallAnchorA = m_Children[i]->GetAnchorPosition(m_Children[i]->GetMainAnchor());
+			sf::Vector2f smallAnchorB = m_Children[i]->GetAnchorPosition(m_Children[i]->GetWeightingAnchor());
+			sf::Vector2f smallAnchorDiff = smallAnchorA - smallAnchorB;
+			sf::Vector2f smallAnchorOffset = smallAnchorB + (smallAnchorDiff * m_Children[i]->GetAnchorWeight());
+			m_Children[i]->setPosition(anchorB + (anchorDiff * m_Children[i]->GetAnchorWeight()) - smallAnchorOffset);
 			
 			// Redraw child container
 			m_Children[i]->Redraw();
 		}
 	}
 
-	void UIContainer::ResetColors()
-	{
-		m_Rect.setFillColor(m_Palette.GetColor(0));
-	}
-
 	void UIContainer::Resize(sf::Vector2f newSize)
 	{
 		m_Size = newSize;
+		m_Rect.setSize(newSize);
 
 		if (m_Parent)
 			m_Parent->Redraw();
@@ -103,11 +104,17 @@ namespace Soul
 	void UIContainer::Resize(f32 width, f32 height)
 	{
 		m_Size = sf::Vector2f(width, height);
+		m_Rect.setSize(sf::Vector2f(width, height));
 
 		if (m_Parent)
 			m_Parent->Redraw();
 		else
 			Redraw();
+	}
+
+	void UIContainer::ResetColors()
+	{
+		m_Rect.setFillColor(m_Palette.GetColor(0));
 	}
 
 	void UIContainer::UpdateSelf(f32 dt)
@@ -119,5 +126,17 @@ namespace Soul
 	{
 		// TODO: Draw 9slice
 		Soul::Renderer::Render(m_Rect, states);
+	}
+
+	void UIContainer::UpdateChildren(f32 dt)
+	{
+		for (u8 i = 0; i < m_Children.Count(); ++i)
+			m_Children[i]->Update(dt);
+	}
+
+	void UIContainer::DrawChildren(sf::RenderStates states) const
+	{
+		for (u8 i = 0; i < m_Children.Count(); ++i)
+			m_Children[i]->Draw(states);
 	}
 }

@@ -28,8 +28,8 @@ namespace Soul
 		};
 
 	public:
-		UI(sf::Vector2f size, UI* parent = nullptr);
-		UI(f32 width, f32 height, UI* parent = nullptr);
+		UI(sf::Vector2f size);
+		UI(f32 width, f32 height);
 
 		UI(const UI& other);
 		UI(UI&& other) noexcept;
@@ -54,17 +54,15 @@ namespace Soul
 		void SetUIPalette(UIPalette palette);
 		const UIPalette& GetUIPalette() const;
 
-		virtual void AddChild(UI* child) = 0;
-
 		virtual void Redraw();
 
-	protected:
 		void SetParent(UI* parent);
-
-		virtual void ResetColors() = 0;
 
 		virtual void Resize(sf::Vector2f newSize) = 0;
 		virtual void Resize(f32 width, f32 height) = 0;
+	
+	protected:
+		virtual void ResetColors() = 0;
 
 		virtual void UpdateSelf(f32 dt) = 0;
 		virtual void DrawSelf(sf::RenderStates states) const = 0;

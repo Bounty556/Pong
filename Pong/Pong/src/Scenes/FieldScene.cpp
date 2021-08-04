@@ -22,7 +22,8 @@ FieldScene::FieldScene() :
 	m_BottomBounds(-5.0f, 715.0f, 1310.0f, 10.0f),
 	m_LeftTrigger(-10.0f, 0.0f, 10.0f, 720.0f),
 	m_RightTrigger(1280.0f, 0.0f, 10.0f, 720.0f),
-	m_Listener()
+	m_Listener(),
+	m_Container(250, 400, 100, 100)
 {
 	m_Player.setPosition(15.0f, 15.0f);
 	m_AI.setPosition(1280.0f - 32.0f - 15.0f, 15.0f);
@@ -53,6 +54,56 @@ FieldScene::FieldScene() :
 			resetData->aiY = m_AI.GetWorldPosition().y;
 			Soul::SceneManager::ResetScene(this, resetData);
 		});
+
+	m_Listener.Subscribe("ChangeContainer",
+		[&](void* data)
+		{
+			sf::Vector2f* newSize = (sf::Vector2f*)data;
+			m_Container.Resize(*newSize);
+			Soul::MessageBus::QueueMessage("ChangeContainer", NEW(sf::Vector2f, (*newSize) * 1.1f), 1000.0f);
+		});
+
+	Soul::UIPalette palette(1, sf::Color::Blue);
+
+	Soul::UIContainer* tlContainer = NEW(Soul::UIContainer, 20.0f, 20.0f, Soul::UI::TopLeft);
+	tlContainer->SetUIPalette(palette);
+
+	Soul::UIContainer* tmContainer = NEW(Soul::UIContainer, 20.0f, 20.0f, Soul::UI::TopMiddle);
+	tmContainer->SetUIPalette(palette);
+
+	Soul::UIContainer* trContainer = NEW(Soul::UIContainer, 20.0f, 20.0f, Soul::UI::TopRight);
+	trContainer->SetUIPalette(palette);
+
+	Soul::UIContainer* mlContainer = NEW(Soul::UIContainer, 20.0f, 20.0f, Soul::UI::MiddleLeft);
+	mlContainer->SetUIPalette(palette);
+
+	Soul::UIContainer* mmContainer = NEW(Soul::UIContainer, 20.0f, 20.0f, Soul::UI::MiddleMiddle);
+	mmContainer->SetUIPalette(palette);
+
+	Soul::UIContainer* mrContainer = NEW(Soul::UIContainer, 20.0f, 20.0f, Soul::UI::MiddleRight);
+	mrContainer->SetUIPalette(palette);
+
+	Soul::UIContainer* blContainer = NEW(Soul::UIContainer, 20.0f, 20.0f, Soul::UI::BottomLeft);
+	blContainer->SetUIPalette(palette);
+
+	Soul::UIContainer* bmContainer = NEW(Soul::UIContainer, 20.0f, 20.0f, Soul::UI::BottomMiddle);
+	bmContainer->SetUIPalette(palette);
+
+	Soul::UIContainer* brContainer = NEW(Soul::UIContainer, 20.0f, 20.0f, Soul::UI::BottomRight);
+	brContainer->SetUIPalette(palette);
+
+	m_Container.AddChild(tlContainer);
+	m_Container.AddChild(tmContainer);
+	m_Container.AddChild(trContainer);
+	m_Container.AddChild(mlContainer);
+	m_Container.AddChild(mmContainer);
+	m_Container.AddChild(mrContainer);
+	m_Container.AddChild(blContainer);
+	m_Container.AddChild(bmContainer);
+	m_Container.AddChild(brContainer);
+
+	// TODO: Solve issue with duplicating message chains on level restart
+	Soul::MessageBus::QueueMessage("ChangeContainer", NEW(sf::Vector2f, m_Container.GetSize() * 1.1f), 1000.0f);
 }
 
 void FieldScene::Update(f32 dt)
@@ -61,6 +112,7 @@ void FieldScene::Update(f32 dt)
 	m_AI.Update(dt);
 	if (m_Ball.Raw())
 		m_Ball->Update(dt);
+	m_Container.Update(dt);
 }
 
 void FieldScene::LateUpdate(f32 dt)
@@ -77,6 +129,7 @@ void FieldScene::Draw(sf::RenderStates states) const
 	m_AI.Draw(states);
 	if (m_Ball.Raw())
 		m_Ball->Draw(states);
+	m_Container.Draw(states);
 }
 
 void FieldScene::ResetSceneData(void* data)

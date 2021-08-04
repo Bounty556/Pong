@@ -14,7 +14,7 @@ namespace Soul
 	class SOULAPI UIPalette
 	{
 	public:
-		UIPalette(u8 count, sf::Color color, ...);
+		UIPalette(u8 count, ...);
 		UIPalette(u8 count, sf::Color* colorArray);
 
 		UIPalette(const UIPalette& other);

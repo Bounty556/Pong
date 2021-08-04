@@ -4,14 +4,14 @@
 
 namespace Soul
 {
-	UIPalette::UIPalette(u8 count, sf::Color colors, ...) :
+	UIPalette::UIPalette(u8 count, ...) :
 		m_Colors(NEW_ARRAY(sf::Color, count)),
 		m_Count(count)
 	{
 		ASSERT(count > 0);
 
 		std::va_list args;
-		va_start(args, colors);
+		va_start(args, count);
 		for (u8 i = 0; i < count; ++i)
 			new (&m_Colors[i]) sf::Color(va_arg(args, sf::Color));
 		va_end(args);

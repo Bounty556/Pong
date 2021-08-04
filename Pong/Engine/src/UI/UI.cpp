@@ -2,9 +2,9 @@
 
 namespace Soul
 {
-	UI::UI(sf::Vector2f size, UI* parent /*= nullptr*/) :
+	UI::UI(sf::Vector2f size) :
 		m_Size(size),
-		m_Parent(parent),
+		m_Parent(nullptr),
 		m_MainAnchor(UIAnchor::None),
 		m_WeightingAnchor(UIAnchor::MiddleMiddle),
 		m_AnchorWeight(0.0f),
@@ -12,9 +12,9 @@ namespace Soul
 	{
 	}
 
-	UI::UI(f32 width, f32 height, UI* parent /*= nullptr*/) :
+	UI::UI(f32 width, f32 height) :
 		m_Size(sf::Vector2f(width, height)),
-		m_Parent(parent),
+		m_Parent(nullptr),
 		m_MainAnchor(UIAnchor::None),
 		m_WeightingAnchor(UIAnchor::MiddleMiddle),
 		m_AnchorWeight(0.0f),
