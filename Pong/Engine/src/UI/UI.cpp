@@ -45,6 +45,8 @@ namespace Soul
 		m_MainAnchor = other.m_MainAnchor;
 		m_WeightingAnchor = other.m_WeightingAnchor;
 		m_AnchorWeight = other.m_AnchorWeight;
+
+		return *this;
 	}
 
 	UI& UI::operator=(UI&& other) noexcept
@@ -54,6 +56,8 @@ namespace Soul
 		m_MainAnchor = other.m_MainAnchor;
 		m_WeightingAnchor = other.m_WeightingAnchor;
 		m_AnchorWeight = other.m_AnchorWeight;
+		
+		return *this;
 	}
 
 	const sf::Vector2f& UI::GetSize() const
