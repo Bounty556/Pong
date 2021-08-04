@@ -11,7 +11,7 @@ namespace Soul
 	Class to be used with UI elements. Contains a list of predefined colors for
 	the UI element to query and use.
 	*/
-	class UIPalette
+	class SOULAPI UIPalette
 	{
 	public:
 		UIPalette(u8 count, sf::Color color, ...);

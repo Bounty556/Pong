@@ -10,7 +10,7 @@
 
 namespace Soul
 {
-	class UI : public sf::Transformable
+	class SOULAPI UI : public sf::Transformable
 	{
 	public:
 		enum UIAnchor
