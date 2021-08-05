@@ -1,12 +1,13 @@
 #pragma once
 
+#include <Defines.h>
 #include <UI/UI.h>
 
 #include <SFML/Graphics/Text.hpp>
 
 namespace Soul
 {
-	class UIText : public UI
+	class SOULAPI UIText : public UI
 	{
 	public:
 		UIText(const char* text, const char* font);

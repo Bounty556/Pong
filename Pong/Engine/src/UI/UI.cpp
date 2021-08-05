@@ -143,7 +143,7 @@ namespace Soul
 		m_AnchorWeight = weight;
 	}
 
-	void UI::SetUIPalette(UIPalette palette)
+	void UI::SetUIPalette(const UIPalette& palette)
 	{
 		m_Palette = palette;
 		ResetColors();

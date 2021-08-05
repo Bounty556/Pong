@@ -8,7 +8,7 @@ namespace Soul
 {
 	UIText::UIText(const char* text, const char* font) :
 		UI(0, 0),
-		m_Text(text, *ResourceManager::GetResource<sf::Font>(font)),
+		m_Text(text, *ResourceManager::GetResource<FontResource>(font)->GetFont()),
 		m_RestrictedSize(false)
 	{
 		m_Size = m_Text.getLocalBounds().getSize();
@@ -79,7 +79,7 @@ namespace Soul
 
 	void UIText::SetFont(const char* font)
 	{
-		m_Text.setFont(*ResourceManager::GetResource<sf::Font>(font));
+		m_Text.setFont(*ResourceManager::GetResource<FontResource>(font)->GetFont());
 
 		if (!m_RestrictedSize)
 			Resize(m_Text.getLocalBounds().getSize());

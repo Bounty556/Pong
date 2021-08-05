@@ -2,6 +2,9 @@
 
 #include <Core/MessageBus.h>
 #include <Core/SceneManager.h>
+#include <Resources/ResourceManager.h>
+#include <Resources/FontResource.h>
+#include <UI/UIText.h>
 
 struct ResetData
 {
@@ -23,7 +26,7 @@ FieldScene::FieldScene() :
 	m_LeftTrigger(-10.0f, 0.0f, 10.0f, 720.0f),
 	m_RightTrigger(1280.0f, 0.0f, 10.0f, 720.0f),
 	m_Listener(),
-	m_Container(250, 400, 100, 100)
+	m_Container(250, 400, 200, 200)
 {
 	m_Player.setPosition(15.0f, 15.0f);
 	m_AI.setPosition(1280.0f - 32.0f - 15.0f, 15.0f);
@@ -58,8 +61,8 @@ FieldScene::FieldScene() :
 		});
 
 	Soul::UIPalette palette(1, sf::Color::Blue);
-
-	Soul::UIContainer* tlContainer = NEW(Soul::UIContainer, 20.0f, 20.0f, Soul::UI::None);
+	
+	Soul::UIContainer* tlContainer = NEW(Soul::UIContainer, 20.0f, 20.0f, Soul::UI::TopLeft);
 	tlContainer->SetUIPalette(palette);
 
 	Soul::UIContainer* tmContainer = NEW(Soul::UIContainer, 20.0f, 20.0f, Soul::UI::TopMiddle);
@@ -85,6 +88,12 @@ FieldScene::FieldScene() :
 
 	Soul::UIContainer* brContainer = NEW(Soul::UIContainer, 20.0f, 20.0f, Soul::UI::BottomRight);
 	brContainer->SetUIPalette(palette);
+	
+	Soul::ResourceManager::LoadResource<Soul::FontResource>("res/Fonts/font.otf", "Font");
+	Soul::UIText* tmText = NEW(Soul::UIText, "Hello!", "Font");
+	tmText->SetAnchor(Soul::UI::TopMiddle);
+	tmText->SetAnchorWeight(0.5f);
+	tmText->SetUIPalette(palette);
 
 	m_Container.AddChild(tlContainer);
 	m_Container.AddChild(tmContainer);
@@ -95,6 +104,7 @@ FieldScene::FieldScene() :
 	m_Container.AddChild(blContainer);
 	m_Container.AddChild(bmContainer);
 	m_Container.AddChild(brContainer);
+	m_Container.AddChild(tmText);
 
 	m_Container.SetCanDrag(true);
 }

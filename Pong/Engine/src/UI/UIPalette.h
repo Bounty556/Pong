@@ -15,7 +15,6 @@ namespace Soul
 	{
 	public:
 		UIPalette(u8 count, ...);
-		UIPalette(u8 count, sf::Color* colorArray);
 
 		UIPalette(const UIPalette& other);
 		UIPalette(UIPalette&& other) noexcept;

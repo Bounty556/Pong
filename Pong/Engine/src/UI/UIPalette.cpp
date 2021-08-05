@@ -17,16 +17,6 @@ namespace Soul
 		va_end(args);
 	}
 
-	UIPalette::UIPalette(u8 count, sf::Color* colorArray) :
-		m_Colors(NEW_ARRAY(sf::Color, count)),
-		m_Count(count)
-	{
-		ASSERT(count > 0);
-
-		for (u8 i = 0; i < count; ++i)
-			new (&m_Colors[i]) sf::Color(colorArray[i]);
-	}
-
 	UIPalette::UIPalette(const UIPalette& other) :
 		m_Colors(NEW_ARRAY(sf::Color, other.m_Count)),
 		m_Count(other.m_Count)

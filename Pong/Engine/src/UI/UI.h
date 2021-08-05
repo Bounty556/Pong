@@ -53,7 +53,7 @@ namespace Soul
 		void SetWeightingAnchor(UIAnchor anchor);
 		void SetAnchorWeight(f32 weight);
 
-		void SetUIPalette(UIPalette palette);
+		void SetUIPalette(const UIPalette& palette);
 		const UIPalette& GetUIPalette() const;
 
 		void SetParent(UI* parent);
