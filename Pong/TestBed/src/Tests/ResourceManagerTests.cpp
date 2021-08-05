@@ -14,12 +14,12 @@ void TextureResourceTest()
 
 	Soul::ResourceManager::LoadResource<Soul::TextureResource>("res/player.png", "Player");
 
-	/*sf::Texture* resource = Soul::ResourceManager::GetResource<sf::Texture>("Player");
-	ASSERT_NOT_EQUAL(resource, nullptr, "Failed to load and retrieve sf::Texture.");*/
+	sf::Texture* resource = Soul::ResourceManager::GetResource<sf::Texture>("Player");
+	ASSERT_NOT_EQUAL(resource, nullptr, "Failed to load and retrieve sf::Texture.");
 
 	Soul::ResourceManager::UnloadResource("Player");
-	/*sf::Texture* resource2 = Soul::ResourceManager::GetResource<sf::Texture>("Player");
-	ASSERT_EQUAL(resource2, nullptr, "Failed to delete resource.");*/
+	sf::Texture* resource2 = Soul::ResourceManager::GetResource<sf::Texture>("Player");
+	ASSERT_EQUAL(resource2, nullptr, "Failed to delete resource.");
 
 	END_MEMORY_CHECK();
 }
