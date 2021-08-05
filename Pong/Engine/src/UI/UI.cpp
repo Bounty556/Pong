@@ -24,7 +24,7 @@ namespace Soul
 
 	UI::UI(const UI& other) :
 		m_Size(other.m_Size),
-		m_Parent(other.m_Parent),
+		m_Parent(nullptr),
 		m_MainAnchor(other.m_MainAnchor),
 		m_WeightingAnchor(other.m_WeightingAnchor),
 		m_AnchorWeight(other.m_AnchorWeight),
@@ -34,7 +34,7 @@ namespace Soul
 
 	UI::UI(UI&& other) noexcept :
 		m_Size(other.m_Size),
-		m_Parent(other.m_Parent),
+		m_Parent(nullptr),
 		m_MainAnchor(other.m_MainAnchor),
 		m_WeightingAnchor(other.m_WeightingAnchor),
 		m_AnchorWeight(other.m_AnchorWeight),
@@ -45,7 +45,7 @@ namespace Soul
 	UI& UI::operator=(const UI& other)
 	{
 		m_Size = other.m_Size;
-		m_Parent = other.m_Parent;
+		m_Parent = nullptr;
 		m_MainAnchor = other.m_MainAnchor;
 		m_WeightingAnchor = other.m_WeightingAnchor;
 		m_AnchorWeight = other.m_AnchorWeight;
@@ -59,7 +59,7 @@ namespace Soul
 	UI& UI::operator=(UI&& other) noexcept
 	{
 		m_Size = other.m_Size;
-		m_Parent = other.m_Parent;
+		m_Parent = nullptr;
 		m_MainAnchor = other.m_MainAnchor;
 		m_WeightingAnchor = other.m_WeightingAnchor;
 		m_AnchorWeight = other.m_AnchorWeight;
@@ -68,6 +68,10 @@ namespace Soul
 		ResetColors();
 
 		return *this;
+	}
+
+	UI::~UI()
+	{
 	}
 
 	const sf::Vector2f& UI::GetSize() const

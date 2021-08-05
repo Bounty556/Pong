@@ -116,6 +116,7 @@ namespace Soul
 		m_Size = newSize;
 		m_Rect.setSize(newSize);
 
+		// We redraw from our parent so it can reposition us properly
 		if (m_Parent)
 			m_Parent->Redraw();
 		else
@@ -127,6 +128,7 @@ namespace Soul
 		m_Size = sf::Vector2f(width, height);
 		m_Rect.setSize(sf::Vector2f(width, height));
 
+		// We redraw from our parent so it can reposition us properly
 		if (m_Parent)
 			m_Parent->Redraw();
 		else
@@ -140,6 +142,7 @@ namespace Soul
 
 	bool UIContainer::UpdateSelf(f32 dt)
 	{
+		// Detect if we're being clicked in or not for dragging
 		if (m_MainAnchor == UIAnchor::None && InputManager::GetControlState(-1, "Select").state == Controller::Pressed &&
 			PointIsInAABB((sf::Vector2f)sf::Mouse::getPosition(Renderer::GetWindow()), GetWorldPosition(), m_Size))
 			m_IsDragged = true;
@@ -154,7 +157,6 @@ namespace Soul
 
 			return false;
 		}
-		// TODO: detect edge drags
 
 		return true;
 	}
@@ -169,10 +171,8 @@ namespace Soul
 	{
 		bool blockedUpdate = false;
 		for (u8 i = 0; i < m_Children.Count(); ++i)
-		{
 			if (!m_Children[i]->Update(dt))
 				blockedUpdate = true;
-		}
 
 		return !blockedUpdate;
 	}

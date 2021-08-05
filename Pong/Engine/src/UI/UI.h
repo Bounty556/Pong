@@ -37,6 +37,8 @@ namespace Soul
 		UI& operator=(const UI& other);
 		UI& operator=(UI&& other) noexcept;
 
+		virtual ~UI();
+
 		const sf::Vector2f& GetSize() const;
 		const UI* GetParent() const;
 
