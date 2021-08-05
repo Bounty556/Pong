@@ -94,7 +94,7 @@ FieldScene::FieldScene() :
 	tmText->SetAnchor(Soul::UI::TopMiddle);
 	tmText->SetAnchorWeight(0.5f);
 	tmText->SetUIPalette(palette);
-	tmText->SetFontSize(30);
+	tmText->SetFontSize(16);
 
 	m_Container.AddChild(tlContainer);
 	m_Container.AddChild(tmContainer);
