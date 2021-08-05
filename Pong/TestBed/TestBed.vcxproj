@@ -60,7 +60,7 @@
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>$(SolutionDir)Engine\src\;$(SolutionDir)vendor\SFML\include\</AdditionalIncludeDirectories>
-      <DisableSpecificWarnings>4251</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4251;26812</DisableSpecificWarnings>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -78,7 +78,7 @@
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>$(SolutionDir)Engine\src\;$(SolutionDir)vendor\SFML\include\</AdditionalIncludeDirectories>
-      <DisableSpecificWarnings>4251</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4251;26812</DisableSpecificWarnings>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -106,6 +106,7 @@
     <ClCompile Include="src\Tests\StringTests.cpp" />
     <ClCompile Include="src\Tests\TestClass.cpp" />
     <ClCompile Include="src\Tests\TestNode.cpp" />
+    <ClCompile Include="src\Tests\UITests.cpp" />
     <ClCompile Include="src\Tests\UniquePointerTests.cpp" />
     <ClCompile Include="src\Tests\VectorTests.cpp" />
   </ItemGroup>
@@ -127,6 +128,7 @@
     <ClInclude Include="src\Tests\TestClass.h" />
     <ClInclude Include="src\TestMacros.h" />
     <ClInclude Include="src\Tests\TestNode.h" />
+    <ClInclude Include="src\Tests\UITests.h" />
     <ClInclude Include="src\Tests\UniquePointerTests.h" />
     <ClInclude Include="src\Tests\VectorTests.h" />
   </ItemGroup>

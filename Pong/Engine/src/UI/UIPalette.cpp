@@ -33,9 +33,6 @@ namespace Soul
 
 	UIPalette& UIPalette::operator=(const UIPalette& other)
 	{
-		for (u8 i = 0; i < m_Count; ++i)
-			DELETE(&m_Colors[i]);
-
 		m_Colors = NEW_ARRAY(sf::Color, other.m_Count);
 		m_Count = other.m_Count;
 
@@ -47,19 +44,10 @@ namespace Soul
 
 	UIPalette& UIPalette::operator=(UIPalette&& other) noexcept
 	{
-		for (u8 i = 0; i < m_Count; ++i)
-			DELETE(&m_Colors[i]);
-
 		m_Colors = std::move(other.m_Colors);
 		m_Count = other.m_Count;
 
 		return *this;
-	}
-
-	UIPalette::~UIPalette()
-	{
-		for (u8 i = 0; i < m_Count; ++i)
-			DELETE(&m_Colors[i]);
 	}
 
 	const sf::Color& UIPalette::GetColor(u8 index) const

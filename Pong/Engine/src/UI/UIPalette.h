@@ -22,8 +22,6 @@ namespace Soul
 		UIPalette& operator=(const UIPalette& other);
 		UIPalette& operator=(UIPalette&& other) noexcept;
 
-		~UIPalette();
-
 		const sf::Color& GetColor(u8 index) const;
 		void SetColor(u8 index, sf::Color color);
 

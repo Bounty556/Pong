@@ -7,7 +7,7 @@ namespace Soul
 		m_Parent(nullptr),
 		m_MainAnchor(UIAnchor::None),
 		m_WeightingAnchor(UIAnchor::MiddleMiddle),
-		m_AnchorWeight(0.0f),
+		m_AnchorWeight(1.0f),
 		m_Palette(1, sf::Color::White)
 	{
 	}
@@ -17,7 +17,7 @@ namespace Soul
 		m_Parent(nullptr),
 		m_MainAnchor(UIAnchor::None),
 		m_WeightingAnchor(UIAnchor::MiddleMiddle),
-		m_AnchorWeight(0.0f),
+		m_AnchorWeight(1.0f),
 		m_Palette(1, sf::Color::White)
 	{
 	}
