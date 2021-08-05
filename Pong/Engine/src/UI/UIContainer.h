@@ -41,5 +41,6 @@ namespace Soul
 	private:
 		Vector<UniquePointer<UI>> m_Children;
 		sf::RectangleShape m_Rect;
+		bool m_IsDragged;
 	};
 }

@@ -54,9 +54,11 @@ namespace Soul
 		void SetUIPalette(UIPalette palette);
 		const UIPalette& GetUIPalette() const;
 
-		virtual void Redraw();
-
 		void SetParent(UI* parent);
+
+		sf::Vector2f GetWorldPosition();
+
+		virtual void Redraw();
 
 		virtual void Resize(sf::Vector2f newSize) = 0;
 		virtual void Resize(f32 width, f32 height) = 0;

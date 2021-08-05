@@ -17,7 +17,7 @@ FieldScene::FieldScene() :
 	m_AI(),
 	m_PlayerScore(0),
 	m_AIScore(0),
-	m_Ball(NEW(Ball, 8, 0.5f)),
+	m_Ball(NEW(Ball, 8, 0.0f)),
 	m_TopBounds(-5.0f, -5.0f, 1310.0f, 10.0f),
 	m_BottomBounds(-5.0f, 715.0f, 1310.0f, 10.0f),
 	m_LeftTrigger(-10.0f, 0.0f, 10.0f, 720.0f),
@@ -57,17 +57,9 @@ FieldScene::FieldScene() :
 			Soul::SceneManager::ResetScene(this, resetData);
 		});
 
-	m_Listener.Subscribe("ChangeContainer",
-		[&](void* data)
-		{
-			sf::Vector2f* newSize = (sf::Vector2f*)data;
-			m_Container.Resize(*newSize);
-			Soul::MessageBus::QueueMessage("ChangeContainer", NEW(sf::Vector2f, (*newSize) * 1.1f), 1000.0f);
-		});
-
 	Soul::UIPalette palette(1, sf::Color::Blue);
 
-	Soul::UIContainer* tlContainer = NEW(Soul::UIContainer, 20.0f, 20.0f, Soul::UI::TopLeft);
+	Soul::UIContainer* tlContainer = NEW(Soul::UIContainer, 20.0f, 20.0f, Soul::UI::None);
 	tlContainer->SetUIPalette(palette);
 
 	Soul::UIContainer* tmContainer = NEW(Soul::UIContainer, 20.0f, 20.0f, Soul::UI::TopMiddle);
@@ -103,8 +95,6 @@ FieldScene::FieldScene() :
 	m_Container.AddChild(blContainer);
 	m_Container.AddChild(bmContainer);
 	m_Container.AddChild(brContainer);
-
-	Soul::MessageBus::QueueMessage("ChangeContainer", NEW(sf::Vector2f, m_Container.GetSize() * 1.1f), 1000.0f);
 }
 
 void FieldScene::Update(f32 dt)

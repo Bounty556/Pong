@@ -1,13 +1,16 @@
 #include "UIContainer.h"
 
 #include <Rendering/Renderer.h>
+#include <IO/InputManager.h>
+#include <Physics/CollisionChecks.h>
 
 namespace Soul
 {
 	UIContainer::UIContainer(sf::Vector2f position, sf::Vector2f size) :
 		UI(size),
 		m_Children(),
-		m_Rect(size)
+		m_Rect(size),
+		m_IsDragged(false)
 	{
 		setPosition(position);
 		ResetColors();
@@ -16,7 +19,8 @@ namespace Soul
 	UIContainer::UIContainer(f32 x, f32 y, f32 width, f32 height) :
 		UI(width, height),
 		m_Children(),
-		m_Rect(sf::Vector2f(width, height))
+		m_Rect(sf::Vector2f(width, height)),
+		m_IsDragged(false)
 	{
 		setPosition(x, y);
 		ResetColors();
@@ -25,7 +29,8 @@ namespace Soul
 	UIContainer::UIContainer(sf::Vector2f size, UIAnchor mainAnchor, f32 anchorWeight /*= 100.0f*/, UIAnchor weightingAnchor /*= UIAnchor::MiddleMiddle*/) :
 		UI(size),
 		m_Children(),
-		m_Rect(size)
+		m_Rect(size),
+		m_IsDragged(false)
 	{
 		SetAnchor(mainAnchor);
 		SetWeightingAnchor(weightingAnchor);
@@ -36,7 +41,8 @@ namespace Soul
 	UIContainer::UIContainer(f32 width, f32 height, UIAnchor mainAnchor, f32 anchorWeight /*= 100.0f*/, UIAnchor weightingAnchor /*= UIAnchor::MiddleMiddle*/) :
 		UI(width, height),
 		m_Children(),
-		m_Rect(sf::Vector2f(width, height))
+		m_Rect(sf::Vector2f(width, height)),
+		m_IsDragged(false)
 	{
 		SetAnchor(mainAnchor);
 		SetWeightingAnchor(weightingAnchor);
@@ -47,7 +53,8 @@ namespace Soul
 	UIContainer::UIContainer(UIContainer&& other) noexcept :
 		UI(other),
 		m_Children(std::move(other.m_Children)),
-		m_Rect(std::move(other.m_Rect))
+		m_Rect(std::move(other.m_Rect)),
+		m_IsDragged(false)
 	{
 		ResetColors();
 	}
@@ -57,6 +64,7 @@ namespace Soul
 		UI::operator=(other);
 		m_Children = std::move(other.m_Children);
 		m_Rect = std::move(other.m_Rect);
+		m_IsDragged = false;
 
 		ResetColors();
 
@@ -75,15 +83,17 @@ namespace Soul
 	{
 		for (u8 i = 0; i < m_Children.Count(); ++i)
 		{
-			// TODO: take into account origins on children
-			sf::Vector2f anchorA = GetAnchorPosition(m_Children[i]->GetMainAnchor());
-			sf::Vector2f anchorB = GetAnchorPosition(m_Children[i]->GetWeightingAnchor());
-			sf::Vector2f anchorDiff = anchorA - anchorB;
-			sf::Vector2f smallAnchorA = m_Children[i]->GetAnchorPosition(m_Children[i]->GetMainAnchor());
-			sf::Vector2f smallAnchorB = m_Children[i]->GetAnchorPosition(m_Children[i]->GetWeightingAnchor());
-			sf::Vector2f smallAnchorDiff = smallAnchorA - smallAnchorB;
-			sf::Vector2f smallAnchorOffset = smallAnchorB + (smallAnchorDiff * m_Children[i]->GetAnchorWeight());
-			m_Children[i]->setPosition(anchorB + (anchorDiff * m_Children[i]->GetAnchorWeight()) - smallAnchorOffset);
+			if (m_Children[i]->GetMainAnchor() != UIAnchor::None)
+			{
+				sf::Vector2f anchorA = GetAnchorPosition(m_Children[i]->GetMainAnchor());
+				sf::Vector2f anchorB = GetAnchorPosition(m_Children[i]->GetWeightingAnchor());
+				sf::Vector2f anchorDiff = anchorA - anchorB;
+				sf::Vector2f smallAnchorA = m_Children[i]->GetAnchorPosition(m_Children[i]->GetMainAnchor());
+				sf::Vector2f smallAnchorB = m_Children[i]->GetAnchorPosition(m_Children[i]->GetWeightingAnchor());
+				sf::Vector2f smallAnchorDiff = smallAnchorA - smallAnchorB;
+				sf::Vector2f smallAnchorOffset = smallAnchorB + (smallAnchorDiff * m_Children[i]->GetAnchorWeight());
+				m_Children[i]->setPosition(anchorB + (anchorDiff * m_Children[i]->GetAnchorWeight()) - smallAnchorOffset);
+			}
 			
 			// Redraw child container
 			m_Children[i]->Redraw();
@@ -119,6 +129,19 @@ namespace Soul
 
 	void UIContainer::UpdateSelf(f32 dt)
 	{
+		if (m_MainAnchor == UIAnchor::None && InputManager::GetControlState(-1, "Select").state == Controller::Pressed &&
+			PointIsInAABB((sf::Vector2f)sf::Mouse::getPosition(Renderer::GetWindow()), GetWorldPosition(), m_Size))
+			m_IsDragged = true;
+		else if (InputManager::GetControlState(-1, "Select").state == Controller::Released)
+			m_IsDragged = false;
+
+		// Drag
+		if (m_IsDragged)
+		{
+			move((sf::Vector2f)Soul::InputManager::GetMouseDelta());
+			Redraw();
+		}
+
 		// TODO: detect edge drags
 	}
 

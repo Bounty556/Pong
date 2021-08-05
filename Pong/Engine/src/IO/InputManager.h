@@ -42,11 +42,18 @@ namespace Soul
 		*/
 		static Controller::ControlState GetControlState(ControllerId id, const char* control);
 
+		/*
+		Gets the change in mouse position from last frame.
+		*/
+		static sf::Vector2i GetMouseDelta();
+
 	private:
 		static void RegisterGamepad(ControllerId id);
 		static void DisconnectGamepad(ControllerId id);
 
 	private:
+		static sf::Vector2i m_MouseDelta;
+		static sf::Vector2i m_LastMousePos;
 		static Keyboard* m_Keyboard;
 		static Map<ControllerId, Gamepad>* m_Gamepads;
 	};

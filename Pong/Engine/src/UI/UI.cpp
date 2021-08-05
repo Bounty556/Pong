@@ -153,6 +153,21 @@ namespace Soul
 		m_Parent = parent;
 	}
 
+	sf::Vector2f UI::GetWorldPosition()
+	{
+		sf::Transform transform = getTransform();
+
+		const UI* current = this;
+
+		while (current->m_Parent)
+		{
+			transform *= m_Parent->getTransform();
+			current = current->m_Parent;
+		}
+
+		return transform * sf::Vector2f();
+	}
+
 	void UI::Redraw()
 	{
 	}

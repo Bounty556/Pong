@@ -4,10 +4,10 @@ m -1
 a -1
 c 0
 Select
-k 58
-m -1
+k -1
+m 0
 a -1
-c 0
+c -1
 Console
 k 54
 m -1

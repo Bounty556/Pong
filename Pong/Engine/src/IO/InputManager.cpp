@@ -4,6 +4,8 @@
 
 namespace Soul
 {
+	sf::Vector2i InputManager::m_LastMousePos;
+	sf::Vector2i InputManager::m_MouseDelta;
 	Keyboard* InputManager::m_Keyboard;
 	Map<ControllerId, Gamepad>* InputManager::m_Gamepads;
 
@@ -11,8 +13,9 @@ namespace Soul
 	{
 		typedef Map<ControllerId, Gamepad> GamepadMap;
 		m_Gamepads = NEW(GamepadMap, 8);
-
 		m_Keyboard = NEW(Keyboard, "res/Controls/defaultControls.controls");
+		m_LastMousePos = sf::Mouse::getPosition();
+		m_MouseDelta = sf::Vector2i(0, 0);
 
 		return true;
 	}
@@ -33,6 +36,8 @@ namespace Soul
 
 	void InputManager::UpdateControllers()
 	{
+		m_MouseDelta = sf::Mouse::getPosition() - m_LastMousePos;
+		m_LastMousePos = sf::Mouse::getPosition();
 		m_Keyboard->UpdateStates();
 
 		Vector<ControllerId*> ids = m_Gamepads->GetKeys();
@@ -82,6 +87,11 @@ namespace Soul
 			else
 				return Controller::ControlState{};
 		}
+	}
+
+	sf::Vector2i InputManager::GetMouseDelta()
+	{
+		return m_MouseDelta;
 	}
 
 	void InputManager::RegisterGamepad(ControllerId id)
