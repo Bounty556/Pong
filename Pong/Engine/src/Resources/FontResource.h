@@ -18,7 +18,7 @@ namespace Soul
 		FontResource& operator=(const FontResource& other) = delete;
 		FontResource& operator=(FontResource&& other) noexcept;
 
-		const sf::Font* GetFont() const;
+		virtual void* GetResource() override;
 
 	private:
 		UniquePointer<sf::Font> m_Font;

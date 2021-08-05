@@ -24,7 +24,7 @@ namespace Soul
 		return *this;
 	}
 
-	const sf::SoundBuffer* SoundResource::GetSound() const
+	void* SoundResource::GetResource()
 	{
 		return m_Sound.Raw();
 	}

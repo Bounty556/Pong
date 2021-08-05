@@ -53,6 +53,7 @@ namespace Soul
 
 	private:
 		sf::Text m_Text;
+		sf::Font m_Font;
 		bool m_RestrictedSize;
 	};
 }

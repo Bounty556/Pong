@@ -14,15 +14,12 @@ void TextureResourceTest()
 
 	Soul::ResourceManager::LoadResource<Soul::TextureResource>("res/player.png", "Player");
 
-	Soul::TextureResource* resource = Soul::ResourceManager::GetResource<Soul::TextureResource>("Player");
-
-	ASSERT_NOT_EQUAL(resource, nullptr, "Failed to load and retrieve resource.");
+	/*sf::Texture* resource = Soul::ResourceManager::GetResource<sf::Texture>("Player");
+	ASSERT_NOT_EQUAL(resource, nullptr, "Failed to load and retrieve sf::Texture.");*/
 
 	Soul::ResourceManager::UnloadResource("Player");
-
-	Soul::TextureResource* resource2 = Soul::ResourceManager::GetResource<Soul::TextureResource>("Player");
-
-	ASSERT_EQUAL(resource2, nullptr, "Failed to delete resource.");
+	/*sf::Texture* resource2 = Soul::ResourceManager::GetResource<sf::Texture>("Player");
+	ASSERT_EQUAL(resource2, nullptr, "Failed to delete resource.");*/
 
 	END_MEMORY_CHECK();
 }
@@ -33,14 +30,11 @@ void SoundResourceTest()
 
 	Soul::ResourceManager::LoadResource<Soul::SoundResource>("res/sound.ogg", "Sound");
 
-	Soul::SoundResource* resource = Soul::ResourceManager::GetResource<Soul::SoundResource>("Sound");
-
-	ASSERT_NOT_EQUAL(resource, nullptr, "Failed to load and retrieve resource.");
+	sf::SoundBuffer* resource = Soul::ResourceManager::GetResource<sf::SoundBuffer>("Sound");
+	ASSERT_NOT_EQUAL(resource, nullptr, "Failed to load and retrieve sf::SoundBuffer.");
 
 	Soul::ResourceManager::UnloadResource("Sound");
-
-	Soul::SoundResource* resource2 = Soul::ResourceManager::GetResource<Soul::SoundResource>("Sound");
-
+	sf::SoundBuffer* resource2 = Soul::ResourceManager::GetResource<sf::SoundBuffer>("Sound");
 	ASSERT_EQUAL(resource2, nullptr, "Failed to delete resource.");
 
 	END_MEMORY_CHECK();
@@ -52,14 +46,11 @@ void FontResourceTest()
 
 	Soul::ResourceManager::LoadResource<Soul::FontResource>("res/Fonts/font.otf", "Font");
 
-	Soul::FontResource* resource = Soul::ResourceManager::GetResource<Soul::FontResource>("Font");
-
-	ASSERT_NOT_EQUAL(resource, nullptr, "Failed to load and retrieve resource.");
+	sf::Font* resource = Soul::ResourceManager::GetResource<sf::Font>("Font");
+	ASSERT_NOT_EQUAL(resource, nullptr, "Failed to load and retrieve sf::Font.");
 
 	Soul::ResourceManager::UnloadResource("Font");
-
-	Soul::FontResource* resource2 = Soul::ResourceManager::GetResource<Soul::FontResource>("Font");
-
+	sf::Font* resource2 = Soul::ResourceManager::GetResource<sf::Font>("Font");
 	ASSERT_EQUAL(resource2, nullptr, "Failed to delete resource.");
 
 	END_MEMORY_CHECK();

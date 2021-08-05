@@ -18,7 +18,7 @@ namespace Soul
 		TextureResource& operator=(const TextureResource& other) = delete;
 		TextureResource& operator=(TextureResource&& other) noexcept;
 
-		const sf::Texture* GetTexture() const;
+		virtual void* GetResource() override;
 
 	private:
 		UniquePointer<sf::Texture> m_Texture;

@@ -20,7 +20,7 @@ FieldScene::FieldScene() :
 	m_AI(),
 	m_PlayerScore(0),
 	m_AIScore(0),
-	m_Ball(NEW(Ball, 8, 0.0f)),
+	m_Ball(NEW(Ball, 8, 0.5f)),
 	m_TopBounds(-5.0f, -5.0f, 1310.0f, 10.0f),
 	m_BottomBounds(-5.0f, 715.0f, 1310.0f, 10.0f),
 	m_LeftTrigger(-10.0f, 0.0f, 10.0f, 720.0f),
@@ -94,6 +94,7 @@ FieldScene::FieldScene() :
 	tmText->SetAnchor(Soul::UI::TopMiddle);
 	tmText->SetAnchorWeight(0.5f);
 	tmText->SetUIPalette(palette);
+	tmText->SetFontSize(30);
 
 	m_Container.AddChild(tlContainer);
 	m_Container.AddChild(tmContainer);

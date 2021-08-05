@@ -24,7 +24,7 @@ namespace Soul
 		return *this;
 	}
 
-	const sf::Texture* TextureResource::GetTexture() const
+	void* TextureResource::GetResource()
 	{
 		return m_Texture.Raw();
 	}

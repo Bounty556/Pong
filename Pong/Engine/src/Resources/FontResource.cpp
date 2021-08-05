@@ -24,7 +24,7 @@ namespace Soul
 		return *this;
 	}
 
-	const sf::Font* FontResource::GetFont() const
+	void* FontResource::GetResource()
 	{
 		return m_Font.Raw();
 	}

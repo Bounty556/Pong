@@ -18,7 +18,7 @@ namespace Soul
 		SoundResource& operator=(const SoundResource& other) = delete;
 		SoundResource& operator=(SoundResource&& other) noexcept;
 
-		const sf::SoundBuffer* GetSound() const;
+		virtual void* GetResource() override;
 
 	private:
 		UniquePointer<sf::SoundBuffer> m_Sound;

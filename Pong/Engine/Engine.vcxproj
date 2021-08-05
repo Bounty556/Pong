@@ -258,6 +258,7 @@
     <ClCompile Include="src\Platform\TimerWin32.cpp" />
     <ClCompile Include="src\Rendering\Renderer.cpp" />
     <ClCompile Include="src\Resources\FontResource.cpp" />
+    <ClCompile Include="src\Resources\IResource.cpp" />
     <ClCompile Include="src\Resources\ResourceManager.cpp" />
     <ClCompile Include="src\Resources\SoundResource.cpp" />
     <ClCompile Include="src\Resources\TextureResource.cpp" />

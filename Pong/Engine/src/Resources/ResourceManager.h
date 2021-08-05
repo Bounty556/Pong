@@ -1,10 +1,11 @@
 #pragma once
 
 #include <Defines.h>
+#include <Memory/UniquePointer.h>
 #include <Structures/Map.h>
 #include <Resources/IResource.h>
 
-#define ResourceMap Map<String, IResource>
+#define ResourceMap Map<Soul::String, Soul::UniquePointer<Soul::IResource>>
 
 namespace Soul
 {
@@ -34,15 +35,16 @@ namespace Soul
 	void ResourceManager::LoadResource(const char* resourcePath, const char* resourceName)
 	{
 		if (!m_ResourceMap->GetValue(resourceName))
-		{
-			T resource(resourcePath);
-			m_ResourceMap->AddPair(resourceName, std::move(resource));
-		}
+			m_ResourceMap->AddPair(resourceName, NEW(T, resourcePath));
 	}
 
 	template <class T>
 	T* ResourceManager::GetResource(const char* resourceName)
 	{
-		return (T*)m_ResourceMap->GetValue(resourceName);
+		Soul::UniquePointer<IResource>* found = m_ResourceMap->GetValue(resourceName);
+		if (found)
+			return (T*)(*found)->GetResource();
+		else
+			return nullptr;
 	}
 }
