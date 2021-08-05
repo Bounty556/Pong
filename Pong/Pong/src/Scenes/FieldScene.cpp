@@ -95,6 +95,8 @@ FieldScene::FieldScene() :
 	m_Container.AddChild(blContainer);
 	m_Container.AddChild(bmContainer);
 	m_Container.AddChild(brContainer);
+
+	m_Container.SetCanDrag(true);
 }
 
 void FieldScene::Update(f32 dt)

@@ -10,7 +10,8 @@ namespace Soul
 		UI(size),
 		m_Children(),
 		m_Rect(size),
-		m_IsDragged(false)
+		m_IsDragged(false),
+		m_CanDrag(false)
 	{
 		setPosition(position);
 		ResetColors();
@@ -20,7 +21,8 @@ namespace Soul
 		UI(width, height),
 		m_Children(),
 		m_Rect(sf::Vector2f(width, height)),
-		m_IsDragged(false)
+		m_IsDragged(false),
+		m_CanDrag(false)
 	{
 		setPosition(x, y);
 		ResetColors();
@@ -30,7 +32,8 @@ namespace Soul
 		UI(size),
 		m_Children(),
 		m_Rect(size),
-		m_IsDragged(false)
+		m_IsDragged(false),
+		m_CanDrag(false)
 	{
 		SetAnchor(mainAnchor);
 		SetWeightingAnchor(weightingAnchor);
@@ -42,7 +45,8 @@ namespace Soul
 		UI(width, height),
 		m_Children(),
 		m_Rect(sf::Vector2f(width, height)),
-		m_IsDragged(false)
+		m_IsDragged(false),
+		m_CanDrag(false)
 	{
 		SetAnchor(mainAnchor);
 		SetWeightingAnchor(weightingAnchor);
@@ -54,7 +58,8 @@ namespace Soul
 		UI(other),
 		m_Children(std::move(other.m_Children)),
 		m_Rect(std::move(other.m_Rect)),
-		m_IsDragged(false)
+		m_IsDragged(false),
+		m_CanDrag(other.m_CanDrag)
 	{
 		ResetColors();
 	}
@@ -65,6 +70,7 @@ namespace Soul
 		m_Children = std::move(other.m_Children);
 		m_Rect = std::move(other.m_Rect);
 		m_IsDragged = false;
+		m_CanDrag = other.m_CanDrag;
 
 		ResetColors();
 
@@ -77,6 +83,11 @@ namespace Soul
 		child->SetParent(this);
 
 		Redraw();
+	}
+
+	void UIContainer::SetCanDrag(bool canDrag)
+	{
+		m_CanDrag = canDrag;
 	}
 
 	void UIContainer::Redraw()
@@ -136,7 +147,7 @@ namespace Soul
 			m_IsDragged = false;
 
 		// Drag
-		if (m_IsDragged)
+		if (m_IsDragged && m_CanDrag)
 		{
 			move((sf::Vector2f)Soul::InputManager::GetMouseDelta());
 			Redraw();

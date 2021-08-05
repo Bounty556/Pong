@@ -25,6 +25,8 @@ namespace Soul
 
 		void AddChild(UI* child);
 
+		void SetCanDrag(bool canDrag);
+
 		virtual void Redraw() override;
 
 		virtual void Resize(sf::Vector2f newSize) override;
@@ -42,5 +44,6 @@ namespace Soul
 		Vector<UniquePointer<UI>> m_Children;
 		sf::RectangleShape m_Rect;
 		bool m_IsDragged;
+		bool m_CanDrag;
 	};
 }
