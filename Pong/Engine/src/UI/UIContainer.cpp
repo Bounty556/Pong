@@ -127,7 +127,7 @@ namespace Soul
 		m_Rect.setFillColor(m_Palette.GetColor(0));
 	}
 
-	void UIContainer::UpdateSelf(f32 dt)
+	bool UIContainer::UpdateSelf(f32 dt)
 	{
 		if (m_MainAnchor == UIAnchor::None && InputManager::GetControlState(-1, "Select").state == Controller::Pressed &&
 			PointIsInAABB((sf::Vector2f)sf::Mouse::getPosition(Renderer::GetWindow()), GetWorldPosition(), m_Size))
@@ -140,9 +140,12 @@ namespace Soul
 		{
 			move((sf::Vector2f)Soul::InputManager::GetMouseDelta());
 			Redraw();
-		}
 
+			return false;
+		}
 		// TODO: detect edge drags
+
+		return true;
 	}
 
 	void UIContainer::DrawSelf(sf::RenderStates states) const
@@ -151,10 +154,16 @@ namespace Soul
 		Soul::Renderer::Render(m_Rect, states);
 	}
 
-	void UIContainer::UpdateChildren(f32 dt)
+	bool UIContainer::UpdateChildren(f32 dt)
 	{
+		bool blockedUpdate = false;
 		for (u8 i = 0; i < m_Children.Count(); ++i)
-			m_Children[i]->Update(dt);
+		{
+			if (!m_Children[i]->Update(dt))
+				blockedUpdate = true;
+		}
+
+		return !blockedUpdate;
 	}
 
 	void UIContainer::DrawChildren(sf::RenderStates states) const

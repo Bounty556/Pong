@@ -40,7 +40,7 @@ namespace Soul
 		const sf::Vector2f& GetSize() const;
 		const UI* GetParent() const;
 
-		void Update(f32 dt);
+		bool Update(f32 dt);
 		void Draw(sf::RenderStates states) const;
 
 		const UIAnchor& GetMainAnchor() const;
@@ -66,9 +66,9 @@ namespace Soul
 	protected:
 		virtual void ResetColors() = 0;
 
-		virtual void UpdateSelf(f32 dt) = 0;
+		virtual bool UpdateSelf(f32 dt) = 0;
 		virtual void DrawSelf(sf::RenderStates states) const = 0;
-		virtual void UpdateChildren(f32 dt);
+		virtual bool UpdateChildren(f32 dt);
 		virtual void DrawChildren(sf::RenderStates states) const;
 
 	protected:

@@ -80,10 +80,12 @@ namespace Soul
 		return m_Parent;
 	}
 
-	void UI::Update(f32 dt)
+	bool UI::Update(f32 dt)
 	{
-		UpdateSelf(dt);
-		UpdateChildren(dt);
+		if (UpdateChildren(dt))
+			return UpdateSelf(dt);
+		else
+			return false;
 	}
 
 	void UI::Draw(sf::RenderStates states) const
@@ -172,8 +174,9 @@ namespace Soul
 	{
 	}
 
-	void UI::UpdateChildren(f32 dt)
+	bool UI::UpdateChildren(f32 dt)
 	{
+		return true;
 	}
 
 	void UI::DrawChildren(sf::RenderStates states) const

@@ -33,9 +33,9 @@ namespace Soul
 	protected:
 		virtual void ResetColors() override;
 
-		virtual void UpdateSelf(f32 dt) override;
+		virtual bool UpdateSelf(f32 dt) override;
 		virtual void DrawSelf(sf::RenderStates states) const override;
-		virtual void UpdateChildren(f32 dt) override;
+		virtual bool UpdateChildren(f32 dt) override;
 		virtual void DrawChildren(sf::RenderStates states) const override;
 
 	private:
