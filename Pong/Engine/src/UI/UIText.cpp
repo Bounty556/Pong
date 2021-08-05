@@ -94,6 +94,14 @@ namespace Soul
 			Resize(m_Text.getLocalBounds().getSize());
 	}
 
+	void UIText::SetOutlineThickness(f32 size)
+	{
+		m_Text.setOutlineThickness(size);
+
+		if (!m_RestrictedSize)
+			Resize(m_Text.getLocalBounds().getSize());
+	}
+
 	void UIText::Resize(sf::Vector2f newSize)
 	{
 		m_Size = newSize;

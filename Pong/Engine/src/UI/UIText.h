@@ -41,6 +41,7 @@ namespace Soul
 		void SetText(const char* text);
 		void SetFont(const char* font);
 		void SetFontSize(u32 fontSize);
+		void SetOutlineThickness(f32 size);
 
 		virtual void Resize(sf::Vector2f newSize) override;
 		virtual void Resize(f32 width, f32 height) override;

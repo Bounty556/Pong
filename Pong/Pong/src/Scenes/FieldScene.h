@@ -32,5 +32,5 @@ private:
 	Soul::AreaNode m_LeftTrigger;
 	Soul::AreaNode m_RightTrigger;
 	Soul::Listener m_Listener;
-	Soul::UIContainer m_Container;
+	Soul::UIContainer m_UIContainer;
 };
