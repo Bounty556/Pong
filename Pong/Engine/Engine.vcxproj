@@ -171,6 +171,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="src\Animation\Animation.h" />
+    <ClInclude Include="src\Animation\AnimationFrame.h" />
     <ClInclude Include="src\Core\Listener.h" />
     <ClInclude Include="src\core\Logger.h" />
     <ClInclude Include="src\Core\MessageBus.h" />
@@ -224,6 +226,8 @@
     <ClInclude Include="src\UI\UIText.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Animation\Animation.cpp" />
+    <ClCompile Include="src\Animation\AnimationFrame.cpp" />
     <ClCompile Include="src\Core\Listener.cpp" />
     <ClCompile Include="src\core\Logger.cpp" />
     <ClCompile Include="src\Core\MessageBus.cpp" />

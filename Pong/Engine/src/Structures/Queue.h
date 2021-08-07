@@ -27,6 +27,8 @@ namespace Soul
 		T Deque();
 		T& Peek();
 		const T& Peek() const;
+		T& PeekEnd();
+		const T& PeekEnd() const;
 
 		u16 Count() const;
 		bool IsEmpty() const;
@@ -130,13 +132,29 @@ namespace Soul
 	template <class T>
 	T& Queue<T>::Peek()
 	{
+		ASSERT(m_Size > 0);
 		return m_Queue[m_Tail];
 	}
 
 	template <class T>
 	const T& Queue<T>::Peek() const
 	{
+		ASSERT(m_Size > 0);
 		return m_Queue[m_Tail];
+	}
+
+	template <class T>
+	T& Queue<T>::PeekEnd()
+	{
+		ASSERT(m_Size > 0);
+		return m_Queue[(m_Head - 1) % m_Capacity];
+	}
+
+	template <class T>
+	const T& Queue<T>::PeekEnd() const
+	{
+		ASSERT(m_Size > 0);
+		return m_Queue[(m_Head - 1) % m_Capacity];
 	}
 
 	template <class T>

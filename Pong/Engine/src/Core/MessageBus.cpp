@@ -66,7 +66,7 @@ namespace Soul
 			listeners->Remove(listener);
 	}
 
-	void MessageBus::QueueMessage(const char* message, void* data, f32 time /*=0.0f*/)
+	void MessageBus::QueueMessage(const char* message, void* data /*= nullptr*/, f32 time /*=0.0f*/)
 	{
 		ASSERT(m_IsInitialized);
 

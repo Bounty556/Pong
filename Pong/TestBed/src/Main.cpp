@@ -5,6 +5,7 @@
 
 #include "TestScene.h"
 
+#include "Tests/AnimationTests.h"
 #include "Tests/CollisionTests.h"
 #include "Tests/MathTests.h"
 #include "Tests/MapTests.h"
@@ -29,6 +30,7 @@ void RunTestSuite(ITestSuite* suite)
 
 void RunAllTestSuites()
 {
+	CREATE_TEST_SUITE(AnimationTests);
 	CREATE_TEST_SUITE(CollisionTests);
 	CREATE_TEST_SUITE(MathTests);
 	CREATE_TEST_SUITE(MapTests);

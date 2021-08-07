@@ -69,6 +69,12 @@ namespace Soul
 		SOULAPI i32 Min(i32 a, i32 b);
 
 		/*
+		Returns the value between initValue and finalValue at the ratio
+		provided.
+		*/
+		SOULAPI f32 Lerp(f32 initValue, f32 finalValue, f32 ratio);
+
+		/*
 		Returns the provided degrees in radians.
 		*/
 		SOULAPI f32 ToRadians(f32 deg);

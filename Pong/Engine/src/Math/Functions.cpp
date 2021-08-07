@@ -142,6 +142,11 @@ namespace Soul
 				return b;
 		}
 
+		f32 Lerp(f32 initValue, f32 finalValue, f32 ratio)
+		{
+			return (initValue - finalValue) * ratio + initValue;
+		}
+
 		f32 ToRadians(f32 deg)
 		{
 			return deg * TO_RAD;
@@ -162,7 +167,7 @@ namespace Soul
 				rad -= PI;
 				sign = -1;
 			}
-			f64 xx = rad * rad;
+			f64 xx = (f64)rad * rad;
 
 			return sign * (1 - (xx * 0.5) + (xx * xx * 0.04166666666) - (xx * xx * xx * 0.00138888888) + (xx * xx * xx * xx * 0.00002480158) - (xx * xx * xx * xx * xx * 2.75573192e-7) + (xx * xx * xx * xx * xx * xx * 2.0876757e-9) - (xx * xx * xx * xx * xx * xx * xx * 1.1470746e-11));
 		}

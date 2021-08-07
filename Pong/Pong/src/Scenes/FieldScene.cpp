@@ -71,6 +71,20 @@ FieldScene::FieldScene() :
 	text->SetFontSize(48);
 
 	m_UIContainer.AddChild(text);
+
+	m_Animation.StartFrame()
+			.Lerp(1000, NEW(std::function<void(f32)>, [&](f32 val) { text->SetFontSize(val); }), 30.0f, 5.0f)
+		.Then()
+			.Call(NEW(std::function<void()>, [&]() { text->SetFontSize(30); }))
+			.Call(NEW(std::function<void()>, [&]() { text->SetText("2"); }))
+			.Lerp(1000, NEW(std::function<void(f32)>, [&](f32 val) { text->SetFontSize(val); }), 30.0f, 5.0f)
+		.Then()
+			.Call(NEW(std::function<void()>, [&]() { text->SetFontSize(30); }))
+			.Call(NEW(std::function<void()>, [&]() { text->SetText("1"); }))
+			.Lerp(1000, NEW(std::function<void(f32)>, [&](f32 val) { text->SetFontSize(val); }), 30.0f, 5.0f)
+		.Then()
+			.Call(NEW(std::function<void()>, [&]() { text->SetText(""); }))
+			.Call(NEW(std::function<void()>, [&]() { Soul::MessageBus::QueueMessage("StartGame"); }));
 }
 
 void FieldScene::Update(f32 dt)
@@ -80,6 +94,7 @@ void FieldScene::Update(f32 dt)
 	if (m_Ball.Raw())
 		m_Ball->Update(dt);
 	m_UIContainer.Update(dt);
+	m_Animation.Update(dt);
 }
 
 void FieldScene::LateUpdate(f32 dt)

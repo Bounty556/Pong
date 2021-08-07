@@ -68,9 +68,36 @@ void MoveQueueTest()
 	END_MEMORY_CHECK();
 }
 
+void PeekTest()
+{
+	START_MEMORY_CHECK();
+
+	Soul::Queue<u32> classQueue;
+
+	classQueue.Que(3);
+	classQueue.Que(6);
+	classQueue.Que(9);
+
+	ASSERT_EQUAL(classQueue.PeekEnd(), 9, "Failed to peek at end of queue.");
+	ASSERT_EQUAL(classQueue.Peek(), 3, "Failed to peek at end of queue.");
+
+	classQueue.Deque();
+	
+	ASSERT_EQUAL(classQueue.PeekEnd(), 9, "Failed to peek at end of queue.");
+	ASSERT_EQUAL(classQueue.Peek(), 6, "Failed to peek at end of queue.");
+
+	classQueue.Deque();
+
+	ASSERT_EQUAL(classQueue.PeekEnd(), 9, "Failed to peek at end of queue.");
+	ASSERT_EQUAL(classQueue.Peek(), 9, "Failed to peek at end of queue.");
+
+	END_MEMORY_CHECK();
+}
+
 void QueueTests::RunAllTests()
 {
 	RUN_TEST(PodQueueTest);
 	RUN_TEST(ObjectQueueTest);
 	RUN_TEST(MoveQueueTest);
+	RUN_TEST(PeekTest);
 }

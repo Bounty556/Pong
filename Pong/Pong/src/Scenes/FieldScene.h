@@ -1,6 +1,7 @@
 #pragma once
 
 #include <Defines.h>
+#include <Animation/Animation.h>
 #include <Core/Listener.h>
 #include <Core/Scene.h>
 #include <Memory/UniquePointer.h>
@@ -33,4 +34,5 @@ private:
 	Soul::AreaNode m_RightTrigger;
 	Soul::Listener m_Listener;
 	Soul::UIContainer m_UIContainer;
+	Soul::Animation m_Animation;
 };

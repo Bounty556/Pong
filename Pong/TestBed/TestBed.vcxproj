@@ -91,6 +91,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="src\Main.cpp" />
+    <ClCompile Include="src\Tests\AnimationTests.cpp" />
     <ClCompile Include="src\Tests\CollisionTests.cpp" />
     <ClCompile Include="src\Tests\NodeTests.cpp" />
     <ClCompile Include="src\Tests\MapTests.cpp" />
@@ -111,6 +112,7 @@
     <ClCompile Include="src\Tests\VectorTests.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\Tests\AnimationTests.h" />
     <ClInclude Include="src\Tests\CollisionTests.h" />
     <ClInclude Include="src\Tests\MapTests.h" />
     <ClInclude Include="src\Tests\MathTests.h" />

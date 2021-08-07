@@ -45,7 +45,7 @@ namespace Soul
 		/*
 		Queue a message up to be pumped later.
 		*/
-		static void QueueMessage(const char* message, void* data, f32 time = 0.0f);
+		static void QueueMessage(const char* message, void* data = nullptr, f32 time = 0.0f);
 
 		/*
 		Send a message directly to a listener without going through the queue.
