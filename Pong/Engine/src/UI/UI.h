@@ -53,6 +53,9 @@ namespace Soul
 		void SetWeightingAnchor(UIAnchor anchor);
 		void SetAnchorWeight(f32 weight);
 
+		const UIAnchor& GetOrigin() const;
+		void SetOrigin(UIAnchor anchor);
+
 		void SetUIPalette(const UIPalette& palette);
 		const UIPalette& GetUIPalette() const;
 
@@ -80,5 +83,6 @@ namespace Soul
 		UIAnchor m_WeightingAnchor;
 		f32 m_AnchorWeight;
 		UIPalette m_Palette;
+		UIAnchor m_Origin;
 	};
 }

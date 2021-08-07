@@ -116,7 +116,8 @@ namespace Soul
 
 	sf::Vector2f UI::GetAnchorPosition(UIAnchor anchor) const
 	{
-		ASSERT(anchor != UIAnchor::None);
+		if (anchor == UIAnchor::None)
+			return sf::Vector2f(0.0f, 0.0f);
 
 		u8 y = (u8)anchor / 3;
 		u8 x = (u8)anchor % 3;
@@ -141,6 +142,16 @@ namespace Soul
 	void UI::SetAnchorWeight(f32 weight)
 	{
 		m_AnchorWeight = weight;
+	}
+
+	const UI::UIAnchor& UI::GetOrigin() const
+	{
+		return m_Origin;
+	}
+
+	void UI::SetOrigin(UIAnchor anchor)
+	{
+		m_Origin = anchor;
 	}
 
 	void UI::SetUIPalette(const UIPalette& palette)

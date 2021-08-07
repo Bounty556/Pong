@@ -20,7 +20,7 @@ FieldScene::FieldScene() :
 	m_AI(),
 	m_PlayerScore(0),
 	m_AIScore(0),
-	m_Ball(NEW(Ball, 8, 0.5f)),
+	m_Ball(NEW(Ball, 8)),
 	m_TopBounds(-5.0f, -5.0f, 1310.0f, 10.0f),
 	m_BottomBounds(-5.0f, 715.0f, 1310.0f, 10.0f),
 	m_LeftTrigger(-10.0f, 0.0f, 10.0f, 720.0f),
@@ -59,6 +59,11 @@ FieldScene::FieldScene() :
 			Soul::MessageBus::ClearQueue();
 			Soul::SceneManager::ResetScene(this, resetData);
 		});
+	m_Listener.Subscribe("StartGame",
+		[&](void* data)
+		{
+			m_Ball->Launch(0.5f);
+		});
 
 	Soul::UIPalette clearContainer(1, sf::Color::Transparent);
 	
@@ -69,6 +74,7 @@ FieldScene::FieldScene() :
 	text->SetAnchor(Soul::UI::TopMiddle);
 	text->SetAnchorWeight(0.75f);
 	text->SetFontSize(48);
+	text->SetOrigin(Soul::UI::MiddleMiddle);
 
 	m_UIContainer.AddChild(text);
 

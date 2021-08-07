@@ -6,12 +6,16 @@
 #include <Nodes/CircleSpriteNode.h>
 #include <Rendering/Renderer.h>
 
-Ball::Ball(f32 radius, f32 speed) :
+Ball::Ball(f32 radius) :
 	Node("Ball"),
 	m_Collider(NEW(Soul::CircleColliderNode, radius))
 {
 	AddChild(m_Collider);
 	AddChild(NEW(Soul::CircleSpriteNode, radius, sf::Color::White));
+}
+
+void Ball::Launch(f32 speed)
+{
 	SetVelocity(Soul::Math::AngleToVector((f32)Soul::Math::Rand32(360)) * speed);
 }
 

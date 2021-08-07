@@ -9,7 +9,9 @@
 class Ball : public Soul::Node
 {
 public:
-	Ball(f32 radius, f32 speed);
+	Ball(f32 radius);
+
+	void Launch(f32 speed);
 
 	virtual void LateUpdateSelf(f32 dt) override;
 

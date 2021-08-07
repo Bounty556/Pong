@@ -99,11 +99,8 @@ namespace Soul
 				sf::Vector2f anchorA = GetAnchorPosition(m_Children[i]->GetMainAnchor());
 				sf::Vector2f anchorB = GetAnchorPosition(m_Children[i]->GetWeightingAnchor());
 				sf::Vector2f anchorDiff = anchorA - anchorB;
-				sf::Vector2f smallAnchorA = m_Children[i]->GetAnchorPosition(m_Children[i]->GetMainAnchor());
-				sf::Vector2f smallAnchorB = m_Children[i]->GetAnchorPosition(m_Children[i]->GetWeightingAnchor());
-				sf::Vector2f smallAnchorDiff = smallAnchorA - smallAnchorB;
-				sf::Vector2f smallAnchorOffset = smallAnchorB + (smallAnchorDiff * m_Children[i]->GetAnchorWeight());
-				m_Children[i]->setPosition(anchorB + (anchorDiff * m_Children[i]->GetAnchorWeight()) - smallAnchorOffset);
+				m_Children[i]->setPosition(anchorB + (anchorDiff * m_Children[i]->GetAnchorWeight()) -
+					m_Children[i]->GetAnchorPosition(m_Children[i]->GetOrigin()));
 			}
 			
 			// Redraw child container
