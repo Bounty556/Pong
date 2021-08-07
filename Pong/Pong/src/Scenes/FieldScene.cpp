@@ -72,19 +72,21 @@ FieldScene::FieldScene() :
 
 	m_UIContainer.AddChild(text);
 
+	// We can't pass by reference here because it gets a reference to the pointer, not a reference to the object being
+	// pointed to.
 	m_Animation.StartFrame()
-			.Lerp(1000, NEW(std::function<void(f32)>, [&](f32 val) { text->SetFontSize(val); }), 30.0f, 5.0f)
+			.Lerp(1000.0f, NEW(std::function<void(f32)>, [text](f32 val) { text->SetFontSize((u32)val); }), 48.0f, 5.0f)
 		.Then()
-			.Call(NEW(std::function<void()>, [&]() { text->SetFontSize(30); }))
-			.Call(NEW(std::function<void()>, [&]() { text->SetText("2"); }))
-			.Lerp(1000, NEW(std::function<void(f32)>, [&](f32 val) { text->SetFontSize(val); }), 30.0f, 5.0f)
+			.Call(NEW(std::function<void()>, [text]() { text->SetFontSize(48); }))
+			.Call(NEW(std::function<void()>, [text]() { text->SetText("2"); }))
+			.Lerp(1000.0f, NEW(std::function<void(f32)>, [text](f32 val) { text->SetFontSize((u32)val); }), 48.0f, 5.0f)
 		.Then()
-			.Call(NEW(std::function<void()>, [&]() { text->SetFontSize(30); }))
-			.Call(NEW(std::function<void()>, [&]() { text->SetText("1"); }))
-			.Lerp(1000, NEW(std::function<void(f32)>, [&](f32 val) { text->SetFontSize(val); }), 30.0f, 5.0f)
+			.Call(NEW(std::function<void()>, [text]() { text->SetFontSize(48); }))
+			.Call(NEW(std::function<void()>, [text]() { text->SetText("1"); }))
+			.Lerp(1000.0f, NEW(std::function<void(f32)>, [text](f32 val) { text->SetFontSize((u32)val); }), 48.0f, 5.0f)
 		.Then()
-			.Call(NEW(std::function<void()>, [&]() { text->SetText(""); }))
-			.Call(NEW(std::function<void()>, [&]() { Soul::MessageBus::QueueMessage("StartGame"); }));
+			.Call(NEW(std::function<void()>, [text]() { text->SetText(""); }))
+			.Call(NEW(std::function<void()>, [text]() { Soul::MessageBus::QueueMessage("StartGame"); }));
 }
 
 void FieldScene::Update(f32 dt)
