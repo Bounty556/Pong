@@ -1,108 +1,133 @@
 #include "InputManager.h"
 
-#include <Memory/MemoryManager.h>
+#include <SFML/Window/Mouse.hpp>
+
+#define KeyAliasMap Soul::Map<Soul::String, sf::Keyboard::Key>
+#define MouseAliasMap Soul::Map<Soul::String, sf::Mouse::Button>
 
 namespace Soul
 {
+	bool InputManager::m_IsInitialized = false;
 	sf::Vector2i InputManager::m_LastMousePos;
 	sf::Vector2i InputManager::m_MouseDelta;
-	Keyboard* InputManager::m_Keyboard;
-	Map<ControllerId, Gamepad>* InputManager::m_Gamepads;
+	KeyAliasMap* InputManager::m_KeyboardAliases;
+	MouseAliasMap* InputManager::m_MouseAliases;
+	Vector<InputManager::KeyState>* InputManager::m_KeyStates;
+	Vector<InputManager::KeyState>* InputManager::m_MouseDelta;
 
 	bool InputManager::Initialize()
 	{
-		typedef Map<ControllerId, Gamepad> GamepadMap;
-		m_Gamepads = NEW(GamepadMap, 8);
-		m_Keyboard = NEW(Keyboard, "res/Controls/defaultControls.controls");
+		ASSERT(!m_IsInitialized);
+
 		m_LastMousePos = sf::Mouse::getPosition();
 		m_MouseDelta = sf::Vector2i(0, 0);
+		m_KeyboardAliases = NEW(KeyAliasMap);
+		m_MouseAliases = NEW(MouseAliasMap);
+		m_KeyStates = NEW(Vector<InputManager::KeyState>, sf::Keyboard::KeyCount);
+		m_MouseStates = NEW(Vector<InputManager::KeyState>, sf::Mouse::ButtonCount);
 
-		return true;
+		m_IsInitialized = true;
 	}
 
 	void InputManager::Shutdown()
 	{
-		DELETE(m_Keyboard);
-		DELETE(m_Gamepads);
+		ASSERT(m_IsInitialized);
+
+		DELETE(m_KeyboardAliases);
+		DELETE(m_MouseAliases);
+		DELETE(m_KeyStates);
+		DELETE(m_MouseStates);
+
+		m_IsInitialized = false;
 	}
 
-	void InputManager::UpdateControllerControls(ControllerId id, const char* controlsFile)
+	bool InputManager::IsKeyUp(sf::Keyboard::Key key)
 	{
-		if (id == -1)
-			m_Keyboard->UpdateControlsFile(controlsFile);
-		else
-			m_Gamepads->GetValue(id)->UpdateControlsFile(controlsFile);
+
 	}
 
-	void InputManager::UpdateControllers()
+	bool InputManager::IsKeyPressed(sf::Keyboard::Key key)
 	{
-		m_MouseDelta = sf::Mouse::getPosition() - m_LastMousePos;
-		m_LastMousePos = sf::Mouse::getPosition();
-		m_Keyboard->UpdateStates();
 
-		Vector<ControllerId*> ids = m_Gamepads->GetKeys();
-		for (u32 i = 0; i < ids.Count(); i++)
-			m_Gamepads->GetValue(*ids[i])->UpdateStates();
 	}
 
-	void InputManager::ReceivedInput(sf::Event input)
+	bool InputManager::IsKeyDown(sf::Keyboard::Key key)
 	{
-		switch (input.type)
-		{
-			case sf::Event::JoystickButtonPressed:
-			case sf::Event::JoystickButtonReleased:
-			{
-				ControllerId id = input.joystickButton.joystickId;
-				if (!m_Gamepads->GetValue(id))
-					RegisterGamepad(id);
-			} break;
 
-			case sf::Event::JoystickMoved:
-			{
-				ControllerId id = input.joystickButton.joystickId;
-				if (!m_Gamepads->GetValue(id))
-					RegisterGamepad(id);
-			} break;
-			case sf::Event::JoystickConnected:
-			{
-				RegisterGamepad(input.joystickConnect.joystickId);
-			} break;
-			case sf::Event::JoystickDisconnected:
-			{
-				DisconnectGamepad(input.joystickConnect.joystickId);
-			} break;
-		}
 	}
 
-	Controller::ControlState InputManager::GetControlState(ControllerId id, const char* control)
+	bool InputManager::IsKeyReleased(sf::Keyboard::Key key)
 	{
-		if (id == -1)
-			return m_Keyboard->GetControlState(control);
-		else
-		{
-			Gamepad* gamepad = m_Gamepads->GetValue(id);
 
-			if (gamepad)
-				return gamepad->GetControlState(control);
-			else
-				return Controller::ControlState{};
-		}
 	}
 
-	sf::Vector2i InputManager::GetMouseDelta()
+	bool InputManager::IsMouseButtonUp(sf::Mouse::Button button)
 	{
-		return m_MouseDelta;
+
 	}
 
-	void InputManager::RegisterGamepad(ControllerId id)
+	bool InputManager::IsMouseButtonPressed(sf::Mouse::Button button)
 	{
-		m_Gamepads->AddPair(id, Gamepad("res/Controls/defaultControls.controls", id));
-		LOG_DEBUG("Gamepad %d added", id);
+
 	}
 
-	void InputManager::DisconnectGamepad(ControllerId id)
+	bool InputManager::IsMouseButtonDown(sf::Mouse::Button button)
 	{
-		m_Gamepads->RemovePair(id);
-		LOG_DEBUG("Gamepad %d disconnected", id);
+
+	}
+
+	bool InputManager::IsMouseButtonReleased(sf::Mouse::Button button)
+	{
+
+	}
+
+	sf::Vector2f InputManager::GetMousePosition(bool relativeToWindow)
+	{
+
+	}
+
+	sf::Vector2f InputManager::GetMouseDelta()
+	{
+
+	}
+
+	void InputManager::AddControlAlias(const char* alias, sf::Keyboard::Key key)
+	{
+
+	}
+
+	void InputManager::RemoveControlAlias(const char* alias, sf::Keyboard::Key key)
+	{
+
+	}
+
+	bool InputManager::IsAliasUp(const char* alias)
+	{
+
+	}
+
+	bool InputManager::IsAliasPressed(const char* alias)
+	{
+
+	}
+
+	bool InputManager::IsAliasDown(const char* alias)
+	{
+
+	}
+
+	bool InputManager::IsAliasReleased(const char* alias)
+	{
+
+	}
+
+	void InputManager::LoadAliases(const char* controlsFile)
+	{
+
+	}
+
+	void InputManager::Update()
+	{
+
 	}
 }

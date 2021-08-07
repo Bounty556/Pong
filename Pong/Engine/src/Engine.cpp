@@ -97,7 +97,7 @@ namespace Soul
 			{
 				// Input
 				ProcessEvents();
-				InputManager::UpdateControllers();
+				InputManager::Update();
 
 				// Updates
 				SceneManager::ConsumeCommands();
