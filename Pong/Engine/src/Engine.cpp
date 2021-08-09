@@ -96,8 +96,8 @@ namespace Soul
 			while (accumulatedTime >= TARGET_FRAMERATE)
 			{
 				// Input
-				ProcessEvents();
 				InputManager::Update();
+				ProcessEvents();
 
 				// Updates
 				SceneManager::ConsumeCommands();
@@ -105,6 +105,7 @@ namespace Soul
 				
 				PhysicsSystem::Update(TARGET_FRAMERATE);
 				SceneManager::LateUpdate(TARGET_FRAMERATE);
+
 
 				// Rendering
 				window->clear();
@@ -148,7 +149,7 @@ namespace Soul
 		sf::Event e;
 		while (window->pollEvent(e))
 		{
-			InputManager::ReceivedInput(e);
+			InputManager::ProcessInput(e);
 			switch (e.type)
 			{
 				case sf::Event::Closed:

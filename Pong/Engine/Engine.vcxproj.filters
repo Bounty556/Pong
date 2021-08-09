@@ -75,21 +75,6 @@
     <ClInclude Include="src\IO\TextFileReader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\IO\InputManager.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\IO\Controller.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\IO\ControlsMap.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\IO\Keyboard.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\IO\Gamepad.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="src\IO\StringReader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -174,6 +159,9 @@
     <ClInclude Include="src\Animation\AnimationFrame.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\IO\InputManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\core\Logger.cpp">
@@ -213,21 +201,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\IO\TextFileReader.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\IO\InputManager.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\IO\Controller.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\IO\ControlsMap.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\IO\Keyboard.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\IO\Gamepad.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\IO\StringReader.cpp">
@@ -309,6 +282,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Animation\AnimationFrame.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\IO\InputManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

@@ -16,15 +16,23 @@ Paddle::Paddle() :
 
 void Paddle::UpdateSelf(f32 dt)
 {
-	Soul::Controller::ButtonState upState = Soul::InputManager::GetControlState(-1, "Up").state;
-	Soul::Controller::ButtonState downState = Soul::InputManager::GetControlState(-1, "Down").state;
+	sf::Vector2f velocity(0.0f, 0.0f);
 
-	if (upState == Soul::Controller::Released || downState == Soul::Controller::Released)
-		SetVelocity(0.0f, 0.0f);
-	if (upState == Soul::Controller::Pressed || upState == Soul::Controller::Down)
-		SetVelocity(0.0f, -m_MoveSpeed);
-	if (downState == Soul::Controller::Pressed || downState == Soul::Controller::Down)
-		SetVelocity(0.0f, m_MoveSpeed);
+	if (Soul::InputManager::IsAliasDown("Up"))
+		velocity.y -= m_MoveSpeed;
+	if (Soul::InputManager::IsAliasDown("Down"))
+		velocity.y += m_MoveSpeed;
+
+	if (Soul::InputManager::IsAliasPressed("Down"))
+		LOG_INFO("Down");
+	if (Soul::InputManager::IsAliasReleased("Down"))
+		LOG_INFO("Down--");
+	if (Soul::InputManager::IsAliasPressed("Up"))
+		LOG_INFO("Up");
+	if (Soul::InputManager::IsAliasReleased("Up"))
+		LOG_INFO("Up--");
+
+	SetVelocity(velocity);
 }
 
 void Paddle::LateUpdateSelf(f32 dt)

@@ -1,35 +1,14 @@
-Jump
+Jump:
 k 57
-m -1
-a -1
-c 0
-Select
-k -1
+Select:
 m 0
-a -1
-c -1
-Console
+Console:
 k 54
-m -1
-a -1
-c -1
-Left
+Left:
 k 71
-m -1
-a 0
-c -1
-Right
+Right:
 k 72
-m -1
-a 0
-c -1
-Up
+Up:
 k 73
-m -1
-a 1
-c -1
-Down
+Down:
 k 74
-m -1
-a 1
-c -1

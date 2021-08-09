@@ -1,7 +1,7 @@
 #include "UIContainer.h"
 
-#include <Rendering/Renderer.h>
 #include <IO/InputManager.h>
+#include <Rendering/Renderer.h>
 #include <Physics/CollisionChecks.h>
 
 namespace Soul
@@ -140,10 +140,10 @@ namespace Soul
 	bool UIContainer::UpdateSelf(f32 dt)
 	{
 		// Detect if we're being clicked in or not for dragging
-		if (m_MainAnchor == UIAnchor::None && InputManager::GetControlState(-1, "Select").state == Controller::Pressed &&
-			PointIsInAABB((sf::Vector2f)sf::Mouse::getPosition(Renderer::GetWindow()), GetWorldPosition(), m_Size))
+		if (m_MainAnchor == UIAnchor::None && InputManager::IsAliasPressed("Select") && 
+			PointIsInAABB((sf::Vector2f)InputManager::GetMousePosition(true), GetWorldPosition(), m_Size))
 			m_IsDragged = true;
-		else if (InputManager::GetControlState(-1, "Select").state == Controller::Released)
+		else if (InputManager::IsAliasReleased("Select"))
 			m_IsDragged = false;
 
 		// Drag
