@@ -12,6 +12,8 @@
 
 namespace Soul
 {
+	class Controller;
+
 	class SOULAPI InputManager
 	{
 	public:
@@ -21,6 +23,13 @@ namespace Soul
 			Pressed = 2,
 			Down = 4,
 			Released = 8
+		};
+
+	private:
+		struct ControllerConnection
+		{
+			Controller* controller;
+			bool isConnected;
 		};
 
 	public:
@@ -58,6 +67,12 @@ namespace Soul
 		static void Update();
 		static void ProcessInput(sf::Event e);
 
+		static Controller* GetController(u8 player);
+
+	private:
+		static void ConnectController(u8 joystickId);
+		static void DisconnectController(u8 joystickId);
+
 	private:
 		static bool m_IsInitialized;
 		static sf::Vector2i m_LastMousePos;
@@ -66,5 +81,6 @@ namespace Soul
 		static Map<String, sf::Mouse::Button>* m_MouseAliases;
 		static KeyState* m_KeyStates;
 		static KeyState* m_MouseStates;
+		static ControllerConnection* m_Controllers;
 	};
 }

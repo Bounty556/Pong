@@ -181,6 +181,7 @@
     <ClInclude Include="src\Core\String.h" />
     <ClInclude Include="src\Defines.h" />
     <ClInclude Include="src\Engine.h" />
+    <ClInclude Include="src\IO\Controller.h" />
     <ClInclude Include="src\IO\InputManager.h" />
     <ClInclude Include="src\IO\LoggerFile.h" />
     <ClInclude Include="src\IO\StringReader.h" />
@@ -231,6 +232,7 @@
     <ClCompile Include="src\Core\SceneManager.cpp" />
     <ClCompile Include="src\Core\String.cpp" />
     <ClCompile Include="src\Engine.cpp" />
+    <ClCompile Include="src\IO\Controller.cpp" />
     <ClCompile Include="src\IO\InputManager.cpp" />
     <ClCompile Include="src\IO\LoggerFile.cpp" />
     <ClCompile Include="src\IO\StringReader.cpp" />

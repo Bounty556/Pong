@@ -23,15 +23,6 @@ void Paddle::UpdateSelf(f32 dt)
 	if (Soul::InputManager::IsAliasDown("Down"))
 		velocity.y += m_MoveSpeed;
 
-	if (Soul::InputManager::IsAliasPressed("Down"))
-		LOG_INFO("Down");
-	if (Soul::InputManager::IsAliasReleased("Down"))
-		LOG_INFO("Down--");
-	if (Soul::InputManager::IsAliasPressed("Up"))
-		LOG_INFO("Up");
-	if (Soul::InputManager::IsAliasReleased("Up"))
-		LOG_INFO("Up--");
-
 	SetVelocity(velocity);
 }
 

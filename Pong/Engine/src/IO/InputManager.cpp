@@ -1,11 +1,15 @@
 #include "InputManager.h"
 
-#include <Rendering/Renderer.h>
+#include <Core/MessageBus.h>
+#include <IO/Controller.h>
 #include <IO/TextFileReader.h>
 #include <IO/StringReader.h>
+#include <Rendering/Renderer.h>
 
 #define KeyAliasMap Soul::Map<Soul::String, sf::Keyboard::Key>
 #define MouseAliasMap Soul::Map<Soul::String, sf::Mouse::Button>
+
+#define MAX_CONTROLLERS 4
 
 namespace Soul
 {
@@ -16,6 +20,7 @@ namespace Soul
 	MouseAliasMap* InputManager::m_MouseAliases;
 	InputManager::KeyState* InputManager::m_KeyStates;
 	InputManager::KeyState* InputManager::m_MouseStates;
+	InputManager::ControllerConnection* InputManager::m_Controllers;
 
 	bool InputManager::Initialize()
 	{
@@ -27,11 +32,22 @@ namespace Soul
 		m_MouseAliases = NEW(MouseAliasMap);
 		m_KeyStates = NEW_ARRAY(KeyState, sf::Keyboard::KeyCount);
 		m_MouseStates = NEW_ARRAY(KeyState, sf::Mouse::ButtonCount);
+		m_Controllers = NEW_ARRAY(ControllerConnection, MAX_CONTROLLERS);
 
 		for (u8 i = 0; i < sf::Keyboard::KeyCount; ++i)
 			m_KeyStates[i] = KeyState::Up;
 		for (u8 i = 0; i < sf::Mouse::ButtonCount; ++i)
 			m_MouseStates[i] = KeyState::Up;
+
+		// Initialize the already-connected controllers
+		for (u8 i = 0; i < MAX_CONTROLLERS; ++i)
+		{
+			if (sf::Joystick::isConnected(i))
+			{
+				m_Controllers[i].controller = NEW(Controller, i);
+				m_Controllers[i].isConnected = true;
+			}
+		}
 
 		m_IsInitialized = true;
 
@@ -46,6 +62,12 @@ namespace Soul
 		DELETE(m_MouseAliases);
 		DELETE(m_KeyStates);
 		DELETE(m_MouseStates);
+
+		for (u8 i = 0; i < MAX_CONTROLLERS; ++i)
+			if (m_Controllers[i].isConnected)
+				DELETE(m_Controllers[i].controller);
+
+		DELETE(m_Controllers);
 
 		m_IsInitialized = false;
 	}
@@ -176,9 +198,7 @@ namespace Soul
 			line = stringReader.GetNextLine();
 			
 			if (line.FindFirstOf(':') != -1)
-			{
 				alias = line.Substring(0, line.FindFirstOf(':'));
-			}
 			else
 			{
 				if (line[0] == 'k')
@@ -209,7 +229,10 @@ namespace Soul
 				m_MouseStates[i] = KeyState::Up;
 		}
 
-		// TODO: Loop through and update controllers
+		// Loop through and update controllers
+		for (u8 i = 0; i < MAX_CONTROLLERS; ++i)
+			if (m_Controllers[i].isConnected)
+				m_Controllers[i].controller->Update();
 	}
 
 	void InputManager::ProcessInput(sf::Event e)
@@ -239,6 +262,53 @@ namespace Soul
 				if (!(m_MouseStates[e.key.code] & KeyState::Up))
 					m_MouseStates[e.mouseButton.button] = (KeyState)(KeyState::Released | KeyState::Up);
 			} break;
+
+			// Controller connecting and disconnecting
+			case sf::Event::JoystickConnected:
+			{
+				ConnectController(e.joystickConnect.joystickId);
+			} break;
+
+			case sf::Event::JoystickDisconnected:
+			{
+				DisconnectController(e.joystickConnect.joystickId);
+			} break;
+		}
+	}
+
+	Controller* InputManager::GetController(u8 player)
+	{
+		if (m_Controllers[player].isConnected)
+			return m_Controllers->controller;
+		return nullptr;
+	}
+
+	void InputManager::ConnectController(u8 joystickId)
+	{
+		for (u8 i = 0; i < MAX_CONTROLLERS; ++i)
+		{
+			if (!m_Controllers[i].isConnected)
+			{
+				m_Controllers[i].controller = NEW(Controller, joystickId, i);
+				m_Controllers[i].isConnected = true;
+				MessageBus::QueueMessage("ControllerAdded", NEW(u8, i));
+				
+				break;
+			}
+		}
+	}
+
+	void InputManager::DisconnectController(u8 joystickId)
+	{
+		for (u8 i = 0; i < MAX_CONTROLLERS; ++i)
+		{
+			if (m_Controllers[i].isConnected && m_Controllers[i].controller->GetJoystickId() == joystickId)
+			{
+				DELETE(m_Controllers[i].controller);
+				MessageBus::ImmediateMessage("ControllerDisconnected", NEW(u8, i));
+
+				break;
+			}
 		}
 	}
 }
