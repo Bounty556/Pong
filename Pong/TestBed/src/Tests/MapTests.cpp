@@ -178,6 +178,29 @@ void CStringKeyTest()
 	END_MEMORY_CHECK();
 }
 
+void MapExpandTest()
+{
+	START_MEMORY_CHECK();
+
+	Soul::Map<Soul::String, u32> stringMap;
+
+	stringMap.AddPair("A", 0);
+	stringMap.AddPair("Z", 1);
+	stringMap.AddPair("W", 2);
+	stringMap.AddPair("Y", 3);
+	stringMap.AddPair("X", 4);
+	stringMap.AddPair("M", 5);
+
+	ASSERT_EQUAL(*stringMap.GetValue("A"), 0, "Failed to find value in expanded map.");
+	ASSERT_EQUAL(*stringMap.GetValue("Z"), 1, "Failed to find value in expanded map.");
+	ASSERT_EQUAL(*stringMap.GetValue("W"), 2, "Failed to find value in expanded map.");
+	ASSERT_EQUAL(*stringMap.GetValue("Y"), 3, "Failed to find value in expanded map.");
+	ASSERT_EQUAL(*stringMap.GetValue("X"), 4, "Failed to find value in expanded map.");
+	ASSERT_EQUAL(*stringMap.GetValue("M"), 5, "Failed to find value in expanded map.");
+
+	END_MEMORY_CHECK();
+}
+
 void MapTests::RunAllTests()
 {
 	RUN_TEST(PodMapTest);
@@ -188,4 +211,5 @@ void MapTests::RunAllTests()
 	RUN_TEST(ClearTest);
 	RUN_TEST(StringKeyTest);
 	RUN_TEST(CStringKeyTest);
+	RUN_TEST(MapExpandTest);
 }
