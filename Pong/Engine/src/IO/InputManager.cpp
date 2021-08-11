@@ -39,16 +39,6 @@ namespace Soul
 		for (u8 i = 0; i < sf::Mouse::ButtonCount; ++i)
 			m_MouseStates[i] = KeyState::Up;
 
-		// Initialize the already-connected controllers
-		for (u8 i = 0; i < MAX_CONTROLLERS; ++i)
-		{
-			if (sf::Joystick::isConnected(i))
-			{
-				m_Controllers[i].controller = NEW(Controller, i);
-				m_Controllers[i].isConnected = true;
-			}
-		}
-
 		m_IsInitialized = true;
 
 		return true;
@@ -220,7 +210,7 @@ namespace Soul
 				m_KeyStates[i] = KeyState::Up;
 		}
 
-		//// Loop through mouse buttons and update
+		// Loop through mouse buttons and update
 		for (u8 i = 0; i < sf::Mouse::ButtonCount; ++i)
 		{
 			if (m_MouseStates[i] & KeyState::Pressed)
@@ -273,6 +263,38 @@ namespace Soul
 			{
 				DisconnectController(e.joystickConnect.joystickId);
 			} break;
+
+			case sf::Event::JoystickButtonPressed:
+			case sf::Event::JoystickButtonReleased:
+			{
+				bool found = false;
+				for (u8 i = 0; i < MAX_CONTROLLERS; ++i)
+				{
+					if (m_Controllers[i].isConnected && e.joystickButton.joystickId == m_Controllers[i].controller->GetJoystickId())
+					{
+						found = true;
+						break;
+					}
+				}
+
+				if (!found)
+					ConnectController(e.joystickButton.joystickId);
+			} break;
+			case sf::Event::JoystickMoved:
+			{
+				bool found = false;
+				for (u8 i = 0; i < MAX_CONTROLLERS; ++i)
+				{
+					if (m_Controllers[i].isConnected && e.joystickMove.joystickId == m_Controllers[i].controller->GetJoystickId())
+					{
+						found = true;
+						break;
+					}
+				}
+
+				if (!found)
+					ConnectController(e.joystickMove.joystickId);
+			} break;
 		}
 	}
 
@@ -291,7 +313,7 @@ namespace Soul
 			{
 				m_Controllers[i].controller = NEW(Controller, joystickId, i);
 				m_Controllers[i].isConnected = true;
-				MessageBus::QueueMessage("ControllerAdded", NEW(u8, i));
+				MessageBus::QueueMessage("ControllerConnected", NEW(u8, i));
 				
 				break;
 			}

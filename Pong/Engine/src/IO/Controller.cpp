@@ -2,6 +2,7 @@
 
 #include <IO/TextFileReader.h>
 #include <IO/StringReader.h>
+#include <Math/Functions.h>
 
 #define ButtonAliasMap Soul::Map<Soul::String, u32>
 #define AxisAliasMap Soul::Map<Soul::String, sf::Joystick::Axis>
@@ -11,11 +12,13 @@ namespace Soul
 	Controller::Controller(u8 joystickId, u8 playerId, const char* aliasFile/*= "res/Controls/defaultControls.controls"*/) :
 		m_JoystickId(joystickId),
 		m_PlayerId(playerId),
-		m_ButtonStates(NEW_ARRAY(InputManager::KeyState, sf::Joystick::getButtonCount(joystickId))),
+		m_ButtonCount(sf::Joystick::getButtonCount(joystickId)),
+		m_DeadZone(25.0f),
+		m_ButtonStates(NEW_ARRAY(InputManager::KeyState, m_ButtonCount)),
 		m_ButtonAliases(NEW(ButtonAliasMap)),
 		m_AxisAliases(NEW(AxisAliasMap))
 	{
-		for (u8 i = 0; i < sf::Keyboard::KeyCount; ++i)
+		for (u8 i = 0; i < m_ButtonCount; ++i)
 			m_ButtonStates[i] = InputManager::KeyState::Up;
 
 		LoadAliases(aliasFile);
@@ -24,6 +27,8 @@ namespace Soul
 	Controller::Controller(Controller&& other) noexcept :
 		m_JoystickId(other.m_JoystickId),
 		m_PlayerId(other.m_PlayerId),
+		m_ButtonCount(other.m_ButtonCount),
+		m_DeadZone(other.m_DeadZone),
 		m_ButtonStates(std::move(other.m_ButtonStates)),
 		m_ButtonAliases(std::move(other.m_ButtonAliases)),
 		m_AxisAliases(std::move(other.m_AxisAliases))
@@ -34,9 +39,13 @@ namespace Soul
 	{
 		m_JoystickId = other.m_JoystickId;
 		m_PlayerId = other.m_PlayerId;
+		m_ButtonCount = other.m_ButtonCount;
+		m_DeadZone = other.m_DeadZone;
 		m_ButtonStates = std::move(other.m_ButtonStates);
 		m_ButtonAliases = std::move(other.m_ButtonAliases);
 		m_AxisAliases = std::move(other.m_AxisAliases);
+
+		return *this;
 	}
 
 	bool Controller::IsButtonUp(u32 button) const
@@ -61,7 +70,11 @@ namespace Soul
 
 	f32 Controller::GetAxisPos(sf::Joystick::Axis axis) const
 	{
-		return sf::Joystick::getAxisPosition(m_JoystickId, axis);
+		f32 pos = sf::Joystick::getAxisPosition(m_JoystickId, axis);
+		if (Math::Abs(pos) >= m_DeadZone)
+			return pos;
+
+		return 0.0f;
 	}
 
 	void Controller::AddButtonAlias(const char* alias, u32 button)
@@ -123,7 +136,7 @@ namespace Soul
 		sf::Joystick::Axis* foundAxis = m_AxisAliases->GetValue(alias);
 
 		if (foundAxis)
-			return sf::Joystick::getAxisPosition(m_JoystickId, *foundAxis);
+			return GetAxisPos(*foundAxis);
 
 		return 0.0f;
 	}
@@ -140,7 +153,7 @@ namespace Soul
 
 	void Controller::Update()
 	{
-		for (u8 i = 0; i < sf::Joystick::getButtonCount(m_JoystickId); ++i)
+		for (u8 i = 0; i < m_ButtonCount; ++i)
 		{
 			if (m_ButtonStates[i] & InputManager::KeyState::Pressed)
 				m_ButtonStates[i] = InputManager::KeyState::Down;
@@ -151,6 +164,9 @@ namespace Soul
 
 	void Controller::LoadAliases(const char* controlsFile)
 	{
+		m_AxisAliases->Clear();
+		m_ButtonAliases->Clear();
+
 		TextFileReader file(controlsFile);
 		StringReader stringReader(file.GetString());
 		String line;

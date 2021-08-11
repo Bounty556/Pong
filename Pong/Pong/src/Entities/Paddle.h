@@ -2,6 +2,8 @@
 
 #include <Defines.h>
 
+#include <Core/Listener.h>
+#include <IO/Controller.h>
 #include <Nodes/Node.h>
 #include <Physics/RectColliderNode.h>
 
@@ -19,5 +21,7 @@ private:
 	// Child Nodes
 	Soul::RectColliderNode* m_Collider;
 
+	Soul::Listener m_Listener;
+	Soul::Controller* m_Controller;
 	f32 m_MoveSpeed;
 };

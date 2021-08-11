@@ -44,9 +44,13 @@ namespace Soul
 
 		void LoadAliases(const char* controlsFile);
 
+		void SetDeadZone(f32 deadZone);
+
 	private:
 		u8 m_JoystickId;
 		u8 m_PlayerId;
+		u8 m_ButtonCount;
+		f32 m_DeadZone;
 		UniquePointer<InputManager::KeyState> m_ButtonStates;
 		UniquePointer<Map<String, u32>> m_ButtonAliases;
 		UniquePointer<Map<String, sf::Joystick::Axis>> m_AxisAliases;
