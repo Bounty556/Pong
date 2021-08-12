@@ -12,9 +12,9 @@ namespace Soul
 
 	Listener::~Listener()
 	{
-		Vector<const char**> messages(std::move(m_Callbacks.GetKeys()));
+		Vector<String*> messages(std::move(m_Callbacks.GetKeys()));
 		for (u32 i = 0; i < messages.Count(); ++i)
-			MessageBus::Unsubscribe(*messages[i], this);
+			MessageBus::Unsubscribe(messages[i]->GetCString(), this);
 	}
 
 	Listener::Listener(Listener&& other) noexcept :

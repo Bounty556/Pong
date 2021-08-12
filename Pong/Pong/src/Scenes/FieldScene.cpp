@@ -65,7 +65,7 @@ FieldScene::FieldScene() :
 	m_Listener.Subscribe("StartGame",
 		[&](void* data)
 		{
-			m_Ball->Launch(0.5f);
+			//m_Ball->Launch(0.5f);
 		});
 
 	Soul::UIPalette clearContainer(1, sf::Color::Transparent);

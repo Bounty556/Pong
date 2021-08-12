@@ -1,6 +1,7 @@
 #pragma once
 
 #include <Defines.h>
+#include <Core/String.h>
 #include <Structures/Map.h>
 
 #include <functional>
@@ -29,6 +30,6 @@ namespace Soul
 		friend class MessageBus;
 
 	private:
-		Map<const char*, std::function<void(void*)>> m_Callbacks;
+		Map<String, std::function<void(void*)>> m_Callbacks;
 	};
 }

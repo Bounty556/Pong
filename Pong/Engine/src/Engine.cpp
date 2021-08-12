@@ -106,7 +106,6 @@ namespace Soul
 				PhysicsSystem::Update(TARGET_FRAMERATE);
 				SceneManager::LateUpdate(TARGET_FRAMERATE);
 
-
 				// Rendering
 				window->clear();
 				SceneManager::Draw(sf::RenderStates::Default);
