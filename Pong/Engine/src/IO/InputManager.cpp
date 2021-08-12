@@ -327,6 +327,8 @@ namespace Soul
 			if (m_Controllers[i].isConnected && m_Controllers[i].controller->GetJoystickId() == joystickId)
 			{
 				DELETE(m_Controllers[i].controller);
+				m_Controllers[i].isConnected = false;
+				m_Controllers[i].controller = nullptr;
 				MessageBus::ImmediateMessage("ControllerDisconnected", NEW(u8, i));
 
 				break;

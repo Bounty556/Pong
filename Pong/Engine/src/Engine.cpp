@@ -16,6 +16,8 @@
 
 #include <SFML/Graphics.hpp>
 
+#include <SFML/Graphics.hpp>
+
 #define TARGET_FRAMERATE 6.94f // 144 FPS // TODO: Make configurable
 
 namespace Soul
