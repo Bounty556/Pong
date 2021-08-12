@@ -29,6 +29,8 @@ FieldScene::FieldScene() :
 	m_Listener(),
 	m_UIContainer(0.0f, 0.0f, 1280.0f, 720.0f)
 {
+	m_UIContainer.SetCanDrag(true);
+
 	Soul::InputManager::LoadAliases("res/Controls/defaultControls.controls");
 
 	m_Player.setPosition(15.0f, 15.0f);
@@ -65,7 +67,7 @@ FieldScene::FieldScene() :
 	m_Listener.Subscribe("StartGame",
 		[&](void* data)
 		{
-			//m_Ball->Launch(0.5f);
+			m_Ball->Launch(0.5f);
 		});
 
 	Soul::UIPalette clearContainer(1, sf::Color::Transparent);

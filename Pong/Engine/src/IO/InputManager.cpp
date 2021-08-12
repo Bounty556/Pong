@@ -201,6 +201,9 @@ namespace Soul
 
 	void InputManager::Update()
 	{
+		m_MouseDelta = sf::Mouse::getPosition() - m_LastMousePos;
+		m_LastMousePos = sf::Mouse::getPosition();
+
 		// Loop through keyboard keys and update
 		for (u8 i = 0; i < sf::Keyboard::KeyCount; ++i)
 		{
