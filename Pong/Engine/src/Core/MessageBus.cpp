@@ -2,12 +2,12 @@
 
 #include <Core/Listener.h>
 
-#define MessageBusMap Map<const char*, Vector<Listener*>>
+#define MessageBusMap Soul::Map<Soul::String, Soul::Vector<Listener*>>
 
 namespace Soul
 {
 	bool MessageBus::m_IsInitialized = false;
-	Map<const char*, Vector<Listener*>>* MessageBus::m_Map;
+	Map<String, Vector<Listener*>>* MessageBus::m_Map;
 	Queue<MessageBus::Message>* MessageBus::m_Messages;
 	Vector<MessageBus::Message>* MessageBus::m_TimedMessages;
 

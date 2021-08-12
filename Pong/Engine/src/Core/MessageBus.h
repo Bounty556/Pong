@@ -1,6 +1,7 @@
 #pragma once
 
 #include <Defines.h>
+#include <Core/String.h>
 #include <Structures/Map.h>
 #include <Structures/Vector.h>
 #include <Structures/Queue.h>
@@ -65,7 +66,7 @@ namespace Soul
 		
 	private:
 		static bool m_IsInitialized;
-		static Map<const char*, Vector<Listener*>>* m_Map;
+		static Map<String, Vector<Listener*>>* m_Map;
 		static Queue<Message>* m_Messages;
 		static Vector<Message>* m_TimedMessages;
 	};

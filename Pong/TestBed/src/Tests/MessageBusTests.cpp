@@ -56,8 +56,84 @@ void ObjectListeningTest()
 	END_MEMORY_CHECK();
 }
 
+void ManySubscriptionsTest()
+{
+	Soul::Listener listener;
+
+	i32 testInt = 10;
+	listener.Subscribe("ChangeIntThing",
+		[&](void* data)
+		{
+			testInt = 0;
+		});
+	listener.Subscribe("ChangeIntThat",
+		[&](void* data)
+		{
+			testInt = 1;
+		});
+	listener.Subscribe("ChangeIntDoes",
+		[&](void* data)
+		{
+			testInt = 2;
+		});
+	listener.Subscribe("ChangeIntStuff",
+		[&](void* data)
+		{
+			testInt = 3;
+		});
+	listener.Subscribe("ChangeIntBut",
+		[&](void* data)
+		{
+			testInt = 4;
+		});
+	listener.Subscribe("ChangeIntWhat",
+		[&](void* data)
+		{
+			testInt = 5;
+		});
+	listener.Subscribe("ChangeIntElse?",
+		[&](void* data)
+		{
+			testInt = 6;
+		});
+
+
+	START_MEMORY_CHECK();
+
+	Soul::MessageBus::QueueMessage("ChangeIntThing");
+	Soul::MessageBus::PumpQueue(0.0f);
+	ASSERT_EQUAL(testInt, 0, "Failed to change int via message.");
+
+	Soul::MessageBus::QueueMessage("ChangeIntThat");
+	Soul::MessageBus::PumpQueue(0.0f);
+	ASSERT_EQUAL(testInt, 1, "Failed to change int via message.");
+
+	Soul::MessageBus::QueueMessage("ChangeIntDoes");
+	Soul::MessageBus::PumpQueue(0.0f);
+	ASSERT_EQUAL(testInt, 2, "Failed to change int via message.");
+
+	Soul::MessageBus::QueueMessage("ChangeIntStuff");
+	Soul::MessageBus::PumpQueue(0.0f);
+	ASSERT_EQUAL(testInt, 3, "Failed to change int via message.");
+
+	Soul::MessageBus::QueueMessage("ChangeIntBut");
+	Soul::MessageBus::PumpQueue(0.0f);
+	ASSERT_EQUAL(testInt, 4, "Failed to change int via message.");
+
+	Soul::MessageBus::QueueMessage("ChangeIntWhat");
+	Soul::MessageBus::PumpQueue(0.0f);
+	ASSERT_EQUAL(testInt, 5, "Failed to change int via message.");
+
+	Soul::MessageBus::QueueMessage("ChangeIntElse?");
+	Soul::MessageBus::PumpQueue(0.0f);
+	ASSERT_EQUAL(testInt, 6, "Failed to change int via message.");
+
+	END_MEMORY_CHECK();
+}
+
 void MessageBusTests::RunAllTests()
 {
 	RUN_TEST(BasicListeningTest);
 	RUN_TEST(ObjectListeningTest);
+	RUN_TEST(ManySubscriptionsTest);
 }

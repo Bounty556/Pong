@@ -22,6 +22,7 @@ Paddle::Paddle() :
 			u8* controller = (u8*)data;
 			if (controller == 0)
 				m_Controller = Soul::InputManager::GetController(0);
+			LOG_INFO("Controller Connected!!!");
 		});
 	m_Listener.Subscribe("ControllerDisconnected",
 		[&](void* data)
