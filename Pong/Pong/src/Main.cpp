@@ -3,12 +3,13 @@
 #include <Core/String.h>
 
 #include "Scenes/FieldScene.h"
+#include "Scenes/MainMenuScene.h"
 
 int main()
 {
 	if (Soul::InitializeEngine(1280, 720, "Pong!"))
 	{
-		FieldScene* scene = NEW(FieldScene);
+		MainMenuScene* scene = NEW(MainMenuScene);
 
 		Soul::SetScene(scene);
 	}

@@ -23,11 +23,13 @@
     <ClCompile Include="src\Entities\Paddle.cpp" />
     <ClCompile Include="src\Main.cpp" />
     <ClCompile Include="src\Scenes\FieldScene.cpp" />
+    <ClCompile Include="src\Scenes\MainMenuScene.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Entities\Ball.h" />
     <ClInclude Include="src\Entities\Paddle.h" />
     <ClInclude Include="src\Scenes\FieldScene.h" />
+    <ClInclude Include="src\Scenes\MainMenuScene.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
