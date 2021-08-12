@@ -8,7 +8,8 @@ namespace Soul
 		m_MainAnchor(UIAnchor::None),
 		m_WeightingAnchor(UIAnchor::MiddleMiddle),
 		m_AnchorWeight(1.0f),
-		m_Palette(1, sf::Color::White)
+		m_Palette(1, sf::Color::White),
+		m_Origin(UIAnchor::MiddleMiddle)
 	{
 	}
 
@@ -18,7 +19,8 @@ namespace Soul
 		m_MainAnchor(UIAnchor::None),
 		m_WeightingAnchor(UIAnchor::MiddleMiddle),
 		m_AnchorWeight(1.0f),
-		m_Palette(1, sf::Color::White)
+		m_Palette(1, sf::Color::White),
+		m_Origin(UIAnchor::MiddleMiddle)
 	{
 	}
 
@@ -28,7 +30,8 @@ namespace Soul
 		m_MainAnchor(other.m_MainAnchor),
 		m_WeightingAnchor(other.m_WeightingAnchor),
 		m_AnchorWeight(other.m_AnchorWeight),
-		m_Palette(other.m_Palette)
+		m_Palette(other.m_Palette),
+		m_Origin(other.m_Origin)
 	{
 	}
 
@@ -38,7 +41,8 @@ namespace Soul
 		m_MainAnchor(other.m_MainAnchor),
 		m_WeightingAnchor(other.m_WeightingAnchor),
 		m_AnchorWeight(other.m_AnchorWeight),
-		m_Palette(std::move(other.m_Palette))
+		m_Palette(std::move(other.m_Palette)),
+		m_Origin(other.m_Origin)
 	{
 	}
 
@@ -50,6 +54,7 @@ namespace Soul
 		m_WeightingAnchor = other.m_WeightingAnchor;
 		m_AnchorWeight = other.m_AnchorWeight;
 		m_Palette = other.m_Palette;
+		m_Origin = other.m_Origin;
 		
 		ResetColors();
 
@@ -64,6 +69,7 @@ namespace Soul
 		m_WeightingAnchor = other.m_WeightingAnchor;
 		m_AnchorWeight = other.m_AnchorWeight;
 		m_Palette = other.m_Palette;
+		m_Origin = other.m_Origin;
 		
 		ResetColors();
 

@@ -7,6 +7,7 @@
 #include <Memory/UniquePointer.h>
 #include <Nodes/AreaNode.h>
 #include <UI/UIContainer.h>
+#include <UI/UIText.h>
 
 #include "../Entities/Paddle.h"
 #include "../Entities/Ball.h"
@@ -34,5 +35,7 @@ private:
 	Soul::AreaNode m_RightTrigger;
 	Soul::Listener m_Listener;
 	Soul::UIContainer m_UIContainer;
+	Soul::UIText* m_PlayerScoreText;
+	Soul::UIText* m_AIScoreText;
 	Soul::Animation m_Animation;
 };

@@ -27,7 +27,8 @@ FieldScene::FieldScene() :
 	m_LeftTrigger(-10.0f, 0.0f, 10.0f, 720.0f),
 	m_RightTrigger(1280.0f, 0.0f, 10.0f, 720.0f),
 	m_Listener(),
-	m_UIContainer(0.0f, 0.0f, 1280.0f, 720.0f)
+	m_UIContainer(0.0f, 0.0f, 1280.0f, 720.0f),
+	m_Animation()
 {
 	m_UIContainer.SetCanDrag(true);
 
@@ -75,12 +76,27 @@ FieldScene::FieldScene() :
 	m_UIContainer.SetUIPalette(clearContainer);
 
 	Soul::ResourceManager::LoadResource<Soul::FontResource>("res/Fonts/font.otf", "Font");
+
 	Soul::UIText* text = NEW(Soul::UIText, "3", "Font");
 	text->SetAnchor(Soul::UI::TopMiddle);
 	text->SetAnchorWeight(0.75f);
 	text->SetFontSize(48);
-	text->SetOrigin(Soul::UI::MiddleMiddle);
 
+	Soul::UIPalette greyText(1, sf::Color(100, 100, 100));
+
+	m_PlayerScoreText = NEW(Soul::UIText, "0", "Font");
+	m_PlayerScoreText->SetAnchor(Soul::UI::MiddleLeft);
+	m_PlayerScoreText->SetAnchorWeight(0.5f);
+	m_PlayerScoreText->SetFontSize(98);
+	m_PlayerScoreText->SetUIPalette(greyText);
+	m_AIScoreText = NEW(Soul::UIText, "0", "Font");
+	m_AIScoreText->SetAnchor(Soul::UI::MiddleRight);
+	m_AIScoreText->SetAnchorWeight(0.5f);
+	m_AIScoreText->SetFontSize(98);
+	m_AIScoreText->SetUIPalette(greyText);
+
+	m_UIContainer.AddChild(m_PlayerScoreText);
+	m_UIContainer.AddChild(m_AIScoreText);
 	m_UIContainer.AddChild(text);
 
 	// We can't pass by reference here because it gets a reference to the pointer, not a reference to the object being
@@ -122,9 +138,9 @@ void FieldScene::Draw(sf::RenderStates states) const
 {
 	m_Player.Draw(states);
 	m_AI.Draw(states);
+	m_UIContainer.Draw(states);
 	if (m_Ball.Raw())
 		m_Ball->Draw(states);
-	m_UIContainer.Draw(states);
 }
 
 void FieldScene::ResetSceneData(void* data)
@@ -135,6 +151,8 @@ void FieldScene::ResetSceneData(void* data)
 	m_AI.setPosition(m_AI.GetWorldPosition().x, resetData->aiY);
 	m_PlayerScore = resetData->playerScore;
 	m_AIScore = resetData->aiScore;
+	m_PlayerScoreText->SetText(Soul::String::IntToString(m_PlayerScore).GetCString());
+	m_AIScoreText->SetText(Soul::String::IntToString(m_AIScore).GetCString());
 
 	LOG_INFO("Score:\n\tPlayer: %d\t\tAI: %d", m_PlayerScore, m_AIScore);
 
